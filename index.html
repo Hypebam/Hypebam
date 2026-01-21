@@ -293,14 +293,28 @@
         document.body.style.overflow = '';
         
         // Try to start Lenis if it exists and is stopped
-        if (window.lenis) {
+        if (window.lenis && window.lenis.isStopped) {
+          console.log('Starting Lenis smooth scroll');
           window.lenis.start();
         }
       }, 4000);
       
+      // Additional check at 2 seconds - start Lenis if it exists
+      setTimeout(function() {
+        if (window.lenis && window.lenis.isStopped) {
+          console.log('Early start: Starting Lenis smooth scroll');
+          window.lenis.start();
+        }
+      }, 2000);
+      
       // Fix for Lenis blocking native scroll - ensure it's started
       setTimeout(function() {
-        // If Lenis exists but scroll still doesn't work, force native scroll
+        // Try starting Lenis one more time
+        if (window.lenis && window.lenis.isStopped) {
+          console.log('Late start: Starting Lenis smooth scroll');
+          window.lenis.start();
+        }
+        // If Lenis still doesn't work, force native scroll
         if (document.documentElement.classList.contains('lenis-stopped')) {
           document.documentElement.classList.remove('lenis', 'lenis-stopped');
           document.body.classList.remove('lenis', 'lenis-stopped');
@@ -316,6 +330,9 @@
         document.body.classList.remove('lenis-stopped');
         document.documentElement.style.overflow = '';
         document.body.style.overflow = '';
+        if (window.lenis && window.lenis.isStopped) {
+          window.lenis.start();
+        }
         return false;
       };
     </script>

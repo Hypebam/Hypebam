@@ -14083,7 +14083,8 @@
         kt = new Zi({
             lerp: .18,
             autoRaf: !0
-        })
+        });
+        window.lenis = kt
     }
 
     function mo() {
