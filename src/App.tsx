@@ -82,10 +82,10 @@ const App: React.FC = () => {
               <div className="stage-content">
                 <div className="stage-logo">
                   {/* @ts-ignore - lottie-player is a custom web component */}
-                  <lottie-player 
-                    src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68bf4595ca06155170fa0b3f_fee5b51503049a55da64bfd6a8ed744f_more-logo-animation.json" 
-                    background="transparent" 
-                    speed="1" 
+                  <lottie-player
+                    src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68bf4595ca06155170fa0b3f_fee5b51503049a55da64bfd6a8ed744f_more-logo-animation.json"
+                    background="transparent"
+                    speed="1"
                     data-load-stage-logo-lottie=""
                     data-load-stage-logo=""
                     className="stage-logo-svg"
@@ -163,7 +163,7 @@ const App: React.FC = () => {
                   <div className="stage-right">
                     <div className="stage-text-wrap">
                       <h1 data-load-stage-title="" className="hero-heading">
-                        <span className="white-span">Matcha</span><br/>meets<br/>Protein
+                        <span className="white-span">Matcha</span><br />meets<br />Protein
                       </h1>
                       <div className="stage-paragraph-wrap">
                         <p data-load-stage-text="" className="paragraph is-stage-paragraph">
@@ -205,7 +205,7 @@ const App: React.FC = () => {
           <div className="insider-container">
             <div className="grid-layout">
               <h2 id="w-node-_3e09cbcc-bb63-d8d5-fc92-5249d862c0ff-0ac01850" className="insider-heading">
-                You deserve the best.<br/>You deserve More:<br/><span className="light-green-span">Iced Matcha Latte.</span>
+                You deserve the best.<br />You deserve More:<br /><span className="light-green-span">Iced Matcha Latte.</span>
               </h2>
               <div id="w-node-e1fee9ee-097a-d41e-6a8c-8fb81a411381-0ac01850" className="insider-wrapper">
                 <div id="w-node-_93a09ee3-b180-b755-d23e-d7d2b5f676da-0ac01850" className="testimonial-wrapper">
@@ -325,13 +325,13 @@ const App: React.FC = () => {
                     <div data-sequence-smiley="" className="top-smiley is-card">
                       <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689534f1390e42ee1492e9df_Group%2042.svg" loading="lazy" alt="Smiley" />
                     </div>
-                    <h2 className="statement-heading">More<br/> Taste</h2>
+                    <h2 className="statement-heading">More<br /> Taste</h2>
                     <div className="statement-card-paragraph-wrap">
                       <div className="first-statement-icon">
                         <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689bbc7e54e7ae27ef30fe2a_Layer_1%20(7).svg" loading="lazy" alt="Circle" className="first-statement-icon-img" />
                         <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689bbc7e54e7ae27ef30fe2a_Layer_1%20(7).svg" loading="lazy" alt="Circle" className="first-statement-icon-img is-wiggle" />
                       </div>
-                      <p className="paragraph center-align">Finest matcha. Smooth &amp; creamy.<br/>20g of pure protein per serving, for your <br/>ultimate green power drink.</p>
+                      <p className="paragraph center-align">Finest matcha. Smooth &amp; creamy.<br />20g of pure protein per serving, for your <br />ultimate green power drink.</p>
                     </div>
                   </div>
                 </div>
@@ -347,7 +347,7 @@ const App: React.FC = () => {
                         <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689c4dc54e2bba0f8a77b238_Layer_1%20(9).svg" loading="lazy" alt="Thunder" className="second-icon-img" />
                         <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689c4dc54e2bba0f8a77b238_Layer_1%20(9).svg" loading="lazy" alt="Thunder" className="second-icon-img is-wiggle" />
                       </div>
-                      <p className="paragraph center-align">85mg of caffeine per serving, <br/>equal to a cappuccino. <br/>Your daily energy boost.</p>
+                      <p className="paragraph center-align">85mg of caffeine per serving, <br />equal to a cappuccino. <br />Your daily energy boost.</p>
                     </div>
                   </div>
                 </div>
@@ -363,7 +363,7 @@ const App: React.FC = () => {
                         <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689c4ee13616a5bb6e89d831_Vector%20(6).svg" loading="lazy" alt="Arrow" className="third-statement-icon-img" />
                         <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689c4ee13616a5bb6e89d831_Vector%20(6).svg" loading="lazy" alt="Arrow" className="third-statement-icon-img is-wiggle" />
                       </div>
-                      <p className="paragraph center-align">With glucomannan - clinically proven to <br/>support weight loss, ideal for your conscious<br/>lifestyle.</p>
+                      <p className="paragraph center-align">With glucomannan - clinically proven to <br />support weight loss, ideal for your conscious<br />lifestyle.</p>
                     </div>
                   </div>
                 </div>
@@ -379,7 +379,7 @@ const App: React.FC = () => {
                         <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689c4f47af9547f0f5223089_Vector%20(7).svg" loading="lazy" alt="Circle" className="fourth-statement-icon-img" />
                         <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689c4f47af9547f0f5223089_Vector%20(7).svg" loading="lazy" alt="Circle" className="fourth-statement-icon-img is-wiggle" />
                       </div>
-                      <p className="paragraph center-align">No added sugar - only naturally occurring, <br/>with 95% less sugar than traditional instant<br/>matcha lattes.</p>
+                      <p className="paragraph center-align">No added sugar - only naturally occurring, <br />with 95% less sugar than traditional instant<br />matcha lattes.</p>
                     </div>
                   </div>
                 </div>
@@ -387,8 +387,8 @@ const App: React.FC = () => {
               {/* Sequence Final */}
               <div className="sequence-final">
                 <h2 data-sequence-title="" className="sequence-title">
-                  Matcha, just the<br/>way you like it.<br/>
-                  <span data-sequence-title-split="" className="light-green-span">What's your flavour?</span><br/>
+                  Matcha, just the<br />way you like it.<br />
+                  <span data-sequence-title-split="" className="light-green-span">What's your flavour?</span><br />
                 </h2>
                 <div style={{ '--animation-delay': '.05s' } as React.CSSProperties} data-sequence-final-signature="" className="sequence-final-signature">
                   <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68bb4a56d6965dfedaaf9bbb_sequence-vanilla-crumble.svg" loading="lazy" width="285" height="150" alt="sequence-vanilla-crumble" className="sequence-final-signature-img" />
@@ -446,11 +446,12 @@ const App: React.FC = () => {
                 <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68953755a9a7a338f1c66af8_2bc96c5443dd740a3309d483ae39d3da60cc7e2c.webp" loading="lazy" alt="Iced Matcha Latte - More Nutrition" className="img" />
               </div>
               <div id="w-node-_32be253f-aa6e-8103-6d3f-40e63162832f-0ac01850" className="benefit-wrapper">
-                <h2 className="benefit-heading"><span data-highlight-text="" className="light-green-span">More for you.</span><br/>See the difference.</h2>
+                <h2 className="benefit-heading"><span data-highlight-text="" className="light-green-span">More for you.</span><br />See the difference.</h2>
                 <div data-benefit-table="" className="benefit-table">
                   <div id="w-node-_244ca70f-4fb8-4324-7d1f-6e5cebd97f1e-0ac01850" className="benefit-table-title-wrapper">
                     <div id="w-node-da33aad3-e9be-fd6f-a8b0-79237ed37994-0ac01850" className="benefit-table-title">Benefits</div>
                     <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/687ea845b6162b993ddd0020_Group%201%20(1).svg" loading="lazy" id="w-node-d5a0031d-8b6e-5d4a-5e75-e26d1c40acd5-0ac01850" alt="More Nutrition Logo" className="benefit-table-title-img is-desktop" />
+                    <div className="benefit-table-title is-mobile-only">More</div>
                     <div id="w-node-_78d70ec8-c380-1f74-9296-fa312e5af0f4-0ac01850" className="benefit-table-title">Regular Matcha</div>
                   </div>
                   <div data-benefit-table-line="" id="w-node-dabaf014-7b8f-d5cf-7507-3b9733e65ad8-0ac01850" className="sub-line"></div>
@@ -531,15 +532,15 @@ const App: React.FC = () => {
                   <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2e8120f5b95bfbd87aebf_testimonial-signature.svg" loading="lazy" width="300" height="27" alt="testimonial-signature" className="testimonial-signature-img" />
                   <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2e8120f5b95bfbd87aebf_testimonial-signature.svg" loading="lazy" width="300" height="27" alt="testimonial-signature" className="testimonial-signature-img is-wiggle" />
                 </div>
-                <h2 className="testimonial-big-heading">Clean. Green. <br/>Goodness.</h2>
+                <h2 className="testimonial-big-heading">Clean. Green. <br />Goodness.</h2>
               </div>
               <div id="w-node-d56024cf-9b70-fc24-7ba0-e2b3ea8d1769-0ac01850" className="testimonial-slider">
-                <h3 className="testimonial-heading">don't take our <br/>word for it</h3>
+                <h3 className="testimonial-heading">don't take our <br />word for it</h3>
                 <div data-testimonial-inview="" className="testimonial-slider-wrapper">
                   <div data-slider-interface="" className="testimonial-slider-interface">
                     <div data-slider-arrows="" className="testimonial-slider-button-wrapper">
                       <button type="button" data-slider-left-button="" className="testimonial-slider-button is-left">
-                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2de0fba88460ab65187e9_icon-arrow-left.svg" loading="lazy" width="20" height="20" alt="icon-arrow-left" className="testimonial-slider-button-arrow"/>
+                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2de0fba88460ab65187e9_icon-arrow-left.svg" loading="lazy" width="20" height="20" alt="icon-arrow-left" className="testimonial-slider-button-arrow" />
                       </button>
                       <button type="button" data-slider-right-button="" className="testimonial-slider-button is-right">
                         <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2de0f2245f238d5eb3226_icon-arrow-right.svg" loading="lazy" width="20" height="20" alt="icon-arrow-right" className="testimonial-slider-button-arrow" />
@@ -559,7 +560,7 @@ const App: React.FC = () => {
                       <div key={index} className="testimonial-slider-item-wrap">
                         <div data-slider-item-inner="" className="testimonial-slider-item">
                           <div className="testimonial-star-wrap">
-                            {[1,2,3,4,5].map(star => (
+                            {[1, 2, 3, 4, 5].map(star => (
                               <img key={star} src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2bdb3390600fa418ac907_icon-testimonial-star.svg" loading="lazy" width="20" height="20" alt="icon-testimonial-star" className="testimonial-star" />
                             ))}
                           </div>
@@ -654,7 +655,7 @@ const App: React.FC = () => {
               </div>
               <div className="flavour-navigation">
                 <button type="button" data-flavour-slider-left-button="" className="flavour-slider-button is-left">
-                  <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2de0fba88460ab65187e9_icon-arrow-left.svg" loading="lazy" width="20" height="20" alt="icon-arrow-left" className="flavour-slider-button-arrow"/>
+                  <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2de0fba88460ab65187e9_icon-arrow-left.svg" loading="lazy" width="20" height="20" alt="icon-arrow-left" className="flavour-slider-button-arrow" />
                 </button>
                 <button type="button" data-flavour-slider-right-button="" className="flavour-slider-button is-right">
                   <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2de0f2245f238d5eb3226_icon-arrow-right.svg" loading="lazy" width="20" height="20" alt="icon-arrow-right" className="flavour-slider-button-arrow" />
@@ -712,7 +713,7 @@ const App: React.FC = () => {
                   <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2211dbd022ef87bf8047a_payment_3-5-days-delivery.svg" loading="lazy" width="269" height="150" alt="payment_3-5-days-delivery" className="payment-signature-days-img" />
                   <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2211dbd022ef87bf8047a_payment_3-5-days-delivery.svg" loading="lazy" width="269" height="150" alt="payment_3-5-days-delivery" className="payment-signature-days-img is-wiggle" />
                 </div>
-                <h2 id="w-node-_5aa7990f-3909-960f-ff04-09bf6fbaf58f-0ac01850" className="insider-heading">Don't just crave It.<br/><span className="light-green-span">Get It.</span></h2>
+                <h2 id="w-node-_5aa7990f-3909-960f-ff04-09bf6fbaf58f-0ac01850" className="insider-heading">Don't just crave It.<br /><span className="light-green-span">Get It.</span></h2>
                 <div id="w-node-_3b9ad9e4-4de9-0d6f-0561-c6944df56da5-0ac01850" className="payment-methods-inner">
                   <div data-payment="" className="pament-methods">
                     <div data-inertia-item="" className="payment-method-item-outer">
@@ -770,7 +771,7 @@ const App: React.FC = () => {
                 <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe3f1_footer_product-bg.webp" loading="lazy" width="700" height="700" alt="footer_product-bg" srcSet="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe3f1_footer_product-bg-p-500.webp 500w, https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe3f1_footer_product-bg-p-800.webp 800w, https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe3f1_footer_product-bg-p-1080.webp 1080w, https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe3f1_footer_product-bg.webp 1400w" sizes="(max-width: 767px) 100vw, 700px" className="footer-img" />
               </div>
               <div className="footer-product-text-inner">
-                <h3 className="footer-product-heading">Matcha<br/>meets<br/>Protein</h3>
+                <h3 className="footer-product-heading">Matcha<br />meets<br />Protein</h3>
                 <div aria-hidden="true" className="button is-light">
                   <div className="button-cycle is-first">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 10" width="100%" className="button-arrow">
@@ -794,16 +795,16 @@ const App: React.FC = () => {
             <div id="w-node-_52f3956c-463e-cf84-00da-ec073fe306cc-0ac01850" className="footer-content">
               <div id="w-node-_103e8af5-3d0c-0c66-5f7b-cd9c707fa04f-0ac01850" className="footer-fact-wrapper">
                 <a href="https://morenutrition.co.uk/collections/all-products-uk" target="_blank" rel="noreferrer" className="footer-info is-first w-inline-block">
-                  <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689754d9448e952a9e6c0aeb_Alle-Produkte_f1ba7a0d-4d19-4202-af26-db495d4d8559_100x100%201.svg" loading="lazy" width="57" height="70" alt="More Nutrition Icon" className="footer-info-img is-first"/>
-                  <div className="footer-info-text">shop all<br/>Products</div>
+                  <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689754d9448e952a9e6c0aeb_Alle-Produkte_f1ba7a0d-4d19-4202-af26-db495d4d8559_100x100%201.svg" loading="lazy" width="57" height="70" alt="More Nutrition Icon" className="footer-info-img is-first" />
+                  <div className="footer-info-text">shop all<br />Products</div>
                 </a>
                 <a href="https://morenutrition.co.uk/collections/samples-and-singlepacks-uk" target="_blank" rel="noreferrer" className="footer-info is-second w-inline-block">
                   <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689754d9d94ba5b480581df7_Group%2084.svg" loading="lazy" width="58" height="49" alt="More Nutrition Icon" className="footer-info-img is-second" />
-                  <div className="footer-info-text">samples <br/>&amp; Singles</div>
+                  <div className="footer-info-text">samples <br />&amp; Singles</div>
                 </a>
               </div>
               <div id="w-node-d7a8f3ad-3299-e0db-d6e1-45b4c5d40c53-0ac01850" className="footer-content-wrapper">
-                <h4 className="footer-heading"><span data-highlight-text="" className="heading-line">More Nutrition</span> <br/>Iced Matcha Latte</h4>
+                <h4 className="footer-heading"><span data-highlight-text="" className="heading-line">More Nutrition</span> <br />Iced Matcha Latte</h4>
                 <div className="footer-shipping-wrapper">
                   <a href="https://service.morenutrition.de/hc/en-us/sections/15534294234257-Shipping-and-Delivery" target="_blank" rel="noreferrer" className="shipping-link w-inline-block">
                     <div className="shipping-link-wrap">
@@ -879,7 +880,7 @@ const App: React.FC = () => {
               </div>
             </div>
           </div>
-          <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/687ea845b6162b993ddd0020_Group%201%20(1).svg" loading="lazy" alt="More Nutrition Logo" className="footer-logo desktop" />
+          {/* Footer logo removed as per user request */}
         </div>
       </div>
     </>
