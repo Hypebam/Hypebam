@@ -3,6 +3,37 @@ html.lenis body {
     height: auto
 }
 
+/* Ensure the hero stage canvas sits above subsequent sections and crops correctly */
+.stage {
+    position: relative;
+    z-index: 50;
+}
+
+.stage-visual {
+    position: relative;
+    overflow: hidden; /* crop overflowing image bottom */
+    z-index: 60;
+}
+
+.stage-canvas {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: 70; /* sit above decorative overlays */
+    pointer-events: none;
+}
+
+/* Ensure the default dark-green overlay doesn't dim the stage image */
+.stage-overlay {
+    position: absolute;
+    inset: 0;
+    background: transparent !important;
+    opacity: 0 !important;
+    z-index: 40 !important; /* sit below the canvas */
+    pointer-events: none !important;
+}
+
 .lenis:not(.lenis-autoToggle).lenis-stopped {
     overflow: clip
 }

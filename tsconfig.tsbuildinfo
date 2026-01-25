@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/hooks/useanimations.ts","./src/hooks/usecanvassequence.ts","./src/hooks/useinertia.ts","./src/hooks/uselenis.ts","./src/hooks/usescrollanimations.ts","./src/hooks/usesequenceanimation.ts","./src/hooks/usesliders.ts","./src/hooks/usestageanimation.ts","./src/types/global.d.ts"],"version":"5.9.3"}

@@ -76,7 +76,6 @@ const App: React.FC = () => {
       <div className="page-wrapper">
         {/* Stage Section */}
         <section data-load-stage="" data-inertia="" className="stage">
-          <div className="stage-overlay"></div>
           <div className="stage-container">
             <div className="stage-inner">
               <div className="stage-content">
@@ -180,6 +179,7 @@ const App: React.FC = () => {
               </div>
             </div>
           </div>
+          <div className="stage-overlay"></div>
 
           {/* Marquee */}
           <div data-marquee="" className="marquee">

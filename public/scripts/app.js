@@ -14491,8 +14491,8 @@
             b = Math.max(1, window.devicePixelRatio || 1),
             S = p.dataset.loadStageCanvasImgPath,
             w = Array.from({
-                length: 23
-            }, (t, e) => `${S}seq_1_${e}.webp`),
+                length: 90
+            }, (t, e) => `${S}hypeBamvideo00${e+1}.webp`),
             E = [],
             x = !1;
 
@@ -14514,12 +14514,15 @@
             v.clearRect(0, 0, p.width, p.height);
             let i = e.width,
                 r = e.height,
-                s = Math.min(p.width / i, p.height / r) / b,
+                // Set scale to 90% of base width
+                s = p.width / i / b * 0.9,
                 a = i * s,
                 n = r * s,
-                o = (p.width / b - a) / 2,
-                l = (p.height / b - n) / 2;
-            v.drawImage(e, o, l, a, n)
+                // center horizontally then shift right by 0px (CSS pixels) — moved 200px further left
+                o = (p.width / b - a) / 2 + 0,
+                // position vertically then shift down by 400px (CSS pixels), move up by 1200px, then move down by 500px
+                l = ((p.height / b - n) / 2) + (p.height / b) * 0.12 + 400 - 1200 + 500;
+            v.save(), v.translate(o + a / 2, l + n / 2), v.rotate(35 * Math.PI / 180), v.drawImage(e, -a / 2, -n / 2, a, n), v.restore()
         }
         we(() => {
             kt.stop();

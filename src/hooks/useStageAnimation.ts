@@ -35,7 +35,7 @@ export const useStageAnimation = () => {
     if (!context) return;
 
     const imgPath = canvas.getAttribute('data-load-stage-canvas-img-path') || '/img/';
-    const frameCount = 23; // Stage animation has 23 frames
+    const frameCount = 90; // Stage animation has 90 frames
     const images: HTMLImageElement[] = [];
 
     // Preload images
@@ -43,10 +43,10 @@ export const useStageAnimation = () => {
       return new Promise((resolve) => {
         let loadedCount = 0;
 
-        for (let i = 0; i < frameCount; i++) {
+        for (let i = 1; i <= frameCount; i++) {
           const img = new Image();
-          // Stage images are named seq_1_0.webp to seq_1_22.webp
-          img.src = `${imgPath}seq_1_${i}.webp`;
+          // Stage images are named hypeBamvideo001.webp to hypeBamvideo090.webp
+          img.src = `${imgPath}hypeBamvideo00${i}.webp`;
 
           img.onload = () => {
             loadedCount++;
@@ -214,7 +214,7 @@ export const useStageAnimation = () => {
       setCanvasSize();
       await preloadImages();
       renderFrame(0);
-      
+
       // Small delay to ensure everything is ready
       setTimeout(() => {
         createLoadingAnimation();
