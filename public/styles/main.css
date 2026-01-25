@@ -1104,6 +1104,90 @@ body {
    MOBILE RESPONSIVE STYLES - Benefit Section
    ================================================= */
 
+/* Ensure testimonials are visible on mobile */
+@media screen and (max-width: 991px) {
+    .testimonial-section {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        transform: none !important;
+        z-index: 60;
+        padding-bottom: 3em;
+        position: relative; /* contain absolutely positioned background images */
+    }
+
+    /* Layout testimonials horizontally on mobile so sliding is horizontal */
+    .testimonial-container {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    .testimonial-slider-wrapper {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .testimonial-slider-inner {
+        display: flex !important;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: stretch;
+        will-change: transform;
+    }
+
+    .testimonial-slider-item-wrap {
+        flex: 0 0 auto;
+        width: calc(100% - 2rem);
+        max-width: 420px;
+    }
+
+    /* Show and style background images on mobile but keep them decorative */
+    .bg-img-wrapper {
+        display: block;
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        opacity: 1; /* fully visible on mobile */
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .bg-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transform: translateY(-4%);
+        filter: saturate(1.05) contrast(1.05);
+        mix-blend-mode: normal;
+    }
+
+    /* Ensure testimonial content sits above the background */
+    .testimonial-container {
+        position: relative;
+        z-index: 20;
+    }
+
+    /* Fix benefit/ingredient table titles: stack and align left on mobile */
+    .benefit-table-title-wrapper {
+        grid-template-columns: 1fr !important;
+        padding-left: 1.25em !important;
+        padding-right: 1.25em !important;
+        grid-column-gap: 0.5em !important;
+        align-items: start !important;
+    }
+
+    .benefit-table-title {
+        text-align: left !important;
+        font-size: 1.05em !important;
+    }
+
+    .benefit-table-title.is-mobile-only {
+        display: block !important;
+        text-align: left !important;
+    }
+}
+
 /* Default: Hide mobile-only elements on desktop */
 .benefit-table-title.is-mobile-only {
     display: none;

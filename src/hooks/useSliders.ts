@@ -26,12 +26,17 @@ export const useSliders = () => {
     const testimonialRightBtn = document.querySelector('[data-slider-right-button]');
 
     if (testimonialSlider) {
+      // Enable touch dragging on mobile and improve cursor UX
+      const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 991px)').matches;
+
       testimonialSwiperRef.current = new Swiper(testimonialSlider as HTMLElement, {
         modules: [Navigation],
         slidesPerView: 1,
         spaceBetween: 20,
         loop: true,
         speed: 600,
+        grabCursor: !!isMobile,
+        allowTouchMove: !!isMobile,
         breakpoints: {
           768: {
             slidesPerView: 2,
@@ -47,6 +52,13 @@ export const useSliders = () => {
           nextEl: testimonialRightBtn as HTMLElement,
         },
       });
+
+      // Mark the DOM node to indicate Swiper was initialized to avoid duplicate custom slider init
+      try {
+        testimonialSlider.setAttribute('data-swiper-initialized', 'true');
+      } catch (e) {
+        // ignore
+      }
     }
 
     // Initialize flavour product slider
