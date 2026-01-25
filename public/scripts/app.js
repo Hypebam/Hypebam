@@ -14514,14 +14514,14 @@
             v.clearRect(0, 0, p.width, p.height);
             let i = e.width,
                 r = e.height,
-                // Set scale to 90% of base width
-                s = p.width / i / b * 0.9,
+                // Set scale to 105% of base width (small increase)
+                s = p.width / i / b * 1.05,
                 a = i * s,
                 n = r * s,
-                // center horizontally then shift right by 0px (CSS pixels) — moved 200px further left
-                o = (p.width / b - a) / 2 + 0,
-                // position vertically then shift down by 400px (CSS pixels), move up by 1200px, then move down by 500px
-                l = ((p.height / b - n) / 2) + (p.height / b) * 0.12 + 400 - 1200 + 500;
+                // center horizontally then shift right by 100px (CSS pixels)
+                o = (p.width / b - a) / 2 + 100,
+                // position vertically then shift down by 400px (CSS pixels), move up by 1200px, then move down by 500px, then move up by 250px, then move down by 100px
+                l = ((p.height / b - n) / 2) + (p.height / b) * 0.12 + 400 - 1200 + 500 - 250 + 100;
             v.save(), v.translate(o + a / 2, l + n / 2), v.rotate(35 * Math.PI / 180), v.drawImage(e, -a / 2, -n / 2, a, n), v.restore()
         }
         we(() => {
