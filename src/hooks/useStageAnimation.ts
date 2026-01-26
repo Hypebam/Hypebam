@@ -43,10 +43,11 @@ export const useStageAnimation = () => {
       return new Promise((resolve) => {
         let loadedCount = 0;
 
-        for (let i = 1; i < frameCount; i++) {
+        for (let i = 1; i <= frameCount; i++) {
           const img = new Image();
-          // Stage images are named seq_1_0.webp to seq_1_22.webp
-          img.src = `${imgPath}hypeBamvideo00${i}.webp`;
+          // Format image number with zero-padding: hypeBamvideo001.webp to hypeBamvideo090.webp
+          const paddedNum = i.toString().padStart(3, '0');
+          img.src = `${imgPath}hypeBamvideo${paddedNum}.webp`;
 
           img.onload = () => {
             loadedCount++;
@@ -56,6 +57,7 @@ export const useStageAnimation = () => {
           };
 
           img.onerror = () => {
+            console.error(`Failed to load image: ${img.src}`);
             loadedCount++;
             if (loadedCount === frameCount) {
               resolve();
@@ -75,49 +77,94 @@ export const useStageAnimation = () => {
       if (!img || !img.complete) return;
 
       const dpr = window.devicePixelRatio || 1;
-      const rect = canvas.getBoundingClientRect();
-      const width = rect.width;
-      const height = rect.height;
 
-      // Reset canvas size and scale if needed
-      if (canvas.width !== width * dpr || canvas.height !== height * dpr) {
-        canvas.width = width * dpr;
-        canvas.height = height * dpr;
-      }
+      // Use the canvas's style dimensions (which we set to match image aspect ratio)
+      const width = parseFloat(canvas.style.width) || canvas.width / dpr;
+      const height = parseFloat(canvas.style.height) || canvas.height / dpr;
 
       // Save, reset transform, draw, restore
       context.save();
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
       context.clearRect(0, 0, width, height);
 
-      // Cover fit
+      // Contain fit - preserves original aspect ratio without cropping
       const imgRatio = img.width / img.height;
       const canvasRatio = width / height;
 
       let drawWidth: number, drawHeight: number, drawX: number, drawY: number;
 
       if (imgRatio > canvasRatio) {
-        drawHeight = height;
-        drawWidth = drawHeight * imgRatio;
-        drawX = (width - drawWidth) / 2;
-        drawY = 0;
-      } else {
+        // Image is wider than canvas - fit to width
         drawWidth = width;
         drawHeight = drawWidth / imgRatio;
         drawX = 0;
         drawY = (height - drawHeight) / 2;
+      } else {
+        // Image is taller than canvas - fit to height
+        drawHeight = height;
+        drawWidth = drawHeight * imgRatio;
+        drawX = (width - drawWidth) / 2;
+        drawY = 0;
       }
 
       context.drawImage(img, drawX, drawY, drawWidth, drawHeight);
       context.restore();
     };
 
-    // Set canvas size
+    // Set canvas size maintaining original image aspect ratio (1466 x 1822)
     const setCanvasSize = () => {
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
+
+      // If we have a loaded image, use its aspect ratio
+      const firstImage = imagesRef.current[0];
+      if (firstImage && firstImage.complete && firstImage.naturalWidth && firstImage.naturalHeight) {
+        const imageRatio = firstImage.naturalWidth / firstImage.naturalHeight;
+
+        // Get the available container width
+        const containerWidth = rect.width;
+
+        // Calculate height to maintain aspect ratio
+        const calculatedHeight = containerWidth / imageRatio;
+
+        console.log('🖼️ Image dimensions:', {
+          naturalWidth: firstImage.naturalWidth,
+          naturalHeight: firstImage.naturalHeight,
+          aspectRatio: `${firstImage.naturalWidth}:${firstImage.naturalHeight}`,
+          ratioDecimal: imageRatio,
+          containerWidth,
+          calculatedHeight
+        });
+
+        // Set canvas buffer size (for rendering)
+        canvas.width = containerWidth * dpr;
+        canvas.height = calculatedHeight * dpr;
+
+        // Set canvas display size with exact aspect ratio
+        canvas.style.setProperty('width', '100%', 'important');
+        canvas.style.setProperty('height', 'auto', 'important');
+        canvas.style.setProperty('aspect-ratio', `${firstImage.naturalWidth} / ${firstImage.naturalHeight}`, 'important');
+        canvas.style.setProperty('display', 'block', 'important');
+        canvas.style.setProperty('max-width', 'none', 'important');
+
+        // Set parent containers to allow full width and maintain aspect ratio
+        let parent = canvas.parentElement;
+        let depth = 0;
+        while (parent && !parent.classList.contains('stage') && depth < 5) {
+          parent.style.setProperty('width', '100%', 'important');
+          parent.style.setProperty('height', 'auto', 'important');
+          parent.style.setProperty('max-width', 'none', 'important');
+          parent = parent.parentElement;
+          depth++;
+        }
+
+        console.log('✅ Canvas aspect ratio set to:', `${firstImage.naturalWidth}:${firstImage.naturalHeight} (${imageRatio.toFixed(4)})`);
+      } else {
+        console.log('⚠️ Fallback: Image not loaded yet, using container dimensions');
+        // Fallback: use container dimensions
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+      }
     };
 
     // Create loading animation timeline
@@ -211,8 +258,13 @@ export const useStageAnimation = () => {
 
     // Initialize
     const init = async () => {
-      setCanvasSize();
+      // First load the images
       await preloadImages();
+
+      // Now set canvas size based on loaded image dimensions
+      setCanvasSize();
+
+      // Render the first frame
       renderFrame(0);
 
       // Small delay to ensure everything is ready
