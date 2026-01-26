@@ -11,8 +11,15 @@ html.lenis body {
 
 .stage-visual {
     position: relative;
-    overflow: hidden; /* crop overflowing image bottom */
+    overflow: visible; /* allow canvas to extend so full image is visible */
     z-index: 60;
+    transform-origin: center center; /* rotate around center */
+    transform: rotate(20deg); /* rotate component 20deg clockwise (10° left of previous) */
+    top: -65px; /* move container up by 150px (visual page offset) */
+}
+
+.stage-wrap {
+    overflow: visible; /* allow children to extend beyond container */
 }
 
 .stage-canvas {
@@ -20,7 +27,7 @@ html.lenis body {
     display: block;
     width: 100%;
     height: 100%;
-    z-index: 70; /* sit above decorative overlays */
+    z-index: 9999; /* sit above everything */
     pointer-events: none;
 }
 

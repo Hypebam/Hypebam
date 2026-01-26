@@ -40,7 +40,7 @@ export const useSequenceAnimation = () => {
     if (!context) return;
 
     const imgPath = canvas.getAttribute('data-sequence-canvas-img-path') || '/img/';
-    const frameCount = 90; // Sequence has 90 frames
+    const frameCount = 200; // Sequence has 200 frames
     const images: HTMLImageElement[] = [];
 
     // Preload images
@@ -50,8 +50,8 @@ export const useSequenceAnimation = () => {
 
         for (let i = 0; i < frameCount; i++) {
           const img = new Image();
-          // Sequence images are named hypeBamvideo001.webp to hypeBamvideo090.webp
-          img.src = `${imgPath}hypeBamvideo00${i + 1}.webp`;
+          // Sequence images are named seq_0_0.webp to seq_0_199.webp
+          img.src = `${imgPath}seq_0_${i}.webp`;
 
           img.onload = () => {
             loadedCount++;
