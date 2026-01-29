@@ -1398,7 +1398,17 @@ body {
     .benefit-item-check,
     .benefit-item-x {
         justify-content: center;
+        align-items: center;
         display: flex;
+        text-align: center;
+    }
+
+    .benefit-item-check {
+        grid-column: 2;
+    }
+
+    .benefit-item-x {
+        grid-column: 3;
     }
 
     .check {
