@@ -3,18 +3,6 @@ html.lenis body {
     height: auto
 }
 
-/* Global benefit table icon positioning */
-.benefit-item-check {
-    transform: translateX(350px) !important;
-    position: relative !important;
-}
-
-.benefit-item-x {
-    transform: translateX(450px) !important;
-    position: relative !important;
-}
-
-/* Ensure the hero stage canvas sits above subsequent sections and crops correctly */
 .stage {
     position: relative;
     z-index: 50;
@@ -23,29 +11,14 @@ html.lenis body {
 .stage-visual {
     position: relative;
     overflow: visible;
-    /* allow canvas to extend so full image is visible */
     z-index: 60;
     transform-origin: center center;
-    /* rotate around center */
-    transform: rotate(20deg) translateX(100px);
-    /* rotate and move right by 200px */
+    transform: rotate(20deg);
     top: -65px;
-    /* move container up by 150px (visual page offset) */
-    width: 76% !important;
-    /* make it smaller (0.9x of original 85%) */
-    max-width: none !important;
 }
 
 .stage-wrap {
     overflow: visible;
-    /* allow children to extend beyond container */
-    width: 100% !important;
-    max-width: none !important;
-}
-
-.stage-left {
-    width: 100% !important;
-    max-width: none !important;
 }
 
 .stage-canvas {
@@ -54,87 +27,16 @@ html.lenis body {
     width: 100%;
     height: 100%;
     z-index: 9999;
-    /* sit above everything */
     pointer-events: none;
-    max-width: none !important;
 }
 
-/* Ensure the default dark-green overlay doesn't dim the stage image */
 .stage-overlay {
     position: absolute;
     inset: 0;
     background: transparent !important;
     opacity: 0 !important;
     z-index: 40 !important;
-    /* sit below the canvas */
     pointer-events: none !important;
-}
-
-/* Mobile responsive styles for aspect ratio preservation */
-@media (max-width: 991px) {
-    .stage-visual {
-        width: 90% !important;
-        transform: rotate(20deg) translateX(100px);
-        top: -15px;
-    }
-
-    .stage-wrap,
-    .stage-left {
-        width: 100% !important;
-        max-width: none !important;
-        height: auto !important;
-    }
-
-    .stage-canvas {
-        width: 100% !important;
-        height: auto !important;
-        aspect-ratio: 1466 / 1822 !important;
-        max-width: none !important;
-    }
-}
-
-@media (max-width: 767px) {
-    .stage-visual {
-        width: 95% !important;
-        transform: rotate(20deg) translateX(50px);
-        top: 10px;
-    }
-
-    .stage-wrap,
-    .stage-left {
-        width: 100% !important;
-        max-width: none !important;
-        height: auto !important;
-    }
-
-    .stage-canvas {
-        width: 100% !important;
-        height: auto !important;
-        aspect-ratio: 1466 / 1822 !important;
-        max-width: none !important;
-    }
-}
-
-@media (max-width: 479px) {
-    .stage-visual {
-        width: 100% !important;
-        transform: rotate(20deg) translateX(0px);
-        top: 30px;
-    }
-
-    .stage-wrap,
-    .stage-left {
-        width: 100% !important;
-        max-width: none !important;
-        height: auto !important;
-    }
-
-    .stage-canvas {
-        width: 100% !important;
-        height: auto !important;
-        aspect-ratio: 1466 / 1822 !important;
-        max-width: none !important;
-    }
 }
 
 .lenis:not(.lenis-autoToggle).lenis-stopped {
@@ -1203,11 +1105,6 @@ body {
     will-change: transform
 }
 
-/* =================================================
-   MOBILE RESPONSIVE STYLES - Benefit Section
-   ================================================= */
-
-/* Ensure testimonials are visible on mobile */
 @media screen and (max-width: 991px) {
     .testimonial-section {
         display: block !important;
@@ -1217,10 +1114,8 @@ body {
         z-index: 60;
         padding-bottom: 3em;
         position: relative;
-        /* contain absolutely positioned background images */
     }
 
-    /* Layout testimonials horizontally on mobile so sliding is horizontal */
     .testimonial-container {
         display: block !important;
         visibility: visible !important;
@@ -1246,14 +1141,12 @@ body {
         max-width: 420px;
     }
 
-    /* Show and style background images on mobile but keep them decorative */
     .bg-img-wrapper {
         display: block;
         position: absolute;
         inset: 0;
         z-index: 10;
         opacity: 1;
-        /* fully visible on mobile */
         pointer-events: none;
         overflow: hidden;
     }
@@ -1267,13 +1160,11 @@ body {
         mix-blend-mode: normal;
     }
 
-    /* Ensure testimonial content sits above the background */
     .testimonial-container {
         position: relative;
         z-index: 20;
     }
 
-    /* Fix benefit/ingredient table titles: stack and align left on mobile */
     .benefit-table-title-wrapper {
         grid-template-columns: 1fr !important;
         padding-left: 1.25em !important;
@@ -1293,12 +1184,10 @@ body {
     }
 }
 
-/* Default: Hide mobile-only elements on desktop */
 .benefit-table-title.is-mobile-only {
     display: none;
 }
 
-/* Tablet breakpoint (max-width: 991px) */
 @media screen and (max-width: 991px) {
     .benefit-section {
         border-radius: 0;
@@ -1360,7 +1249,6 @@ body {
         width: 100%;
     }
 
-    /* Show mobile text, hide desktop logo */
     .benefit-table-title-img.is-desktop {
         display: none;
     }
@@ -1409,18 +1297,7 @@ body {
     .benefit-item-check,
     .benefit-item-x {
         justify-content: center;
-        align-items: center;
         display: flex;
-        text-align: center;
-    }
-
-    .benefit-item-check {
-        grid-column: 2;
-        margin-left: 200px;
-    }
-
-    .benefit-item-x {
-        grid-column: 3;
     }
 
     .check {
@@ -1434,7 +1311,6 @@ body {
     }
 }
 
-/* Mobile breakpoint (max-width: 767px) */
 @media screen and (max-width: 767px) {
     .benefit-section {
         padding: 1.5em 0;
@@ -1492,7 +1368,6 @@ body {
     }
 }
 
-/* Small mobile breakpoint (max-width: 479px) */
 @media screen and (max-width: 479px) {
     .benefit-section {
         padding: 1em 0;
@@ -1535,7 +1410,6 @@ body {
     }
 }
 
-/* Footer logo - hide on all screens since removed */
 .footer-logo.desktop {
     display: none;
 }

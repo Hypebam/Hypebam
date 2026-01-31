@@ -14514,11 +14514,9 @@
             v.clearRect(0, 0, p.width, p.height);
             let i = e.width,
                 r = e.height,
-                // Restore original image sizing: draw at natural size relative to canvas
                 s = p.width / i / b,
                 a = i * s,
                 n = r * s,
-                // center image
                 o = (p.width / b - a) / 2,
                 l = (p.height / b - n) / 2;
             v.save();
@@ -15261,7 +15259,6 @@
         });
     }
 
-    // Run immediately if page already loaded, otherwise wait for load event
     if (document.readyState === "complete") {
         initializeApp();
     } else {

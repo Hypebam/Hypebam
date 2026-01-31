@@ -19,17 +19,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Webflow Base CSS */}
         <link
           href="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/css/more-nutrition.shared.e35377ec8.min.css"
           rel="stylesheet"
           type="text/css"
         />
 
-        {/* Main project CSS from public folder */}
         <link href="/styles/main.css" rel="stylesheet" type="text/css" />
 
-        {/* GSAP and plugins from CDN */}
         <Script
           src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
           strategy="beforeInteractive"
@@ -43,7 +40,6 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
 
-        {/* SplitText polyfill */}
         <Script id="splittext-polyfill" strategy="beforeInteractive">
           {`
             window.SplitText = class SplitText {
@@ -115,7 +111,6 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* DrawSVG polyfill */}
         <Script id="drawsvg-polyfill" strategy="beforeInteractive">
           {`
             if (window.gsap) {
@@ -153,7 +148,6 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* Webflow modifier classes */}
         <Script id="webflow-classes" strategy="beforeInteractive">
           {`
             (function (o, c) {
@@ -169,10 +163,8 @@ export default function RootLayout({
       </head>
       <body className="body">
         {children}
-        {/* Fallback scripts to ensure page loads */}
         <Script id="fallback-loader" strategy="afterInteractive">
           {`
-            // Fallback: Force hide loader and enable scrolling after 4 seconds
             setTimeout(function () {
               if (!document.documentElement.classList.contains('is-ready')) {
                 console.log('Fallback: Forcing loader to hide and enabling scroll');

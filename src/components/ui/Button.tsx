@@ -10,9 +10,6 @@ interface ButtonProps {
     rel?: string;
 }
 
-/**
- * Reusable animated button component with arrow icons
- */
 export const Button: React.FC<ButtonProps> = ({
     href,
     children,

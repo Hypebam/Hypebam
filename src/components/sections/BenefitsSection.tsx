@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-// Benefits comparison data
 const benefits = [
     'Coffee-level caffeine (80mg)',
     'Lower sugar content',
@@ -13,9 +12,6 @@ const benefits = [
     'Multiple fruity flavours'
 ];
 
-/**
- * Benefits section comparing Hype Bam vs typical energy drinks
- */
 export const BenefitsSection: React.FC = () => {
     return (
         <div id="benefits" className="benefit-section">

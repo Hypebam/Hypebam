@@ -1,4 +1,3 @@
-// Section components barrel export
 export { HeroSection } from './HeroSection';
 export { InsiderSection } from './InsiderSection';
 export { SequenceSection } from './SequenceSection';

@@ -4,7 +4,6 @@ import React from 'react';
 import { ArrowIcon } from '@/components/icons';
 import { SocialLinks } from '@/components/ui';
 
-// Credits data
 const credits = [
     { role: '3D Design', name: 'Tobias Anderssohn', link: 'https://www.tobias-anderssohn.com/en/' },
     { role: 'Web Design', name: 'Somefolk®', link: 'https://www.somefolk.co/' },
@@ -13,9 +12,6 @@ const credits = [
     { role: 'Copywriting', name: 'Psychologie.Biz', link: 'https://psychologie.biz/' },
 ];
 
-/**
- * Footer section with product showcase, links, and credits
- */
 export const Footer: React.FC = () => {
     return (
         <div className="footer">

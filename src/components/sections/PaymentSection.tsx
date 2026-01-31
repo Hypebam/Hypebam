@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-// Payment method data
 const paymentMethods = [
     { img: 'https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689b2b15e9b7e50000f8cad0_Layer_1%20(5).svg', alt: 'Amex', class: 'is-amex' },
     { img: 'https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689b2b1554cf5d3d8dbbeb01_Group%20102.svg', alt: 'Mastercard', class: 'is-mastercard' },
@@ -13,9 +12,6 @@ const paymentMethods = [
     { img: 'https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689bad624fa04dfe23225ad3_Klarna_Payment_Badge%201.svg', alt: 'Klarna', class: '' },
 ];
 
-/**
- * Payment section with payment methods and shipping info
- */
 export const PaymentSection: React.FC = () => {
     return (
         <div data-inertia="" className="payment-section">

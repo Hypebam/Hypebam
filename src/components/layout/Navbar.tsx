@@ -1,9 +1,6 @@
 import React from 'react';
 import { Button, SocialLinks } from '@/components/ui';
 
-/**
- * Main navigation bar component
- */
 export const Navbar: React.FC = () => {
     return (
         <div

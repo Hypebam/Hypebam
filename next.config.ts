@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-    // Allow external images from various domains
     images: {
         remotePatterns: [
             {
@@ -18,7 +17,6 @@ const nextConfig: NextConfig = {
             },
         ],
     },
-    // Disable strict mode for better GSAP compatibility
     reactStrictMode: false,
 };
 

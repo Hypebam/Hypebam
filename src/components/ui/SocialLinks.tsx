@@ -29,9 +29,6 @@ const defaultLinks: SocialLink[] = [
     }
 ];
 
-/**
- * Social media links component
- */
 export const SocialLinks: React.FC<SocialLinksProps> = ({
     links = defaultLinks,
     variant = 'default'

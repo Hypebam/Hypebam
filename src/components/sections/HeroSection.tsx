@@ -3,9 +3,6 @@
 import React from 'react';
 import { Button } from '@/components/ui';
 
-/**
- * Hero/Stage section with the main title, 3D can animation, and facts
- */
 export const HeroSection: React.FC = () => {
     return (
         <section data-load-stage="" data-inertia="" className="stage">
@@ -14,7 +11,6 @@ export const HeroSection: React.FC = () => {
                 <div className="stage-inner">
                     <div className="stage-content">
                         <div className="stage-logo">
-                            {/* @ts-ignore - lottie-player is a custom web component */}
                             <lottie-player
                                 src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68bf4595ca06155170fa0b3f_fee5b51503049a55da64bfd6a8ed744f_more-logo-animation.json"
                                 background="transparent"
@@ -100,7 +96,6 @@ export const HeroSection: React.FC = () => {
                 </div>
             </div>
 
-            {/* Marquee */}
             <div data-marquee="" className="marquee">
                 <div className="marquee-inner">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1440 442" width="100%" style={{ overflow: 'visible' }} className="marquee-bg-svg">

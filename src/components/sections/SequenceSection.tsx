@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-// Statement card data
 const statementCards = [
     {
         position: 'is-first',
@@ -42,9 +41,6 @@ const statementCards = [
     }
 ];
 
-/**
- * Sequence/Nutrition section with animated canvas and statement cards
- */
 export const SequenceSection: React.FC = () => {
     return (
         <div id="nutrition" data-sequence="" className="sequence-section">
@@ -90,7 +86,7 @@ export const SequenceSection: React.FC = () => {
                         ))}
                     </div>
 
-                    {/* Sequence Final */}
+
                     <div className="sequence-final">
                         <h2 data-sequence-title="" className="sequence-title">
                             Fuel The Rebel<br /><span data-sequence-title-split="" className="light-green-span">Let's Get Bam'ed</span><br />
@@ -117,7 +113,6 @@ export const SequenceSection: React.FC = () => {
                         <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68bb559a1333de45c53ee927_sequence-strawberry.webp" loading="lazy" width="594" height="594" alt="sequence-strawberry" data-sequence-strawberry-second="" className="sequence-final-strawberry is-second" />
                     </div>
 
-                    {/* Sequence Lines */}
                     <div className="sequence-lines">
                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 1440 691" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-first">
                             <path d="M-11 627.781C31.2318 652.606 151.814 698.642 199.05 645.884C264.5 572.781 199.05 472.107 47.547 363.054C-103.956 254 -52.529 150.083 24.5115 108.595C210.583 8.39218 434.763 502.251 720.049 329.362C981.436 170.957 1134 -69.7188 1490 2.78121" stroke="currentColor" strokeWidth="40"></path>

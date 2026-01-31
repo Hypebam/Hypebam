@@ -3,7 +3,6 @@
 import React from 'react';
 import { Button } from '@/components/ui';
 
-// Testimonial video data
 const testimonialVideos = [
     {
         src: "https://www.dl.dropboxusercontent.com/scl/fi/sn5g0ke38hntd7qchzhn3/SnapInsta.to_AQO-6-wc7kGZhVWDEZdicSozaqoIGuwQNnyqUly6BQNAyHcK97qvkSA6nEpLa8FL7KCmUoUDdz_a4LW2v49v8UhQxv0XijkRGobU6Io.mp4?rlkey=tip5d5fx1nr0sbeegogs83i3a&st=xphiyn1m&dl=0",
@@ -22,9 +21,6 @@ const testimonialVideos = [
     }
 ];
 
-/**
- * Sound button icons for video testimonials
- */
 const SoundButtonIcons: React.FC = () => (
     <>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16" width="100%" className="testimonial-sound-button-icon is-first">
@@ -36,9 +32,6 @@ const SoundButtonIcons: React.FC = () => (
     </>
 );
 
-/**
- * Insider section with heading, video testimonials, and text content
- */
 export const InsiderSection: React.FC = () => {
     return (
         <div data-inertia="" className="insider-section">

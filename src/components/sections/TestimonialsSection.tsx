@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-// Testimonial/review data
 const testimonials = [
     { name: 'Original', heading: 'Original', text: 'A crisp, lightly sweet blend with subtle berry notes and a smooth finish.' },
     { name: 'Apple Berry', heading: 'Apple Berry', text: 'A fresh, lightly sweet blend of juicy apple and soft berry notes with a smooth finish.' },
@@ -12,9 +11,6 @@ const testimonials = [
     { name: 'Find Us', heading: "Find us and let's bam!", text: 'Available at stores near you. Experience the rebellious energy of Sri Lanka.' },
 ];
 
-/**
- * Testimonials/Reviews section with slider
- */
 export const TestimonialsSection: React.FC = () => {
     return (
         <div id="reviews" className="testimonial-section">
