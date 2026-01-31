@@ -3,6 +3,17 @@ html.lenis body {
     height: auto
 }
 
+/* Global benefit table icon positioning */
+.benefit-item-check {
+    transform: translateX(350px) !important;
+    position: relative !important;
+}
+
+.benefit-item-x {
+    transform: translateX(450px) !important;
+    position: relative !important;
+}
+
 /* Ensure the hero stage canvas sits above subsequent sections and crops correctly */
 .stage {
     position: relative;
@@ -1405,6 +1416,7 @@ body {
 
     .benefit-item-check {
         grid-column: 2;
+        margin-left: 200px;
     }
 
     .benefit-item-x {

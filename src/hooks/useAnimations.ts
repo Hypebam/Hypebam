@@ -1,41 +1,38 @@
-﻿import { useEffect } from 'react';
+"use client";
+
+import { useEffect } from 'react';
 
 /**
- * This hook loads the original app.js which contains all GSAP premium plugins
- * (SplitText, DrawSVG, InertiaPlugin, CustomEase) bundled together.
+ * Custom hook to load and initialize GSAP animations
+ * Loads the app.js script which contains all GSAP premium plugins and animations
  */
 export const useAnimations = () => {
-  useEffect(() => {
-    console.log('Loading original app.js with GSAP premium plugins...');
+    useEffect(() => {
+        console.log('Loading original app.js with GSAP premium plugins...');
 
-    // Check if already loaded
-    if (document.querySelector('script[src="/scripts/app.js"]')) {
-      console.log('app.js already loaded');
-      return;
-    }
+        // Check if already loaded
+        if (document.querySelector('script[src="/scripts/app.js"]')) {
+            console.log('app.js already loaded');
+            return;
+        }
 
-    // Load the original bundled app.js
-    const script = document.createElement('script');
-    script.src = '/scripts/app.js';
-    script.async = false;
-    
-    script.onload = () => {
-      console.log('app.js loaded successfully');
-    };
-    
-    script.onerror = (e) => {
-      console.error('Failed to load app.js:', e);
-      // Force show content on error
-      document.documentElement.classList.add('fonts-loaded', 'is-ready', 'has-seq-ready');
-    };
-    
-    document.body.appendChild(script);
+        // Load the original bundled app.js
+        const script = document.createElement('script');
+        script.src = '/scripts/app.js';
+        script.async = false;
 
-    // Cleanup
-    return () => {
-      // Note: We don't remove the script as it has already executed
-    };
-  }, []);
+        script.onload = () => {
+            console.log('app.js loaded successfully');
+        };
+
+        script.onerror = () => {
+            console.error('Failed to load app.js');
+            // Force show content on error
+            document.documentElement.classList.add('fonts-loaded', 'is-ready', 'has-seq-ready');
+        };
+
+        document.body.appendChild(script);
+    }, []);
 };
 
 export default useAnimations;

@@ -1,0 +1,101 @@
+"use client";
+
+import React from 'react';
+import { Button } from '@/components/ui';
+
+// Testimonial video data
+const testimonialVideos = [
+    {
+        src: "https://www.dl.dropboxusercontent.com/scl/fi/sn5g0ke38hntd7qchzhn3/SnapInsta.to_AQO-6-wc7kGZhVWDEZdicSozaqoIGuwQNnyqUly6BQNAyHcK97qvkSA6nEpLa8FL7KCmUoUDdz_a4LW2v49v8UhQxv0XijkRGobU6Io.mp4?rlkey=tip5d5fx1nr0sbeegogs83i3a&st=xphiyn1m&dl=0",
+        position: "is-first",
+        buttonPosition: "is-top"
+    },
+    {
+        src: "https://www.dl.dropboxusercontent.com/scl/fi/vzjyqfr7i098s1e4f35fx/SnapInsta.to_AQN4zwHLLGQzUTUU7rkiWCayhvMlcD579UzW7eIdHgcwvbEXgqqX8JMZkSiqALpLD_bigNDJwwg7Geal33Ocpjl7VEbT4P2VvF-qIzo.mp4?rlkey=13n2hsdztyjfay5542poch07u&st=di2y9e7y&dl=0",
+        position: "is-second",
+        buttonPosition: ""
+    },
+    {
+        src: "https://www.dl.dropboxusercontent.com/scl/fi/ccn1egi3ikhsytqhbfwsf/SnapInsta.to_AQMqh_lTfkPamg2Oj4zR5IUuybxe2H0drgz6Q3qUpgoxPo_ITsqHGGRXaA0tU8cn22XVNo6eJ6_jLGfS0eVkEWLwpgjarC1GYIj9qMI.mp4?rlkey=o6zx1vqe0g584o8pwb12e8ju3&st=yfiuwnbo&dl=0",
+        position: "is-third",
+        buttonPosition: ""
+    }
+];
+
+/**
+ * Sound button icons for video testimonials
+ */
+const SoundButtonIcons: React.FC = () => (
+    <>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16" width="100%" className="testimonial-sound-button-icon is-first">
+            <path fill="currentColor" d="M10.5 2v12a.5.5 0 0 1-.807.394L5.328 11H2.5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2.828l4.365-3.394A.5.5 0 0 1 10.5 2Zm2 4a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 1 0v-3a.5.5 0 0 0-.5-.5Zm2-1a.5.5 0 0 0-.5.5v5a.5.5 0 0 0 1 0v-5a.5.5 0 0 0-.5-.5Z"></path>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16" width="100%" className="testimonial-sound-button-icon is-second">
+            <path fill="currentColor" d="M13.87 13.164a.5.5 0 1 1-.74.672l-2.63-2.893v3.038a.518.518 0 0 1-.244.448.5.5 0 0 1-.563-.035L5.328 11H2.5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2.597L3.13 2.836a.5.5 0 0 1 .74-.672l10 11ZM12.533 10A.51.51 0 0 0 13 9.484V6.517A.51.51 0 0 0 12.533 6a.5.5 0 0 0-.533.5v3a.499.499 0 0 0 .533.5Zm-2.47-2.508a.25.25 0 0 0 .437-.169V2.015a.515.515 0 0 0-.18-.4.5.5 0 0 0-.625-.01L6.989 3.709a.25.25 0 0 0-.03.366l3.104 3.418ZM14.466 5a.51.51 0 0 0-.467.517v4.966a.51.51 0 0 0 .467.516.498.498 0 0 0 .533-.5V5.5a.499.499 0 0 0-.533-.5Z"></path>
+        </svg>
+    </>
+);
+
+/**
+ * Insider section with heading, video testimonials, and text content
+ */
+export const InsiderSection: React.FC = () => {
+    return (
+        <div data-inertia="" className="insider-section">
+            <div className="insider-container">
+                <div className="grid-layout">
+                    <h2 id="w-node-_3e09cbcc-bb63-d8d5-fc92-5249d862c0ff-0ac01850" className="insider-heading">
+                        <br />Sri Lankanized<br /><span className="light-green-span">Taste that's out of this world</span><br />Energy to conquer the day<br />Sri-Lankanized just for you
+                    </h2>
+                    <div id="w-node-e1fee9ee-097a-d41e-6a8c-8fb81a411381-0ac01850" className="insider-wrapper">
+                        <div id="w-node-_93a09ee3-b180-b755-d23e-d7d2b5f676da-0ac01850" className="testimonial-wrapper">
+                            {testimonialVideos.map((video, index) => (
+                                <div
+                                    key={index}
+                                    data-inertia-item=""
+                                    id={index > 0 ? `w-node-testimonial-${index}` : undefined}
+                                    className={`testimonial-inner-wrap ${video.position}`}
+                                >
+                                    <div data-inertia-item-child="" className={`testimonial-inner _${index + 1}`}>
+                                        <div className="testimonial-media w-embed">
+                                            <video playsInline loop muted data-video="">
+                                                <source src={video.src} />
+                                            </video>
+                                        </div>
+                                        <button type="button" data-video-button="" aria-label="Sound on/off" className={`testimonial-sound-btn ${video.buttonPosition}`}>
+                                            <SoundButtonIcons />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div id="w-node-_1ac78251-f73b-1f50-5984-75b855ef30eb-0ac01850" className="insider-text-inner">
+                            <h3 className="insider-subheading">Taste as Bold as Your Ambitions</h3>
+                            <p className="paragraph">Hype Bam is more than just an energy drink; it's a symbol of Sri Lankan resilience. We've faced countless challenges, yet we rise stronger every time. We defy the odds, push boundaries, and keep moving forward…and that's the spirit we've infused into every can.</p>
+                            <div className="insider-cta">
+                                <Button href="https://morenutrition.co.uk/products/more-protein-iced-matcha-latte?country=GB">
+                                    Buy now
+                                </Button>
+                                <div className="rating-inner">
+                                    <a href="https://morenutrition.co.uk/products/more-protein-iced-matcha-latte?country=GB" target="_blank" rel="noreferrer" className="rating-link w-inline-block">
+                                        <div className="rating-star-wrap">
+                                            {[1, 2, 3, 4].map(i => (
+                                                <img key={i} src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68ae178a6c618dbc4bb25c48_icon-star.svg" loading="lazy" width="20" height="20" alt="icon-star" className="rating-star" />
+                                            ))}
+                                            <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68ae178a30a512b269607fbe_icon-star-half.svg" loading="lazy" width="20" height="20" alt="icon-star" className="rating-star" />
+                                        </div>
+                                        <div className="rating-text-wrap">
+                                            <div className="rating-text">3158 Reviews</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default InsiderSection;
