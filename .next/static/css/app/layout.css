@@ -433,7 +433,7 @@ a:hover {
 .payment-method-item {
     background: rgba(255, 251, 245, 0.95) !important;
     border: 2px solid #FFB74D !important;
-    border-radius: 12px !important;
+    border-radius: 50% !important;
 }
 
 /* Payment method specific styling */
