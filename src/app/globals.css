@@ -1,77 +1,73 @@
+/* ========================================
+   ORANGE-YELLOW FLOWING GRADIENT THEME
+   With interactive mouse movement effect
+   ======================================== */
+
+html,
+body,
 .body,
 body.body {
-    background: linear-gradient(180deg,
-            #FF6B35 0%,
-            #FF8C42 25%,
-            #FFB347 50%,
-            #FFD23F 75%,
-            #FFE066 100%
-        ) !important;
+    background: linear-gradient(
+        180deg,
+        #FF6B35 0%,
+        #FF8C42 15%,
+        #FFB347 30%,
+        #FFD54F 45%,
+        #FFE082 55%,
+        #FFD54F 65%,
+        #FFB347 75%,
+        #FF8C42 90%,
+        #FF6B35 100%
+    ) !important;
     background-attachment: fixed !important;
     min-height: 100vh;
 }
 
 :root {
-    --bg-pale: linear-gradient(180deg, #FF6B35, #FFD23F) !important;
-    --bg-pale-solid: #FFD23F;
+    /* Override existing CSS variables */
+    --dark-green: #E65100 !important;
+    --light-green: #FFA726 !important;
+    --bg-pale: #FFE082 !important;
+    --bg-pale-solid: #FFD54F !important;
+    --bg-light: #FFE082 !important;
+    --bg-dark: #E65100 !important;
+    --white: #FFFBF5 !important;
+    
+    /* Theme colors */
+    --primary-orange: #FF8C42;
+    --deep-orange: #E65100;
+    --accent-yellow: #FFD54F;
+    --cream: #FFFBF5;
 }
 
-.page-wrapper {
+/* ALL SECTIONS - Transparent to show gradient */
+.page-wrapper,
+.stage,
+.insider-section,
+.sequence-section,
+.benefit-section,
+.testimonial-section,
+.payment-section,
+.flavour,
+.footer {
     background: transparent !important;
+    background-color: transparent !important;
 }
 
-.stage {
-    background: linear-gradient(180deg,
-            #FF6B35 0%,
-            #FF8C42 50%,
-            #FFB347 100%) !important;
-}
-
+/* Marquee overlay - blend smoothly */
 .marquee-overlay {
     background: linear-gradient(180deg,
             transparent 0%,
-            #FFD23F 100%) !important;
+            transparent 100%) !important;
 }
 
+/* Loader */
 .loader {
-    background: linear-gradient(180deg, #FF6B35, #FFB347) !important;
-}
-
-.flavour {
-    background: linear-gradient(180deg,
-            #FFD23F 0%,
-            #FFE066 50%,
-            #FFF3B0 100%) !important;
-}
-
-.insider-section {
-    background: transparent !important;
-}
-
-.footer {
-    background: linear-gradient(180deg,
-            #FFE066 0%,
-            #FFD23F 100%) !important;
-}
-
-.benefit-section {
-    background-color: rgba(255, 255, 255, 0.95) !important;
-}
-
-.testimonial-section {
-    background: transparent !important;
-}
-
-.payment-section {
-    background: transparent !important;
-}
-
-.sequence-section {
-    background: transparent !important;
+    background: linear-gradient(135deg, #FF6B35, #FFD54F, #FF8C42) !important;
 }
 
 .loader::after {
-    border-color: #8B4513 !important;
+    border-color: #E65100 !important;
     border-bottom-color: transparent !important;
 }
 
@@ -81,7 +77,7 @@ body.body {
     width: 100%;
     height: 100%;
     z-index: 9999;
-    background-color: rgba(182, 203, 165, 0.99);
+    background: linear-gradient(135deg, #FF6B35, #FFD54F, #FF8C42) !important;
     display: grid;
     place-content: flex-end;
     padding-right: 2.5em;
@@ -111,7 +107,7 @@ html.is-ready .loader {
     content: "";
     height: 1.25em;
     width: 1.25em;
-    border: 0.125em solid #335c30;
+    border: 0.125em solid #CC4A1A;
     border-bottom-color: transparent;
     border-radius: 50%;
     display: inline-block;
@@ -157,4 +153,401 @@ html.is-ready.lenis-stopped {
 
 .lenis.lenis-scrolling iframe {
     pointer-events: none;
+}
+
+/* ========================================
+   ORANGE THEME - COMPLETE OVERRIDES
+   Base: #FF8C42 (Warm Orange)
+   ======================================== */
+
+/* Force all backgrounds to orange */
+div, section, main, article, aside, header, footer, nav {
+    background-color: transparent !important;
+}
+
+/* Insider section high z-index */
+.insider-section {
+    position: relative;
+    z-index: 100 !important;
+}
+
+/* Marquee/Banner */
+.marquee-bg-svg {
+    color: #E65100 !important;
+}
+
+.marquee-bg-svg path {
+    stroke: #E65100 !important;
+}
+
+/* Text colors - warm brown for readability */
+.insider-heading,
+.hero-heading,
+.flavour-title,
+.testimonial-big-heading,
+.footer-product-heading,
+.sequence-heading,
+.benefit-heading {
+    color: #FFFBF5 !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Accent text */
+.light-green-span {
+    color: #FFFBF5 !important;
+}
+
+/* White span */
+.white-span {
+    color: #FFFBF5 !important;
+}
+
+/* Buttons */
+.button,
+.btn,
+[class*="button"] {
+    background: #E65100 !important;
+    color: #FFFBF5 !important;
+    border: none !important;
+}
+
+.button:hover,
+.btn:hover,
+[class*="button"]:hover {
+    background: #BF360C !important;
+}
+
+/* Navigation */
+.nav-link,
+.navbar a {
+    color: #BF360C !important;
+}
+
+.nav-link:hover,
+.navbar a:hover {
+    color: #E65100 !important;
+}
+
+/* Cards and containers */
+.testimonial-inner,
+.benefit-card,
+.sequence-item {
+    background: #FFFBF5 !important;
+    border-color: #FFB74D !important;
+}
+
+/* Stage facts/badges */
+.stage-fact {
+    background: #E65100 !important;
+    color: #FFFBF5 !important;
+}
+
+/* SVG and icon colors */
+.stage-bg-svg {
+    color: #FFB74D !important;
+}
+
+/* Focus states */
+*:focus-visible {
+    outline-color: #E65100 !important;
+    box-shadow: 0 0 0 3px rgba(230, 81, 0, 0.25) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar-thumb {
+    background: #FFA726 !important;
+}
+
+::-webkit-scrollbar-track {
+    background: #FFE0B2 !important;
+}
+
+/* Video testimonials border */
+.testimonial-media {
+    border-color: #FFA726 !important;
+}
+
+/* Sound button */
+.testimonial-sound-btn {
+    background: #E65100 !important;
+    color: #FFFBF5 !important;
+}
+
+/* Rating stars */
+.rating-star {
+    color: #FFD54F !important;
+}
+
+/* Links */
+a {
+    color: #E65100;
+}
+
+a:hover {
+    color: #BF360C;
+}
+
+/* Subline/underline images */
+.subline-img {
+    filter: hue-rotate(-30deg) saturate(1.3) !important;
+}
+
+/* Stage deco elements */
+.stage-deco-text,
+.stage-deco-arrow {
+    filter: hue-rotate(-30deg) saturate(1.1) !important;
+}
+
+/* ========================================
+   FORCE TRANSPARENT BACKGROUNDS
+   ======================================== */
+
+/* Selection colors */
+::selection {
+    background: #E65100 !important;
+    color: #FFFBF5 !important;
+}
+
+::-moz-selection {
+    background: #E65100 !important;
+    color: #FFFBF5 !important;
+}
+
+/* Override any remaining backgrounds */
+[class*="section"],
+[class*="container"],
+[class*="wrapper"],
+[class*="inner"] {
+    background-color: transparent !important;
+}
+
+/* Specific container fixes */
+.stage-container,
+.stage-inner,
+.stage-content,
+.stage-wrap,
+.insider-container,
+.flavour-container,
+.benefit-container,
+.testimonial-container,
+.sequence-container,
+.payment-container,
+.footer-container {
+    background: transparent !important;
+}
+
+/* Grid and layout backgrounds */
+.grid-layout,
+.w-layout-grid {
+    background: transparent !important;
+}
+
+/* Swiper backgrounds */
+.swiper,
+.swiper-wrapper,
+.swiper-slide {
+    background: transparent !important;
+}
+
+/* Any remaining W- prefixed elements from Webflow */
+[class^="w-"],
+[class*=" w-"] {
+    background-color: transparent !important;
+}
+
+/* ========================================
+   COMPONENT COLOR FIXES FOR ORANGE THEME
+   ======================================== */
+
+/* Testimonial slider items */
+.testimonial-slider-item-wrap.is-active .testimonial-slider-item,
+.testimonial-slider-item {
+    color: #BF360C !important;
+    background-color: rgba(255, 251, 245, 0.95) !important;
+    border: 2px solid #FFB74D !important;
+    border-radius: 12px !important;
+}
+
+.testimonial-slider-item:hover {
+    border-color: #E65100 !important;
+}
+
+/* Testimonial slider buttons */
+.testimonial-slider-button {
+    background: #E65100 !important;
+    color: #FFFBF5 !important;
+    border: none !important;
+}
+
+.testimonial-slider-button:hover {
+    background: #BF360C !important;
+}
+
+/* Video testimonial cards */
+.testimonial-inner {
+    background: rgba(255, 251, 245, 0.9) !important;
+    border: 2px solid #FFB74D !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+}
+
+/* Sequence section items */
+.sequence-item,
+.sequence-card {
+    background: rgba(255, 251, 245, 0.95) !important;
+    border: 2px solid #FFB74D !important;
+    border-radius: 12px !important;
+}
+
+/* Benefit section cards */
+.benefit-card,
+.benefit-item {
+    background: rgba(255, 251, 245, 0.95) !important;
+    border: 2px solid #FFB74D !important;
+    border-radius: 16px !important;
+}
+
+/* Flavour section cards/slides */
+.flavour-slide,
+.flavour-item,
+.flavour-card {
+    background: rgba(255, 251, 245, 0.9) !important;
+    border: 2px solid #FFB74D !important;
+    border-radius: 16px !important;
+}
+
+/* Footer product card */
+.footer-product,
+.footer-card {
+    background: rgba(255, 251, 245, 0.9) !important;
+    border: 2px solid #FFB74D !important;
+    border-radius: 16px !important;
+}
+
+/* Payment section cards */
+.payment-card,
+.payment-item {
+    background: rgba(255, 251, 245, 0.95) !important;
+    border: 2px solid #FFB74D !important;
+    border-radius: 12px !important;
+}
+
+/* Rating component */
+.rating-text,
+.rating-star {
+    color: #BF360C !important;
+}
+
+.rating-star svg,
+.rating-star path {
+    fill: #FFD54F !important;
+}
+
+/* Navigation bar */
+.navbar,
+.nav,
+[class*="nav-"] {
+    background: transparent !important;
+}
+
+.nav-logo,
+.logo {
+    filter: hue-rotate(-30deg) saturate(1.2) !important;
+}
+
+/* All text should be readable */
+p, span, div {
+    color: inherit;
+}
+
+.paragraph,
+.text,
+[class*="paragraph"],
+[class*="text"] {
+    color: #5D4037 !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: #3E2723 !important;
+}
+
+/* Stage section specific */
+.stage-fact {
+    background: linear-gradient(135deg, #E65100, #FF8C42) !important;
+    color: #FFFBF5 !important;
+    border: none !important;
+    border-radius: 50% !important;
+    box-shadow: 0 4px 15px rgba(230, 81, 0, 0.3) !important;
+    aspect-ratio: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 120px !important;
+    min-height: 120px !important;
+    padding: 20px !important;
+    transform: scale(1.3) !important;
+}
+
+.stage-fact-number,
+.stage-fact-unit,
+.stage-fact-text {
+    color: #FFFBF5 !important;
+}
+
+/* Stage background SVG - WHITE */
+.stage-bg-svg,
+.stage-bg-svg path {
+    color: rgba(255, 255, 255, 0.8) !important;
+    stroke: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Insider section heading */
+.insider-heading {
+    color: #3E2723 !important;
+    text-shadow: none !important;
+}
+
+/* Flavour title and subline */
+.flavour-title {
+    color: #3E2723 !important;
+}
+
+.flavour-subline {
+    color: #5D4037 !important;
+}
+
+/* Footer styling */
+.footer-heading,
+.footer-product-heading {
+    color: #3E2723 !important;
+}
+
+.footer-text,
+.footer-link {
+    color: #5D4037 !important;
+}
+
+.footer-link:hover {
+    color: #E65100 !important;
+}
+
+/* Social icons */
+.social-link,
+.social-icon {
+    color: #E65100 !important;
+}
+
+.social-link:hover,
+.social-icon:hover {
+    color: #BF360C !important;
+}
+
+/* Fix any green remnants */
+[style*="green"],
+[style*="#335c30"],
+[style*="#68844c"],
+[style*="#b6cba5"] {
+    color: #E65100 !important;
 }

@@ -6,6 +6,7 @@ html.lenis body {
 .stage {
     position: relative;
     z-index: 50;
+    margin-bottom: -200px;
 }
 
 .stage-visual {
@@ -13,8 +14,9 @@ html.lenis body {
     overflow: visible;
     z-index: 60;
     transform-origin: center center;
-    transform: rotate(20deg);
-    top: -65px;
+    transform: rotate(20deg) scaleX(1.5);
+    top: -60px;
+    left: -200px;
 }
 
 .stage-wrap {
@@ -25,7 +27,7 @@ html.lenis body {
     position: relative;
     display: block;
     width: 100%;
-    height: 100%;
+    height: 80%;
     z-index: 9999;
     pointer-events: none;
 }
@@ -605,6 +607,17 @@ body {
 
 .nav-text {
     transition: translate .725s var(--elastic-ease-out), rotate .725s var(--elastic-ease-out), scale .35s var(--default-ease), transform .35s var(--default-ease), box-shadow .35s var(--smooth-ease)
+}
+
+[data-marquee] {
+    position: relative;
+    top: -300px;
+    margin-bottom: -550px;
+}
+
+.marquee-text-svg {
+    position: relative;
+    top: -120px;
 }
 
 .marquee-text-svg text {

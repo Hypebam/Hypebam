@@ -1,24 +1,31 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui';
 
 export const HeroSection: React.FC = () => {
+    const lottieRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (lottieRef.current && !lottieRef.current.querySelector('lottie-player')) {
+            const player = document.createElement('lottie-player');
+            player.setAttribute('src', 'https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68bf4595ca06155170fa0b3f_fee5b51503049a55da64bfd6a8ed744f_more-logo-animation.json');
+            player.setAttribute('background', 'transparent');
+            player.setAttribute('speed', '1');
+            player.setAttribute('data-load-stage-logo-lottie', '');
+            player.setAttribute('data-load-stage-logo', '');
+            player.className = 'stage-logo-svg';
+            lottieRef.current.appendChild(player);
+        }
+    }, []);
+
     return (
         <section data-load-stage="" data-inertia="" className="stage">
             <div className="stage-overlay"></div>
             <div className="stage-container">
                 <div className="stage-inner">
                     <div className="stage-content">
-                        <div className="stage-logo">
-                            <lottie-player
-                                src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68bf4595ca06155170fa0b3f_fee5b51503049a55da64bfd6a8ed744f_more-logo-animation.json"
-                                background="transparent"
-                                speed="1"
-                                data-load-stage-logo-lottie=""
-                                data-load-stage-logo=""
-                                className="stage-logo-svg"
-                            />
+                        <div className="stage-logo" ref={lottieRef} data-load-stage-logo="">
                         </div>
                         <div data-load-stage-cta="" className="stage-cta">
                             <Button href="https://morenutrition.co.uk/products/more-protein-iced-matcha-latte?country=GB">
@@ -78,7 +85,7 @@ export const HeroSection: React.FC = () => {
                             <div className="stage-right">
                                 <div className="stage-text-wrap">
                                     <h1 data-load-stage-title="" className="hero-heading">
-                                        <span className="white-span">Matcha meets…</span><br />Sri Lankanized<br />Energy Drink
+                                        <span className="white-span"></span><br />Sri Lankanized<br />Energy Drink
                                     </h1>
                                     <div className="stage-paragraph-wrap">
                                         <p data-load-stage-text="" className="paragraph is-stage-paragraph">
@@ -101,10 +108,10 @@ export const HeroSection: React.FC = () => {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1440 442" width="100%" style={{ overflow: 'visible' }} className="marquee-bg-svg">
                         <path stroke="currentColor" strokeWidth="160" d="M-71 371.6C126.3 260 593.5 65.8 934.5 80.8c313 13.8 497 136 572 200"></path>
                     </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1440 293" width="100%" style={{ overflow: 'visible' }} data-marquee-svg="" className="marquee-text-svg">
-                        <path d="M-68 300C173 173 515.5 1 937.2 1 1254.5 1 1468 183.3 1543 246.9" id="curve"></path>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1440 442" width="100%" style={{ overflow: 'visible' }} data-marquee-svg="" className="marquee-text-svg">
+                        <path d="M-71 371.6C126.3 260 593.5 65.8 934.5 80.8c313 13.8 497 136 572 200" id="curve"></path>
                         <text width="100%" style={{ transform: 'translate3d(0,0,0)' }}>
-                            <textPath style={{ transform: 'translate3d(0,0,0)' }} alignmentBaseline="text-before-edge" href="#curve" startOffset="-30%">
+                            <textPath style={{ transform: 'translate3d(0,0,0)' }} alignmentBaseline="middle" href="#curve" startOffset="-30%">
                                 Let's Get Bam'ed · Let's Get Bam'ed · Let's Get Bam'ed
                             </textPath>
                         </text>
