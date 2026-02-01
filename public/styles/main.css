@@ -6,7 +6,6 @@ html.lenis body {
 .stage {
     position: relative;
     z-index: 50;
-    margin-bottom: -200px;
 }
 
 .stage-visual {
@@ -611,8 +610,6 @@ body {
 
 [data-marquee] {
     position: relative;
-    top: -300px;
-    margin-bottom: -550px;
 }
 
 .marquee-text-svg {
