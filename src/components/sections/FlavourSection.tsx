@@ -108,19 +108,19 @@ export const FlavourSection: React.FC = () => {
             <style>{`
                 .hbf {
                     background: #FFF8EF;
-                    padding: clamp(60px, 8vw, 120px) 0 clamp(80px, 10vw, 160px);
+                    padding: clamp(80px, 10vw, 160px) 0 clamp(100px, 12vw, 200px);
                     overflow: hidden;
                     position: relative;
                     text-align: center;
                 }
-                /* decorative ring */
+                /* decorative rings */
                 .hbf::before {
                     content: '';
                     position: absolute;
-                    top: 35%;
+                    top: 40%;
                     left: 50%;
-                    width: min(700px, 55vw);
-                    height: min(700px, 55vw);
+                    width: min(900px, 70vw);
+                    height: min(900px, 70vw);
                     border: 3px solid rgba(230,81,0,0.05);
                     border-radius: 50%;
                     transform: translate(-50%, -50%);
@@ -129,14 +129,20 @@ export const FlavourSection: React.FC = () => {
                 .hbf::after {
                     content: '';
                     position: absolute;
-                    top: 30%;
+                    top: 38%;
                     left: 50%;
-                    width: min(900px, 70vw);
-                    height: min(900px, 70vw);
+                    width: min(1200px, 90vw);
+                    height: min(1200px, 90vw);
                     border: 2px solid rgba(230,81,0,0.03);
                     border-radius: 50%;
                     transform: translate(-50%, -50%);
                     pointer-events: none;
+                }
+
+                /* cinematic floating animation */
+                @keyframes hbf-float {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-12px); }
                 }
 
                 /* ── Header ── */
@@ -159,15 +165,30 @@ export const FlavourSection: React.FC = () => {
                     opacity: 0.9;
                 }
 
-                /* ── Product showcase (centered) ── */
+                /* ── Product showcase (centered, LARGE) ── */
                 .hbf-stage {
                     position: relative;
-                    max-width: 600px;
+                    max-width: 900px;
                     margin: 0 auto;
-                    min-height: clamp(320px, 42vw, 550px);
+                    min-height: clamp(450px, 55vw, 750px);
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                }
+                /* cinematic glow behind product */
+                .hbf-glow {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: clamp(300px, 40vw, 600px);
+                    height: clamp(300px, 40vw, 600px);
+                    border-radius: 50%;
+                    transform: translate(-50%, -50%);
+                    filter: blur(80px);
+                    opacity: 0.2;
+                    transition: background 0.8s ease;
+                    pointer-events: none;
+                    z-index: 0;
                 }
                 .hbf-can-wrap {
                     position: absolute;
@@ -176,12 +197,14 @@ export const FlavourSection: React.FC = () => {
                     align-items: center;
                     justify-content: center;
                     pointer-events: none;
+                    animation: hbf-float 4s ease-in-out infinite;
+                    z-index: 1;
                 }
                 .hbf-can {
-                    width: clamp(240px, 30vw, 420px);
+                    width: clamp(340px, 42vw, 620px);
                     height: auto;
                     object-fit: contain;
-                    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.25));
+                    filter: drop-shadow(0 40px 80px rgba(0,0,0,0.3)) drop-shadow(0 10px 30px rgba(230,81,0,0.15));
                     pointer-events: auto;
                     will-change: transform, opacity;
                 }
