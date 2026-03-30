@@ -66,11 +66,11 @@ export const InsiderSection: React.FC = () => {
                             <h3 className="insider-subheading">Taste as Bold as Your Ambitions</h3>
                             <p className="paragraph">Hype Bam is more than just an energy drink; it's a symbol of Sri Lankan resilience. We've faced countless challenges, yet we rise stronger every time. We defy the odds, push boundaries, and keep moving forward…and that's the spirit we've infused into every can.</p>
                             <div className="insider-cta">
-                                <Button href="https://morenutrition.co.uk/products/more-protein-iced-matcha-latte?country=GB">
+                                <Button href="#">
                                     Buy now
                                 </Button>
                                 <div className="rating-inner">
-                                    <a href="https://morenutrition.co.uk/products/more-protein-iced-matcha-latte?country=GB" target="_blank" rel="noreferrer" className="rating-link w-inline-block">
+                                    <a href="#" className="rating-link w-inline-block">
                                         <div className="rating-star-wrap">
                                             {[1, 2, 3, 4].map(i => (
                                                 <img key={i} src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68ae178a6c618dbc4bb25c48_icon-star.svg" loading="lazy" width="20" height="20" alt="icon-star" className="rating-star" />

@@ -3,9 +3,9 @@ import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "More Nutrition - Matcha meets Protein",
+  title: "Hype Bam — Sri Lankanized Energy Drink",
   description:
-    "Discover the More Nutrition Iced Matcha Latte in a whole new way: 20 g protein, 85 mg caffeine, 95% less sugar, refreshing, light and full of flavor.",
+    "Hype Bam: The Sri Lankanized energy drink. 80mg caffeine, 200mg electrolytes, 5g sugar. 5 incredible flavours. Fuel the rebel in you.",
   icons: {
     icon: "https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689b29bd3caff6492c34a95c_More-32.png",
   },
@@ -26,6 +26,11 @@ export default function RootLayout({
         />
 
         <link href="/styles/main.css" rel="stylesheet" type="text/css" />
+        <link
+          href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+          rel="stylesheet"
+          type="text/css"
+        />
 
         <Script
           src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"

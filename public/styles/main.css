@@ -1,3 +1,459 @@
+/* ========================================
+   OSMO FLUID SCALING SYSTEM
+   CORE responsive engine from original site.
+   html font-size scales with viewport width.
+   Since ALL Webflow dims use em, everything
+   scales proportionally.
+   ======================================== */
+
+:root {
+    --size-unit: 16;
+    --size-container-ideal: 1440;
+    --size-container-min: 992px;
+    --size-container-max: 2560px;
+    --size-container: clamp(var(--size-container-min), 100vw, var(--size-container-max));
+    --size-font: calc(var(--size-container) / (var(--size-container-ideal) / var(--size-unit)));
+}
+
+@media screen and (max-width: 991px) {
+    :root {
+        --size-container-ideal: 640;
+        --size-container-min: 768px;
+        --size-container-max: 991px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    :root {
+        --size-container-ideal: 550;
+        --size-container-min: 480px;
+        --size-container-max: 767px;
+    }
+}
+
+@media screen and (max-width: 479px) {
+    :root {
+        --size-container-ideal: 390;
+        --size-container-min: 320px;
+        --size-container-max: 479px;
+    }
+}
+
+html {
+    font-size: var(--size-font);
+}
+
+body {
+    font-size: 1rem;
+}
+
+/* ========================================
+   HYPE BAM Ã¢â‚¬â€ ORANGE THEME OVERRIDES
+   This MUST load AFTER Webflow shared CSS
+   to override the green color variables.
+   ======================================== */
+:root {
+    /* Remap Webflow green Ã¢â€ â€™ Hype Bam orange */
+    --dark-green: #E65100 !important;
+    --light-green: #FF8C00 !important;
+    --bg-pale: #FFF8EF !important;
+    --bg-light: #FFB74D !important;
+    --white: white !important;
+}
+
+/* === Override hardcoded green colors in Webflow CSS === */
+/* .nav-text has hardcoded #335c3033 (green with alpha) */
+.nav-text {
+    background-color: rgba(230, 81, 0, 0.2) !important;
+}
+
+/* .stage-fact has hardcoded #b6cba4 border at 991px */
+@media screen and (max-width: 991px) {
+    .stage-fact {
+        border-color: #FFB74D !important;
+    }
+}
+
+/* .testimonial-sound-btn uses color-mix with --dark-green */
+.testimonial-sound-btn {
+    background-color: rgba(230, 81, 0, 0.35) !important;
+}
+
+/* .testimonial-media uses --bg-light (now orange) */
+.testimonial-media {
+    background-color: #FFB74D !important;
+}
+
+/* .sub-line uses --dark-green for background */
+.sub-line {
+    background-color: #E65100 !important;
+}
+
+/* Ensure .flavour section uses correct bg */
+.flavour {
+    background-color: #FFF8EF !important;
+}
+
+/* .flavour-right-bg uses --white for color */
+.flavour-right-bg {
+    color: white !important;
+}
+
+/* ========================================
+   FLAVOUR SECTION FIXES
+   Make slides visible + prevent collisions
+   ======================================== */
+
+/* First slide visible by default (before Swiper loads) */
+.flavour-slide:first-child .flavour-slide-dose {
+    opacity: 1 !important;
+    scale: 1 !important;
+    rotate: -5.5deg;
+}
+
+.flavour-content-slide:first-child .flavour-content-slide-inner {
+    opacity: 1 !important;
+}
+
+.flavour-content-slide:first-child .flavour-content-slide-inner .button {
+    opacity: 1 !important;
+    translate: 0 0 0 !important;
+    scale: 1 !important;
+}
+
+/* Dose images should fit and not overflow */
+.flavour-slide-dose-img {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+}
+
+/* Ensure swipers clip overflow to prevent collisions */
+.flavour-swiper {
+    overflow: hidden !important;
+}
+
+.flavour-content-swiper {
+    overflow: hidden !important;
+}
+/* .sequence-lines uses --white */
+.sequence-lines {
+    color: white !important;
+}
+
+/* .footer-line uses --white */
+.footer-line {
+    color: white !important;
+}
+
+/* .benefit-svg uses --white */
+.benefit-svg {
+    color: white !important;
+}
+
+/* Payment method item border at 991px uses hardcoded #bg-pale */
+@media screen and (max-width: 991px) {
+    .payment-method-item {
+        border-color: #FFF8EF !important;
+    }
+}
+
+/* === Body background === */
+body,
+.body,
+body.body {
+    background-color: #FFF8EF !important;
+}
+
+/* === Orange buttons (override Webflow's dark-green bg) === */
+.button .button-bg {
+    background-color: #E65100 !important;
+}
+
+.button .button-text {
+    color: white !important;
+}
+
+.button.is-white .button-bg,
+.button .button-bg.white-bg {
+    background-color: #FFF8EF !important;
+}
+
+.button.is-white .button-text,
+.button .button-text.dark-font {
+    color: #E65100 !important;
+}
+
+.button.is-light .button-bg,
+.button .button-bg.light-bg {
+    background-color: white !important;
+}
+
+.button.is-light .button-text {
+    color: #E65100 !important;
+}
+
+/* === Stage / Hero orange background === */
+.stage {
+    background-color: #FFB74D !important;
+}
+
+.stage-fact {
+    background-color: #FFF8EF !important;
+    border-color: #FFB74D !important;
+}
+
+/* === Marquee overlay matches page bg === */
+.marquee-overlay {
+    background-color: #FFF8EF !important;
+}
+
+/* === Social media circles === */
+.social-media-circle {
+    background-color: #FFF8EF !important;
+}
+
+.social-media-circle.is-white {
+    background-color: white !important;
+}
+
+/* === Benefit section white bg === */
+.benefit-section {
+    background-color: white !important;
+}
+
+.benefit-item-check {
+    background-color: #FFF8EF !important;
+}
+
+/* === Payment method circles === */
+.payment-method-item {
+    background-color: white !important;
+}
+
+/* === Footer info cards === */
+.footer-info {
+    background-color: white !important;
+    border-color: #FFF8EF !important;
+}
+
+.footer-credits-inner {
+    background-color: white !important;
+}
+
+/* === Statement cards orange bg === */
+.statement-card-wrapper {
+    background-color: #FFB74D !important;
+}
+
+/* === Testimonial slider items === */
+.testimonial-slider-button {
+    background-color: white !important;
+}
+
+/* === Scrollbar orange === */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #E65100 !important;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: #FFF8EF !important;
+}
+
+/* === Selection orange === */
+::selection {
+    background: #E65100 !important;
+    color: white !important;
+}
+
+/* === Override remaining green SVG/image assets via CSS filters === */
+/* Hue-rotate green (120Â°) â†’ orange (30Â°) = -90Â° rotation, with saturation boost */
+
+/* "More" logo loaded via Lottie â€” CSS fill/color won't work on canvas.
+   Use filter on the CONTAINER to transform all rendered content. */
+.stage-logo,
+.stage-logo-svg {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Lottie player element (both SVG and canvas modes) */
+.stage-logo lottie-player {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* "Real Matcha, Original Taste" handwritten text SVG (loaded as <img>) */
+.stage-deco-text,
+.stage-deco-text.is-wiggle {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Stage deco arrow */
+.stage-deco-arrow {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Marquee background SVG â€” has hardcoded #214a1e */
+.marquee-bg-svg {
+    color: #8B3A00 !important;
+}
+
+/* Marquee text SVG */
+.marquee-text-svg {
+    color: #E65100 !important;
+}
+
+/* Stage background SVG (the large arc behind the can) */
+.stage-bg,
+.stage-bg svg {
+    color: white !important;
+}
+
+.stage-bg-svg {
+    color: white !important;
+}
+
+/* Footer logo SVG */
+.footer-logo {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Signature images (handwritten style) â€” all green */
+.hero-signature-img,
+.animation-signature-img,
+.payment-signature-img,
+.payment-signature-days-img,
+.testimonial-signature-img,
+.sequence-signature-text-img,
+.sequence-signature-arrow-img,
+.sequence-inner-signature-img,
+.sequence-final-signature-img,
+.flavour-signature-img,
+.flavour-signature-arrow-img,
+.first-statement-icon-img,
+.second-icon-img,
+.third-statement-icon-img,
+.fourth-statement-icon-img {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Benefit table title image (More Nutrition logo in table header) */
+.benefit-table-title-img {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Stage overlay pattern - keep but match orange */
+.stage-overlay {
+    opacity: 0.03 !important;
+}
+
+/* Loader pattern */
+.loader::before {
+    opacity: 0.05 !important;
+}
+
+/* Social media icons (loaded as <img> with green fills) */
+.social-media-icon {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Subline underline SVG in hero */
+.subline-img {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Rating stars (green star SVGs) */
+.rating-star {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Testimonial stars */
+.testimonial-star {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Testimonial verified icon */
+.testimonial-verified-icon {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Testimonial slider button icon */
+.testimonial-slider-button-arrow {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Flavour slider button icon */
+.flavour-slider-button-arrow {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Nav button arrows */
+.button-arrow {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* ========================================
+   MARQUEE SECTION FIXES
+   Grid stacking + color overrides ONLY
+   ======================================== */
+
+/* Grid container - stacks children in same cell */
+.marquee-inner {
+    display: grid !important;
+}
+
+/* Background band - dark orange, full width */
+.marquee-bg-svg {
+    color: #BF4500 !important;
+    grid-area: 1 / 1 / 2 / 2 !important;
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* Text SVG - overlaid on same grid cell, full width */
+.marquee-text-svg {
+    grid-area: 1 / 1 / 2 / 2 !important;
+    z-index: 1 !important;
+    position: relative !important;
+    top: 0 !important;
+    margin-top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    color: #FFF8EF !important;
+}
+
+/* Overlay layer */
+.marquee-overlay {
+    grid-area: 1 / 1 / 2 / 2 !important;
+    z-index: -1 !important;
+}
+
+/* Text fill */
+.marquee-text-svg text,
+.marquee-text-svg textPath {
+    fill: currentColor !important;
+}
+
+/* Smiley face icon (green SVG) */
+.top-smiley img {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Check marks in benefits table */
+.check {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* ========================================
+   END ORANGE THEME OVERRIDES
+   ======================================== */
+
 html.lenis,
 html.lenis body {
     height: auto
@@ -9,13 +465,8 @@ html.lenis body {
 }
 
 .stage-visual {
-    position: relative;
     overflow: visible;
     z-index: 60;
-    transform-origin: center center;
-    transform: rotate(20deg) scaleX(1.5);
-    top: -60px;
-    left: -200px;
 }
 
 .stage-wrap {
@@ -1423,3 +1874,32 @@ body {
 .footer-logo.desktop {
     display: none;
 }
+
+/* === Sequence section Ã¢â‚¬â€ ensure mobile cards layout === */
+.sequence-cards-mobile {
+    z-index: -1;
+    flex-flow: column;
+    grid-area: 1/1;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    padding-left: 2.5em;
+    padding-right: 2.5em;
+    display: none;
+    position: relative;
+    overflow: clip;
+}
+
+/* === Ensure slider works with overflow === */
+.testimonial-slider-inner {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.testimonial-slider-inner::-webkit-scrollbar {
+    display: none;
+}
+
+

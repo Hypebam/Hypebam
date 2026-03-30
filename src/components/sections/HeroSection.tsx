@@ -28,7 +28,7 @@ export const HeroSection: React.FC = () => {
                         <div className="stage-logo" ref={lottieRef} data-load-stage-logo="">
                         </div>
                         <div data-load-stage-cta="" className="stage-cta">
-                            <Button href="https://morenutrition.co.uk/products/more-protein-iced-matcha-latte?country=GB">
+                            <Button href="#">
                                 Buy now
                             </Button>
                         </div>
@@ -36,8 +36,8 @@ export const HeroSection: React.FC = () => {
                             <div className="stage-left">
                                 <div className="stage-deco">
                                     <div data-load-stage-deco-text="" style={{ '--animation-delay': '.05s' } as React.CSSProperties} className="stage-deco-text-wrap">
-                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68d41a7021c95a7f4ce8cd14_4bb0c9727f3cc3cf72d4fe155fa50163_Real%20Matcha%2C%20Origin%20al%20Taste.svg" loading="lazy" width="300" height="112" alt="Real Matcha, Origin al Taste" className="stage-deco-text" />
-                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68d41a7021c95a7f4ce8cd14_4bb0c9727f3cc3cf72d4fe155fa50163_Real%20Matcha%2C%20Origin%20al%20Taste.svg" loading="eager" width="300" height="112" alt="Real Matcha, Origin al Taste" className="stage-deco-text is-wiggle" />
+                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68d41a7021c95a7f4ce8cd14_4bb0c9727f3cc3cf72d4fe155fa50163_Real%20Matcha%2C%20Origin%20al%20Taste.svg" loading="lazy" width="300" height="112" alt="Hype Bam Energy" className="stage-deco-text" />
+                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68d41a7021c95a7f4ce8cd14_4bb0c9727f3cc3cf72d4fe155fa50163_Real%20Matcha%2C%20Origin%20al%20Taste.svg" loading="eager" width="300" height="112" alt="Hype Bam Energy" className="stage-deco-text is-wiggle" />
                                     </div>
                                     <div data-load-stage-deco-arrow="" style={{ '--animation-delay': '.15s' } as React.CSSProperties} className="stage-deco-arrow-wrap">
                                         <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68a9a089d73e5cf84d4ded67_stage-sketch-arrow.svg" loading="eager" width="150" height="150" alt="stage-sketch-arrow" className="stage-deco-arrow" />
@@ -85,7 +85,7 @@ export const HeroSection: React.FC = () => {
                             <div className="stage-right">
                                 <div className="stage-text-wrap">
                                     <h1 data-load-stage-title="" className="hero-heading">
-                                        <span className="white-span"></span><br />Sri Lankanized<br />Energy Drink
+                                        <span className="white-span"></span><br />Sri Lankanized<br /> Energy Drink<br />
                                     </h1>
                                     <div className="stage-paragraph-wrap">
                                         <p data-load-stage-text="" className="paragraph is-stage-paragraph">
