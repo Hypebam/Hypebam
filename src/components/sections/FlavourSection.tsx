@@ -3,11 +3,11 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 const flavours = [
-    { name: 'Original', label: 'Classic Energy', image: '/img/flavours/original.png', color: '#E65100' },
-    { name: 'Lemon Lime', label: 'Citrus Blast', image: '/img/flavours/lemon-lime.png', color: '#7CB342' },
-    { name: 'Pineapple Passion', label: 'Tropical Rush', image: '/img/flavours/pineapple-passion.png', color: '#E91E63' },
-    { name: 'Apple Berry', label: 'Fruity Fusion', image: '/img/flavours/apple-berry.png', color: '#D32F2F' },
-    { name: 'Mango Peach', label: 'Island Vibes', image: '/img/flavours/mango-peach.png', color: '#FF8F00' },
+    { name: 'Original', label: 'Classic Energy', image: '/img/flavours/original.webp', color: '#E65100' },
+    { name: 'Lemon Lime', label: 'Citrus Blast', image: '/img/flavours/lemon-lime.webp', color: '#7CB342' },
+    { name: 'Pineapple Passion', label: 'Tropical Rush', image: '/img/flavours/pineapple-passion.webp', color: '#E91E63' },
+    { name: 'Apple Berry', label: 'Fruity Fusion', image: '/img/flavours/apple-berry.webp', color: '#D32F2F' },
+    { name: 'Mango Peach', label: 'Island Vibes', image: '/img/flavours/mango-peach.webp', color: '#FF8F00' },
 ];
 
 export const FlavourSection: React.FC = () => {
@@ -322,6 +322,8 @@ export const FlavourSection: React.FC = () => {
             {/* ── Centered product stage ── */}
             <div style={{ position: 'relative', maxWidth: 900, margin: '0 auto' }}>
                 <div ref={productRef} className="hbf-stage">
+                    {/* Cinematic color glow */}
+                    <div className="hbf-glow" style={{ background: cur.color }} />
                     {flavours.map((f, i) => (
                         <div key={i} className="hbf-can-wrap">
                             <img
@@ -330,6 +332,8 @@ export const FlavourSection: React.FC = () => {
                                 src={f.image}
                                 alt={`Hype Bam ${f.name}`}
                                 draggable={false}
+                                loading="lazy"
+                                decoding="async"
                             />
                         </div>
                     ))}

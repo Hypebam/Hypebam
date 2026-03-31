@@ -16,8 +16,47 @@ const nextConfig: NextConfig = {
                 pathname: '/**',
             },
         ],
+        // Optimize images served from public dir
+        formats: ['image/webp', 'image/avif'],
+        minimumCacheTTL: 31536000, // 1 year cache
     },
     reactStrictMode: false,
+    // Enable compression
+    compress: true,
+    // Optimize for production
+    poweredByHeader: false,
+    // Cache static assets aggressively on Vercel
+    async headers() {
+        return [
+            {
+                source: '/img/:path*',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=31536000, immutable',
+                    },
+                ],
+            },
+            {
+                source: '/styles/:path*',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=31536000, immutable',
+                    },
+                ],
+            },
+            {
+                source: '/scripts/:path*',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=31536000, immutable',
+                    },
+                ],
+            },
+        ];
+    },
 };
 
 export default nextConfig;

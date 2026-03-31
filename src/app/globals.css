@@ -87,3 +87,30 @@ html.is-ready.lenis-stopped {
 .lenis.lenis-scrolling iframe {
     pointer-events: none;
 }
+
+/* ========================================
+   SEQUENCE ANIMATION — Mobile speed fix
+   On mobile the scroll-wrap is shorter, so 200 frames
+   play over fewer scroll pixels = too fast.
+   Increasing height gives more scroll distance = slower, smoother.
+   ======================================== */
+@media (max-width: 991px) {
+    .sequence-scroll-wrap {
+        height: 500vh !important;
+        min-height: 3000px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .sequence-scroll-wrap {
+        height: 600vh !important;
+        min-height: 3500px !important;
+    }
+}
+
+@media (max-width: 479px) {
+    .sequence-scroll-wrap {
+        height: 700vh !important;
+        min-height: 4000px !important;
+    }
+}
