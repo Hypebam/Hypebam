@@ -165,12 +165,20 @@ html.is-ready.lenis-stopped {
 }
 
 .marquee-text-svg {
-    margin-top: 10px !important;
+    position: relative !important;
+    top: 300px !important;
 }
 
 /* Ensure marquee visible */
 .marquee {
     overflow-x: visible !important;
+}
+
+/* Scale marquee to match desktop proportions on mobile */
+@media screen and (max-width: 767px) {
+    .marquee-inner {
+        transform: translateY(0px) scale(1.2) !important;
+    }
 }
 
 /* ==============================================

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui';
 
 export const HeroSection: React.FC = () => {
     const lottieRef = useRef<HTMLDivElement>(null);
+    const headingRef = useRef<HTMLHeadingElement>(null);
 
     useEffect(() => {
         if (lottieRef.current && !lottieRef.current.querySelector('lottie-player')) {
@@ -17,6 +18,32 @@ export const HeroSection: React.FC = () => {
             player.className = 'stage-logo-svg';
             lottieRef.current.appendChild(player);
         }
+    }, []);
+
+    // After GSAP SplitText processes the heading, force "Energy" and "Drink" words white
+    useEffect(() => {
+        const applyWhite = () => {
+            if (!headingRef.current) return;
+            const allEls = headingRef.current.querySelectorAll('.split-word, .split-char, div, span');
+            allEls.forEach(el => {
+                const text = el.textContent?.trim();
+                if (text === 'Energy' || text === 'Drink' || text === 'Energy Drink') {
+                    (el as HTMLElement).style.setProperty('color', 'white', 'important');
+                }
+                // Also check single characters inside "Energy Drink"
+                if (el.closest('[data-white-text]')) {
+                    (el as HTMLElement).style.setProperty('color', 'white', 'important');
+                }
+            });
+        };
+        // Run after GSAP has time to initialize
+        const timers = [500, 1000, 2000, 3000].map(ms => setTimeout(applyWhite, ms));
+        // Also observe DOM changes
+        const observer = new MutationObserver(applyWhite);
+        if (headingRef.current) {
+            observer.observe(headingRef.current, { childList: true, subtree: true });
+        }
+        return () => { timers.forEach(clearTimeout); observer.disconnect(); };
     }, []);
 
     return (
@@ -84,8 +111,8 @@ export const HeroSection: React.FC = () => {
                             </div>
                             <div className="stage-right">
                                 <div className="stage-text-wrap">
-                                    <h1 data-load-stage-title="" className="hero-heading">
-                                        <span className="white-span"></span><br />Sri Lankanized<br /> Energy Drink<br />
+                                    <h1 ref={headingRef} data-load-stage-title="" className="hero-heading">
+                                        <span className="white-span"></span><br />Sri Lankanized<br /> <span data-white-text="">Energy Drink</span>
                                     </h1>
                                     <div className="stage-paragraph-wrap">
                                         <p data-load-stage-text="" className="paragraph is-stage-paragraph">
@@ -104,7 +131,7 @@ export const HeroSection: React.FC = () => {
             </div>
 
             <div data-marquee="" className="marquee" style={{ transform: 'translateY(clamp(-20vw, -15vw, -10vw))' }}>
-                <div className="marquee-inner">
+                <div className="marquee-inner" style={{ transform: 'translateY(250px)' }}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1440 442" width="100%" style={{ overflow: 'visible' }} className="marquee-bg-svg">
                         <path stroke="currentColor" strokeWidth="160" d="M-71 371.6C126.3 260 593.5 65.8 934.5 80.8c313 13.8 497 136 572 200"></path>
                     </svg>

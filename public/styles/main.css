@@ -57,7 +57,7 @@ body {
     --dark-green: #E65100 !important;
     --light-green: #FF8C00 !important;
     --bg-pale: #FFF8EF !important;
-    --bg-light: #FFB74D !important;
+    --bg-light: #FF8C00 !important;
     --white: white !important;
 }
 
@@ -197,12 +197,67 @@ body.body {
 
 /* === Stage / Hero orange background === */
 .stage {
-    background-color: #FFB74D !important;
+    background-color: #F09000 !important;
+}
+
+/* Dark text for contrast on orange background — deep espresso brown */
+.stage .paragraph,
+.stage .stage-fact-number,
+.stage .stage-fact-unit,
+.stage .stage-fact-text {
+    color: #3D1800 !important;
+}
+
+.stage .hero-heading,
+.stage .hero-heading * {
+    color: #3D1800 !important;
+}
+
+/* "Energy Drink" text — separate div outside GSAP SplitText */
+.stage .hero-heading-white {
+    color: white !important;
+    margin-top: -0.2em;
+}
+
+/* Stage bg-svg stroke — darker to contrast on orange */
+.stage .stage-bg-svg {
+    color: #ffffff !important;
+}
+
+/* Deco SVGs — white for contrast on orange background */
+.stage .stage-deco-text,
+.stage .stage-deco-text.is-wiggle,
+.stage .stage-deco-arrow,
+.stage .stage-deco-arrow.is-wiggle {
+    filter: brightness(0) saturate(100%) invert(100%) !important;
+}
+
+/* Navbar buttons — 1.2x bigger */
+.navbar .button {
+    scale: 1.25;
+}
+
+/* Hero Buy now button — 2x bigger with dark brown bg */
+.stage-cta .button {
+    scale: 1.25;
+}
+
+.stage-cta .button .button-bg {
+    background-color: #3D1800 !important;
+}
+
+/* Hero button circle — dark bg with white arrow */
+.stage-cta .button .button-cycle-bg {
+    background-color: #3D1800 !important;
+}
+
+.stage-cta .button .button-arrow {
+    filter: brightness(0) saturate(100%) invert(100%) !important;
 }
 
 .stage-fact {
     background-color: #FFF8EF !important;
-    border-color: #FFB74D !important;
+    border-color: #C86E00 !important;
 }
 
 /* === Marquee overlay matches page bg === */
@@ -492,7 +547,7 @@ html.lenis body {
     z-index: 9999;
     pointer-events: none;
     rotate: 20deg !important;
-    scale: 1.2 !important;
+    scale: 1.125 !important;
 }
 
 .stage-overlay {
@@ -2124,18 +2179,28 @@ to {
 
 /* Push marquee higher within the stage section */
 .stage {
-    padding-bottom: 15em !important;
+    padding-bottom: 0em !important;
     overflow: visible !important;
+    margin-bottom: -3em !important;
 }
 
 .marquee {
-    transform: translateY(13em) !important;
+    transform: translateY(0em) !important;
+    z-index: 2 !important;
 }
+
+/* Pull insider section up to cover any remaining gap */
+.insider-section {
+    margin-top: 10em !important;
+    position: relative;
+    z-index: 2;
+}
+
 
 /* Marquee: match original Webflow shared CSS exactly */
 .marquee-inner {
     display: grid;
-    transform: translateY(-180px);
+    /* transform handled by inline style in HeroSection.tsx */
 }
 
 .marquee-bg-svg,
@@ -2277,6 +2342,11 @@ body {
 .testimonial-inner {
     width: 100% !important;
     scale: 1.3;
+}
+
+/* Insider text section — 1.5x bigger */
+.insider-text-inner {
+    font-size: 1.5em !important;
 }
 
 .testimonial-inner-wrap.is-first {

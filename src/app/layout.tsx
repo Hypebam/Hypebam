@@ -26,6 +26,8 @@ export default function RootLayout({
         />
 
         <link href="/styles/main.css" rel="stylesheet" type="text/css" />
+        {/* Preload first canvas animation frame for instant display */}
+        <link rel="preload" href="/img/hypeBamVideo001.webp" as="image" type="image/webp" />
         <link
           href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
           rel="stylesheet"
