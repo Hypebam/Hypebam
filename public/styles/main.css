@@ -2118,8 +2118,8 @@ to {
 }
 
 .paragraph.is-stage-paragraph {
-    font-size: clamp(0.875rem, 1.2vw, 1.125rem) !important;
-    line-height: 1.5 !important;
+    font-size: clamp(1.5rem, 2.5vw, 2.25rem) !important;
+    line-height: 1.4 !important;
 }
 
 /* Push marquee higher within the stage section */
@@ -2276,6 +2276,7 @@ body {
 
 .testimonial-inner {
     width: 100% !important;
+    scale: 1.3;
 }
 
 .testimonial-inner-wrap.is-first {
