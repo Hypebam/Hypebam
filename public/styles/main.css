@@ -2507,6 +2507,11 @@ body {
         margin-top: -10rem !important;
     }
 
+    /* Smaller video cards on mobile */
+    .testimonial-inner {
+        scale: 0.85 !important;
+    }
+
     /* 3x stage facts on mobile */
     .stage .stage-fact-number {
         font-size: 3.5rem !important;
@@ -2522,5 +2527,61 @@ body {
 
     .stage .stage-fact {
         padding: 1.5em !important;
+    }
+
+    /* Fix benefit table: 3-col layout on mobile */
+    .benefit-table-item {
+        grid-template-columns: 3fr 1fr 1fr !important;
+        align-items: center !important;
+    }
+
+    .benefit-item-title {
+        grid-column: 1 / 2 !important;
+        font-size: 0.9rem !important;
+    }
+
+    .benefit-checker-inner {
+        grid-column: 2 / 4 !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.5em !important;
+    }
+
+    .benefit-item-check,
+    .benefit-item-x {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .benefit-table-title-wrapper {
+        display: grid !important;
+        grid-template-columns: 3fr 1fr 1fr !important;
+        align-items: center !important;
+    }
+
+    /* Benefits label → col 1 */
+    .benefit-table-title-wrapper>.benefit-table-title:first-child {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+    }
+
+    /* Desktop logo → hidden */
+    .benefit-table-title-img.is-desktop {
+        display: none !important;
+    }
+
+    /* "Hype Bam" mobile → col 2, centered */
+    .benefit-table-title.is-mobile-only {
+        display: block !important;
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        text-align: center !important;
+    }
+
+    /* "Typical Energy Drinks" → col 3, centered */
+    .benefit-table-title-wrapper>.benefit-table-title:last-child {
+        grid-column: 3 !important;
+        grid-row: 1 !important;
+        text-align: center !important;
     }
 }
