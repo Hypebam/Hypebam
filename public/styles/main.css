@@ -228,6 +228,16 @@ body.body {
     background-color: #FFF8EF !important;
 }
 
+/* Align benefit table rows: title spans 3 cols, check/X spans 2 cols
+   to match the header layout (Benefits | Logo | Typical Energy Drinks) */
+.benefit-table-item>.benefit-item-title {
+    grid-column: span 3;
+}
+
+.benefit-table-item>.benefit-checker-inner {
+    grid-column: span 2;
+}
+
 /* === Payment method circles === */
 .payment-method-item {
     background-color: white !important;
@@ -481,6 +491,8 @@ html.lenis body {
     height: 80%;
     z-index: 9999;
     pointer-events: none;
+    rotate: 20deg !important;
+    scale: 1.2 !important;
 }
 
 .stage-overlay {
@@ -2112,12 +2124,12 @@ to {
 
 /* Push marquee higher within the stage section */
 .stage {
-    padding-bottom: 10em !important;
+    padding-bottom: 15em !important;
     overflow: visible !important;
 }
 
 .marquee {
-    transform: translateY(9em) !important;
+    transform: translateY(13em) !important;
 }
 
 /* Marquee: match original Webflow shared CSS exactly */
