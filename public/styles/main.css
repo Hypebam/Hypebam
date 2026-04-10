@@ -2123,6 +2123,7 @@ to {
 /* Marquee: match original Webflow shared CSS exactly */
 .marquee-inner {
     display: grid;
+    transform: translateY(-180px);
 }
 
 .marquee-bg-svg,
