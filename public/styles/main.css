@@ -2112,12 +2112,12 @@ to {
 
 /* Push marquee higher within the stage section */
 .stage {
-    padding-bottom: 35em !important;
+    padding-bottom: 10em !important;
     overflow: visible !important;
 }
 
 .marquee {
-    transform: translateY(-15em) !important;
+    transform: translateY(9em) !important;
 }
 
 /* Marquee: match original Webflow shared CSS exactly */
