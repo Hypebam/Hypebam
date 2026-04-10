@@ -56,8 +56,13 @@ html.has-seq-ready .loader::after {
 }
 
 @keyframes rotation {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* ========================================
@@ -113,4 +118,13 @@ html.is-ready.lenis-stopped {
         height: 700vh !important;
         min-height: 4000px !important;
     }
+}
+
+/* Fixed px so only SVG viewBox scaling applies — matches curve rate exactly */
+.marquee-text-svg text {
+    font-size: 160px !important;
+}
+
+.marquee-text-svg {
+    margin-top: 10px !important;
 }

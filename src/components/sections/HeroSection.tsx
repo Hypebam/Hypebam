@@ -103,16 +103,16 @@ export const HeroSection: React.FC = () => {
                 </div>
             </div>
 
-            <div data-marquee="" className="marquee">
+            <div data-marquee="" className="marquee" style={{ transform: 'translateY(clamp(-20vw, -15vw, -10vw))' }}>
                 <div className="marquee-inner">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1440 442" width="100%" style={{ overflow: 'visible' }} className="marquee-bg-svg">
                         <path stroke="currentColor" strokeWidth="160" d="M-71 371.6C126.3 260 593.5 65.8 934.5 80.8c313 13.8 497 136 572 200"></path>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1440 442" width="100%" style={{ overflow: 'visible' }} data-marquee-svg="" className="marquee-text-svg">
                         <path d="M-71 371.6C126.3 260 593.5 65.8 934.5 80.8c313 13.8 497 136 572 200" id="curve"></path>
-                        <text width="100%" style={{ transform: 'translate3d(0,0,0)' }}>
+                        <text width="100%" style={{ transform: 'translate3d(0,0,0)' }} fontSize="120" dy="10">
                             <textPath style={{ transform: 'translate3d(0,0,0)' }} alignmentBaseline="middle" href="#curve" startOffset="-30%">
-                                Let's Get Bam'ed · Let's Get Bam'ed · Let's Get Bam'ed
+                                Let&apos;s Get Bam&apos;ed · Let&apos;s Get Bam&apos;ed · Let&apos;s Get Bam&apos;ed
                             </textPath>
                         </text>
                     </svg>

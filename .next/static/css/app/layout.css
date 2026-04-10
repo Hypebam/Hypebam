@@ -1,0 +1,133 @@
+/*!*****************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[10].use[3]!./src/app/globals.css ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************/
+/* ========================================
+   HYPE BAM — Functional CSS
+   Color theme is in main.css (loads after Webflow CSS)
+   This file only contains functional CSS that Next.js bundles.
+   ======================================== */
+
+/* ========================================
+   LOADER
+   ======================================== */
+.loader {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: #FFF8EF !important;
+    display: grid;
+    place-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+html.is-ready .loader {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader::before {
+    content: "";
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+    background-image: url(https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b0b1e2ae528702c898a058_pattern.png);
+    background-position: 0 0;
+    background-size: 7rem 7rem;
+    position: absolute;
+    inset: 0%;
+    opacity: 0.1;
+}
+
+.loader::after {
+    content: "";
+    height: 2em;
+    width: 2em;
+    border: 3px solid #E65100;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    transition: opacity 0.25s ease;
+}
+
+html.has-seq-ready .loader::after {
+    opacity: 0;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* ========================================
+   LENIS SMOOTH SCROLL
+   ======================================== */
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+html.is-ready.lenis-stopped {
+    overflow: auto !important;
+}
+
+.lenis.lenis-scrolling iframe {
+    pointer-events: none;
+}
+
+/* ========================================
+   SEQUENCE ANIMATION — Mobile speed fix
+   On mobile the scroll-wrap is shorter, so 200 frames
+   play over fewer scroll pixels = too fast.
+   Increasing height gives more scroll distance = slower, smoother.
+   ======================================== */
+@media (max-width: 991px) {
+    .sequence-scroll-wrap {
+        height: 500vh !important;
+        min-height: 3000px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .sequence-scroll-wrap {
+        height: 600vh !important;
+        min-height: 3500px !important;
+    }
+}
+
+@media (max-width: 479px) {
+    .sequence-scroll-wrap {
+        height: 700vh !important;
+        min-height: 4000px !important;
+    }
+}
+
+/* Fixed px so only SVG viewBox scaling applies — matches curve rate exactly */
+.marquee-text-svg text {
+    font-size: 160px !important;
+}
+
+.marquee-text-svg {
+    margin-top: 10px !important;
+}
