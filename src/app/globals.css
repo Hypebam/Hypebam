@@ -179,6 +179,32 @@ html.is-ready.lenis-stopped {
     .marquee-inner {
         transform: translateY(0px) scale(1.2) !important;
     }
+
+    /* 2x hero text on mobile */
+    .hero-heading {
+        font-size: 3rem !important;
+    }
+
+    .paragraph.is-stage-paragraph {
+        font-size: 1.5rem !important;
+    }
+
+    /* 2x insider heading on mobile */
+    .insider-heading {
+        font-size: 2.5rem !important;
+        line-height: 1.2 !important;
+    }
+
+    /* Move insider heading ABOVE videos on mobile */
+    .grid-layout {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .insider-heading {
+        order: -1 !important;
+        margin-bottom: 2rem !important;
+    }
 }
 
 /* ==============================================

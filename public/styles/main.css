@@ -2472,3 +2472,55 @@ body {
         rotate: 4deg !important;
     }
 }
+
+/* ==========================================
+   MOBILE TEXT SIZE OVERRIDES (must be last)
+   ========================================== */
+@media screen and (max-width: 767px) {
+
+    /* 2x hero heading */
+    .stage .hero-heading {
+        font-size: 5rem !important;
+    }
+
+    /* 2x hero paragraph */
+    .stage .paragraph.is-stage-paragraph {
+        font-size: 2rem !important;
+        line-height: 1.2 !important;
+    }
+
+    /* 2x insider heading — above videos */
+    .insider-section .insider-heading {
+        font-size: 3rem !important;
+        line-height: 1.2 !important;
+    }
+
+    /* Reorder: heading above videos */
+    .insider-section .grid-layout {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .insider-section .insider-heading {
+        order: -1 !important;
+        margin-bottom: 2rem !important;
+        margin-top: -10rem !important;
+    }
+
+    /* 3x stage facts on mobile */
+    .stage .stage-fact-number {
+        font-size: 3.5rem !important;
+    }
+
+    .stage .stage-fact-unit {
+        font-size: 2rem !important;
+    }
+
+    .stage .stage-fact-text {
+        font-size: 1.2rem !important;
+    }
+
+    .stage .stage-fact {
+        padding: 1.5em !important;
+    }
+}
