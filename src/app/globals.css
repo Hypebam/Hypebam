@@ -4,6 +4,45 @@
    This file only contains functional CSS that Next.js bundles.
    ======================================== */
 
+/* Prevent horizontal overflow on mobile.
+   IMPORTANT: Do NOT use overflow-x:hidden on html — it breaks position:fixed (GSAP pin).
+   Do NOT use overflow-x:clip on .stage — it clips the canvas animation. */
+body,
+.body {
+    overflow-x: clip !important;
+}
+
+/* Force sequence statement cards container visible on mobile (Webflow hides it at 991px).
+   Do NOT override opacity/transform — GSAP ScrollTrigger controls card-by-card reveal. */
+@media screen and (max-width: 991px) {
+    .sequence-cards {
+        display: flex !important;
+        overflow: visible !important;
+    }
+
+    .statement-card {
+        width: 90% !important;
+        max-width: 400px !important;
+    }
+}
+
+/* Nav "Shop all" button: single line + right-align on mobile */
+.navbar .button-text {
+    white-space: nowrap !important;
+}
+
+@media (max-width: 991px) {
+    .navbar .grid-layout {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    .navbar .button {
+        margin-left: auto !important;
+    }
+}
+
 /* ========================================
    LOADER
    ======================================== */
@@ -127,4 +166,196 @@ html.is-ready.lenis-stopped {
 
 .marquee-text-svg {
     margin-top: 10px !important;
+}
+
+/* Ensure marquee visible */
+.marquee {
+    overflow-x: visible !important;
+}
+
+/* ==============================================
+   INSIDER SECTION: 5-VIDEO GRID - COMPLETE FIX
+   ============================================== */
+
+/* 1. Testimonial wrapper: force full 12-col span */
+#w-node-_93a09ee3-b180-b755-d23e-d7d2b5f676da-0ac01850 {
+    grid-area: span 1 / span 12 / span 1 / span 12 !important;
+}
+
+/* 2. Wrapper: 5-column grid */
+.testimonial-wrapper {
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 1rem !important;
+    align-items: start !important;
+    padding-top: 0 !important;
+}
+
+/* 3. Reset base positioning but ADD creative scattered look */
+.testimonial-inner-wrap {
+    position: relative !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    transition: transform 0.4s ease !important;
+}
+
+/* 4. Override fixed width on .testimonial-inner */
+.testimonial-inner {
+    width: 100% !important;
+}
+
+/* 5. Scattered magazine-style layout - rotations + offsets */
+.testimonial-inner-wrap.is-first {
+    top: 3em !important;
+    rotate: -8deg !important;
+    z-index: 2 !important;
+    margin-left: -0.5em !important;
+}
+
+.testimonial-inner-wrap.is-second {
+    top: 6em !important;
+    rotate: 3deg !important;
+    z-index: 3 !important;
+    margin-left: -1.5em !important;
+}
+
+.testimonial-inner-wrap.is-third {
+    top: 0 !important;
+    rotate: -4deg !important;
+    z-index: 5 !important;
+    transform: scale(1.08) !important;
+}
+
+.testimonial-inner-wrap.is-fourth {
+    top: 5em !important;
+    rotate: 5deg !important;
+    z-index: 3 !important;
+    margin-left: -1em !important;
+}
+
+.testimonial-inner-wrap.is-fifth {
+    top: 2em !important;
+    rotate: -6deg !important;
+    z-index: 2 !important;
+    margin-right: -0.5em !important;
+}
+
+/* Hover: lift card up */
+.testimonial-inner-wrap:hover {
+    z-index: 10 !important;
+    transform: scale(1.05) translateY(-0.5em) !important;
+}
+
+/* 6. Text section below videos - full width */
+#w-node-_1ac78251-f73b-1f50-5984-75b855ef30eb-0ac01850 {
+    grid-area: span 1 / span 12 / span 1 / span 12 !important;
+}
+
+/* 7. Ensure no overflow clipping on parents */
+.insider-wrapper {
+    overflow: visible !important;
+}
+
+.insider-section {
+    overflow: visible !important;
+}
+
+/* Make videos bigger - scale up the entire wrapper */
+.testimonial-wrapper {
+    transform: scale(1.1) !important;
+    transform-origin: center top !important;
+    margin-bottom: 4rem !important;
+}
+
+/* Responsive: tablet */
+@media (max-width: 991px) {
+    .testimonial-wrapper {
+        grid-template-columns: repeat(3, 1fr) !important;
+        transform: scale(1) !important;
+        gap: 0.5rem !important;
+    }
+
+    .testimonial-inner-wrap.is-first {
+        top: 1.5em !important;
+        rotate: -6deg !important;
+    }
+
+    .testimonial-inner-wrap.is-second {
+        top: 3em !important;
+        rotate: 3deg !important;
+    }
+
+    .testimonial-inner-wrap.is-third {
+        top: 0 !important;
+        rotate: -3deg !important;
+        transform: scale(1.05) !important;
+    }
+
+    .testimonial-inner-wrap.is-fourth {
+        top: 2em !important;
+        rotate: 4deg !important;
+    }
+
+    .testimonial-inner-wrap.is-fifth {
+        top: 1em !important;
+        rotate: -5deg !important;
+    }
+}
+
+/* Responsive: mobile — scattered photo pile */
+@media (max-width: 991px) {
+    .testimonial-wrapper {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 0 !important;
+        padding: 0 !important;
+        transform: none !important;
+    }
+
+    .testimonial-inner-wrap {
+        width: 75vw !important;
+        max-width: 320px !important;
+        margin-top: -12rem !important;
+    }
+
+    .testimonial-inner-wrap:first-child {
+        margin-top: 0 !important;
+    }
+
+    .testimonial-inner {
+        width: 100% !important;
+    }
+
+    /* Scattered positions: alternating left/right + rotations */
+    .testimonial-inner-wrap.is-first {
+        align-self: flex-end !important;
+        rotate: 5deg !important;
+        z-index: 1 !important;
+    }
+
+    .testimonial-inner-wrap.is-second {
+        align-self: flex-start !important;
+        rotate: -4deg !important;
+        z-index: 2 !important;
+    }
+
+    .testimonial-inner-wrap.is-third {
+        align-self: flex-end !important;
+        rotate: 6deg !important;
+        z-index: 3 !important;
+    }
+
+    .testimonial-inner-wrap.is-fourth {
+        align-self: flex-start !important;
+        rotate: -5deg !important;
+        z-index: 4 !important;
+    }
+
+    .testimonial-inner-wrap.is-fifth {
+        align-self: flex-end !important;
+        rotate: 4deg !important;
+        z-index: 5 !important;
+    }
 }

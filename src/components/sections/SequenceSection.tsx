@@ -86,6 +86,8 @@ export const SequenceSection: React.FC = () => {
                         ))}
                     </div>
 
+                    {/* app.js expects this element to exist — without it GSAP crashes */}
+                    <div className="sequence-cards-mobile"></div>
 
                     <div className="sequence-final">
                         <h2 data-sequence-title="" className="sequence-title">

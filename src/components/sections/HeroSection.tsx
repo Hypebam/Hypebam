@@ -20,7 +20,7 @@ export const HeroSection: React.FC = () => {
     }, []);
 
     return (
-        <section data-load-stage="" data-inertia="" className="stage">
+        <section data-load-stage="" data-inertia="" className="stage" style={{ paddingBottom: 0, overflow: 'visible', marginBottom: '-5vw' }}>
             <div className="stage-overlay"></div>
             <div className="stage-container">
                 <div className="stage-inner">

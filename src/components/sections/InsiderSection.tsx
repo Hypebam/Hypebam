@@ -18,6 +18,16 @@ const testimonialVideos = [
         src: "https://www.dl.dropboxusercontent.com/scl/fi/ccn1egi3ikhsytqhbfwsf/SnapInsta.to_AQMqh_lTfkPamg2Oj4zR5IUuybxe2H0drgz6Q3qUpgoxPo_ITsqHGGRXaA0tU8cn22XVNo6eJ6_jLGfS0eVkEWLwpgjarC1GYIj9qMI.mp4?rlkey=o6zx1vqe0g584o8pwb12e8ju3&st=yfiuwnbo&dl=0",
         position: "is-third",
         buttonPosition: ""
+    },
+    {
+        src: "https://www.dl.dropboxusercontent.com/scl/fi/sn5g0ke38hntd7qchzhn3/SnapInsta.to_AQO-6-wc7kGZhVWDEZdicSozaqoIGuwQNnyqUly6BQNAyHcK97qvkSA6nEpLa8FL7KCmUoUDdz_a4LW2v49v8UhQxv0XijkRGobU6Io.mp4?rlkey=tip5d5fx1nr0sbeegogs83i3a&st=xphiyn1m&dl=0",
+        position: "is-fourth",
+        buttonPosition: ""
+    },
+    {
+        src: "https://www.dl.dropboxusercontent.com/scl/fi/vzjyqfr7i098s1e4f35fx/SnapInsta.to_AQN4zwHLLGQzUTUU7rkiWCayhvMlcD579UzW7eIdHgcwvbEXgqqX8JMZkSiqALpLD_bigNDJwwg7Geal33Ocpjl7VEbT4P2VvF-qIzo.mp4?rlkey=13n2hsdztyjfay5542poch07u&st=di2y9e7y&dl=0",
+        position: "is-fifth",
+        buttonPosition: ""
     }
 ];
 
@@ -38,7 +48,7 @@ export const InsiderSection: React.FC = () => {
             <div className="insider-container">
                 <div className="grid-layout">
                     <h2 id="w-node-_3e09cbcc-bb63-d8d5-fc92-5249d862c0ff-0ac01850" className="insider-heading">
-                        <br />Sri Lankanized<br /><span className="light-green-span">Taste that's out of this world</span><br />Energy to conquer the day<br />Sri-Lankanized just for you
+                        <br />Sri Lankanized<br /><span className="light-green-span">Taste that&apos;s out of this world</span><br />Energy to conquer the day<br />Sri-Lankanized just for you
                     </h2>
                     <div id="w-node-e1fee9ee-097a-d41e-6a8c-8fb81a411381-0ac01850" className="insider-wrapper">
                         <div id="w-node-_93a09ee3-b180-b755-d23e-d7d2b5f676da-0ac01850" className="testimonial-wrapper">
@@ -48,6 +58,7 @@ export const InsiderSection: React.FC = () => {
                                     data-inertia-item=""
                                     id={index > 0 ? `w-node-testimonial-${index}` : undefined}
                                     className={`testimonial-inner-wrap ${video.position}`}
+                                    style={{ display: 'block', width: '100%' }}
                                 >
                                     <div data-inertia-item-child="" className={`testimonial-inner _${index + 1}`}>
                                         <div className="testimonial-media w-embed">
@@ -62,26 +73,27 @@ export const InsiderSection: React.FC = () => {
                                 </div>
                             ))}
                         </div>
-                        <div id="w-node-_1ac78251-f73b-1f50-5984-75b855ef30eb-0ac01850" className="insider-text-inner">
-                            <h3 className="insider-subheading">Taste as Bold as Your Ambitions</h3>
-                            <p className="paragraph">Hype Bam is more than just an energy drink; it's a symbol of Sri Lankan resilience. We've faced countless challenges, yet we rise stronger every time. We defy the odds, push boundaries, and keep moving forward…and that's the spirit we've infused into every can.</p>
-                            <div className="insider-cta">
-                                <Button href="#">
-                                    Buy now
-                                </Button>
-                                <div className="rating-inner">
-                                    <a href="#" className="rating-link w-inline-block">
-                                        <div className="rating-star-wrap">
-                                            {[1, 2, 3, 4].map(i => (
-                                                <img key={i} src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68ae178a6c618dbc4bb25c48_icon-star.svg" loading="lazy" width="20" height="20" alt="icon-star" className="rating-star" />
-                                            ))}
-                                            <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68ae178a30a512b269607fbe_icon-star-half.svg" loading="lazy" width="20" height="20" alt="icon-star" className="rating-star" />
-                                        </div>
-                                        <div className="rating-text-wrap">
-                                            <div className="rating-text">3158 Reviews</div>
-                                        </div>
-                                    </a>
-                                </div>
+                    </div>
+                    {/* Text section — inside grid-layout but after insider-wrapper so it renders below */}
+                    <div id="w-node-_1ac78251-f73b-1f50-5984-75b855ef30eb-0ac01850" className="insider-text-inner" style={{ marginTop: '12rem' }}>
+                        <h3 className="insider-subheading">Taste as Bold as Your Ambitions</h3>
+                        <p className="paragraph">Hype Bam is more than just an energy drink; it&apos;s a symbol of Sri Lankan resilience. We&apos;ve faced countless challenges, yet we rise stronger every time. We defy the odds, push boundaries, and keep moving forward…and that&apos;s the spirit we&apos;ve infused into every can.</p>
+                        <div className="insider-cta">
+                            <Button href="#">
+                                Buy now
+                            </Button>
+                            <div className="rating-inner">
+                                <a href="#" className="rating-link w-inline-block">
+                                    <div className="rating-star-wrap">
+                                        {[1, 2, 3, 4].map(i => (
+                                            <img key={i} src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68ae178a6c618dbc4bb25c48_icon-star.svg" loading="lazy" width="20" height="20" alt="icon-star" className="rating-star" />
+                                        ))}
+                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68ae178a30a512b269607fbe_icon-star-half.svg" loading="lazy" width="20" height="20" alt="icon-star" className="rating-star" />
+                                    </div>
+                                    <div className="rating-text-wrap">
+                                        <div className="rating-text">3158 Reviews</div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>
