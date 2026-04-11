@@ -131,7 +131,7 @@ export const HeroSection: React.FC = () => {
             </div>
 
             <div data-marquee="" className="marquee" style={{ transform: 'translateY(clamp(-20vw, -15vw, -10vw))' }}>
-                <div className="marquee-inner" style={{ transform: 'translateY(250px)' }}>
+                <div className="marquee-inner" style={{ transform: 'translateY(200px)' }}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1440 442" width="100%" style={{ overflow: 'visible' }} className="marquee-bg-svg">
                         <path stroke="currentColor" strokeWidth="160" d="M-71 371.6C126.3 260 593.5 65.8 934.5 80.8c313 13.8 497 136 572 200"></path>
                     </svg>

@@ -2181,7 +2181,7 @@ to {
 .stage {
     padding-bottom: 0em !important;
     overflow: visible !important;
-    margin-bottom: -3em !important;
+    margin-bottom: 5em !important;
 }
 
 .marquee {
@@ -2191,7 +2191,7 @@ to {
 
 /* Pull insider section up to cover any remaining gap */
 .insider-section {
-    margin-top: 10em !important;
+    margin-top: 12em !important;
     position: relative;
     z-index: 2;
 }
@@ -2504,7 +2504,7 @@ body {
     .insider-section .insider-heading {
         order: -1 !important;
         margin-bottom: 2rem !important;
-        margin-top: -10rem !important;
+        margin-top: 0rem !important;
     }
 
     /* Smaller video cards on mobile */
