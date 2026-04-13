@@ -2400,6 +2400,20 @@ body {
 
 @media screen and (max-width: 991px) {
 
+    /* Reorder heading above videos on tablet */
+    .insider-section .grid-layout {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .insider-section .insider-heading {
+        order: -1 !important;
+        margin-bottom: 2rem !important;
+        margin-top: 0 !important;
+        font-size: clamp(1.8rem, 4.5vw, 3rem) !important;
+        line-height: 1.2 !important;
+    }
+
     /* Force sequence statement cards container visible on mobile */
     .sequence-cards {
         display: flex !important;

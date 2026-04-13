@@ -337,6 +337,22 @@ html.is-ready.lenis-stopped {
     }
 }
 
+/* Tablet: reorder heading above videos */
+@media (max-width: 991px) {
+    .insider-section .grid-layout {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .insider-section .insider-heading {
+        order: -1 !important;
+        margin-bottom: 2rem !important;
+        margin-top: 0 !important;
+        font-size: clamp(1.8rem, 4.5vw, 3rem) !important;
+        line-height: 1.2 !important;
+    }
+}
+
 /* Responsive: mobile — scattered photo pile */
 @media (max-width: 991px) {
     .testimonial-wrapper {
