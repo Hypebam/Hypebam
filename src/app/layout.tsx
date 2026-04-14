@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
+import { ResourcePreloader } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Hype Bam — Sri Lankanized Energy Drink",
@@ -19,19 +20,60 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* ── DNS Preconnect: resolve CDN hostnames before requests fire ── */}
+        <link rel="preconnect" href="https://cdn.prod.website-files.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://cdn.prod.website-files.com" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+
+        {/* ── Critical above-fold CSS ── */}
         <link
           href="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/css/more-nutrition.shared.e35377ec8.min.css"
           rel="stylesheet"
           type="text/css"
         />
-
         <link href="/styles/main.css" rel="stylesheet" type="text/css" />
-        {/* Preload first canvas animation frame for instant display */}
-        <link rel="preload" href="/img/hypeBamVideo001.webp" as="image" type="image/webp" />
         <link
           href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
           rel="stylesheet"
           type="text/css"
+        />
+
+        {/* ── Preload: Hero canvas — first frame must paint instantly ── */}
+        <link rel="preload" href="/img/hypeBamVideo001.webp" as="image" type="image/webp" />
+        {/* Preload frames 2–5 for smooth animation start-up */}
+        <link rel="preload" href="/img/hypeBamVideo002.webp" as="image" type="image/webp" />
+        <link rel="preload" href="/img/hypeBamVideo003.webp" as="image" type="image/webp" />
+        <link rel="preload" href="/img/hypeBamVideo004.webp" as="image" type="image/webp" />
+        <link rel="preload" href="/img/hypeBamVideo005.webp" as="image" type="image/webp" />
+
+        {/* ── Preload: Sequence section — first frame so canvas isn't blank ── */}
+        <link rel="preload" href="/img/seq_0_0.webp" as="image" type="image/webp" />
+        <link rel="preload" href="/img/seq_1_0.webp" as="image" type="image/webp" />
+
+        {/* ── Preload: First flavour can (active by default) ── */}
+        <link rel="preload" href="/img/flavours/original.webp" as="image" type="image/webp" />
+
+        {/* ── Prefetch: Lottie hero logo animation JSON ── */}
+        <link
+          rel="prefetch"
+          href="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68bf4595ca06155170fa0b3f_fee5b51503049a55da64bfd6a8ed744f_more-logo-animation.json"
+          as="fetch"
+          crossOrigin="anonymous"
+        />
+
+        {/* ── Prefetch: Hero SVG decorations (above fold) ── */}
+        <link
+          rel="prefetch"
+          href="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68a9a089d73e5cf84d4ded67_stage-sketch-arrow.svg"
+          as="image"
+        />
+        <link
+          rel="prefetch"
+          href="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/688655fd2fed5f707c038914_Layer_1%20(3).svg"
+          as="image"
         />
 
         <Script
@@ -170,6 +212,8 @@ export default function RootLayout({
       </head>
       <body className="body">
         {children}
+        {/* Smart runtime prefetcher — watches scroll and pre-fetches assets just before needed */}
+        <ResourcePreloader />
         <Script id="fallback-loader" strategy="afterInteractive">
           {`
             setTimeout(function () {

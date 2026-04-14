@@ -195,9 +195,18 @@ body.body {
     color: #E65100 !important;
 }
 
-/* === Stage / Hero orange background === */
+/* === Stage / Hero — Brand gradient background === */
+/* Colour stops sampled from brand image: red → orange → gold */
 .stage {
-    background-color: #F09000 !important;
+    background-color: #E8180C !important; /* fallback for browsers that don't support gradients */
+    background-image: linear-gradient(
+        180deg,
+        #E8180C 0%,       /* vivid red — top */
+        #F03A08 28%,      /* orange-red */
+        #F55000 55%,      /* deep orange */
+        #F98000 78%,      /* amber orange */
+        #FFD000 100%      /* golden yellow — bottom */
+    ) !important;
 }
 
 /* Dark text for contrast on orange background — deep espresso brown */
@@ -219,9 +228,9 @@ body.body {
     margin-top: -0.2em;
 }
 
-/* Stage bg-svg stroke — darker to contrast on orange */
+/* Stage bg-svg stroke — white glow on gradient */
 .stage .stage-bg-svg {
-    color: #ffffff !important;
+    color: rgba(255, 255, 255, 0.75) !important;
 }
 
 /* Deco SVGs — white for contrast on orange background */
@@ -377,11 +386,11 @@ body.body {
 /* Stage background SVG (the large arc behind the can) */
 .stage-bg,
 .stage-bg svg {
-    color: white !important;
+    color: rgba(255, 255, 255, 0.75) !important;
 }
 
 .stage-bg-svg {
-    color: white !important;
+    color: rgba(255, 255, 255, 0.75) !important;
 }
 
 /* Footer logo SVG */

@@ -1,31 +1,33 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui';
 
+// Local compressed videos (served from /public/img/video/compressed/)
+// Original: ~225 MB total → Compressed: ~11.4 MB total (94.9% reduction)
 const testimonialVideos = [
     {
-        src: "https://www.dl.dropboxusercontent.com/scl/fi/sn5g0ke38hntd7qchzhn3/SnapInsta.to_AQO-6-wc7kGZhVWDEZdicSozaqoIGuwQNnyqUly6BQNAyHcK97qvkSA6nEpLa8FL7KCmUoUDdz_a4LW2v49v8UhQxv0XijkRGobU6Io.mp4?rlkey=tip5d5fx1nr0sbeegogs83i3a&st=xphiyn1m&dl=0",
+        src: "/img/video/compressed/Story_01.mp4",
         position: "is-first",
         buttonPosition: "is-top"
     },
     {
-        src: "https://www.dl.dropboxusercontent.com/scl/fi/vzjyqfr7i098s1e4f35fx/SnapInsta.to_AQN4zwHLLGQzUTUU7rkiWCayhvMlcD579UzW7eIdHgcwvbEXgqqX8JMZkSiqALpLD_bigNDJwwg7Geal33Ocpjl7VEbT4P2VvF-qIzo.mp4?rlkey=13n2hsdztyjfay5542poch07u&st=di2y9e7y&dl=0",
+        src: "/img/video/compressed/Story_02.mp4",
         position: "is-second",
         buttonPosition: ""
     },
     {
-        src: "https://www.dl.dropboxusercontent.com/scl/fi/ccn1egi3ikhsytqhbfwsf/SnapInsta.to_AQMqh_lTfkPamg2Oj4zR5IUuybxe2H0drgz6Q3qUpgoxPo_ITsqHGGRXaA0tU8cn22XVNo6eJ6_jLGfS0eVkEWLwpgjarC1GYIj9qMI.mp4?rlkey=o6zx1vqe0g584o8pwb12e8ju3&st=yfiuwnbo&dl=0",
+        src: "/img/video/compressed/Story_03.mp4",
         position: "is-third",
         buttonPosition: ""
     },
     {
-        src: "https://www.dl.dropboxusercontent.com/scl/fi/sn5g0ke38hntd7qchzhn3/SnapInsta.to_AQO-6-wc7kGZhVWDEZdicSozaqoIGuwQNnyqUly6BQNAyHcK97qvkSA6nEpLa8FL7KCmUoUDdz_a4LW2v49v8UhQxv0XijkRGobU6Io.mp4?rlkey=tip5d5fx1nr0sbeegogs83i3a&st=xphiyn1m&dl=0",
+        src: "/img/video/compressed/Story_04.mp4",
         position: "is-fourth",
         buttonPosition: ""
     },
     {
-        src: "https://www.dl.dropboxusercontent.com/scl/fi/vzjyqfr7i098s1e4f35fx/SnapInsta.to_AQN4zwHLLGQzUTUU7rkiWCayhvMlcD579UzW7eIdHgcwvbEXgqqX8JMZkSiqALpLD_bigNDJwwg7Geal33Ocpjl7VEbT4P2VvF-qIzo.mp4?rlkey=13n2hsdztyjfay5542poch07u&st=di2y9e7y&dl=0",
+        src: "/img/video/compressed/Story_05.mp4",
         position: "is-fifth",
         buttonPosition: ""
     }
@@ -43,6 +45,42 @@ const SoundButtonIcons: React.FC = () => (
 );
 
 export const InsiderSection: React.FC = () => {
+    const wrapperRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const wrapper = wrapperRef.current;
+        if (!wrapper) return;
+
+        // Lazy-play videos only when they scroll into view
+        const videos = wrapper.querySelectorAll<HTMLVideoElement>('video[data-video]');
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const video = entry.target as HTMLVideoElement;
+                    if (entry.isIntersecting) {
+                        // Set src from data-src if not already loaded
+                        const source = video.querySelector('source');
+                        if (source && source.dataset.src && !source.src) {
+                            source.src = source.dataset.src;
+                            video.load();
+                        }
+                        video.play().catch(() => {
+                            // Autoplay blocked — silently ignore (muted videos usually allowed)
+                        });
+                    } else {
+                        video.pause();
+                    }
+                });
+            },
+            { threshold: 0.25 }
+        );
+
+        videos.forEach((video) => observer.observe(video));
+
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <div data-inertia="" className="insider-section">
             <div className="insider-container">
@@ -50,7 +88,7 @@ export const InsiderSection: React.FC = () => {
                     <h2 id="w-node-_3e09cbcc-bb63-d8d5-fc92-5249d862c0ff-0ac01850" className="insider-heading">
                         <br />Sri Lankanized<br /><span className="light-green-span">Taste that&apos;s out of this world</span><br />Energy to conquer the day<br />Sri-Lankanized just for you
                     </h2>
-                    <div id="w-node-e1fee9ee-097a-d41e-6a8c-8fb81a411381-0ac01850" className="insider-wrapper">
+                    <div id="w-node-e1fee9ee-097a-d41e-6a8c-8fb81a411381-0ac01850" className="insider-wrapper" ref={wrapperRef}>
                         <div id="w-node-_93a09ee3-b180-b755-d23e-d7d2b5f676da-0ac01850" className="testimonial-wrapper">
                             {testimonialVideos.map((video, index) => (
                                 <div
@@ -62,8 +100,15 @@ export const InsiderSection: React.FC = () => {
                                 >
                                     <div data-inertia-item-child="" className={`testimonial-inner _${index + 1}`}>
                                         <div className="testimonial-media w-embed">
-                                            <video playsInline loop muted data-video="">
-                                                <source src={video.src} />
+                                            <video
+                                                playsInline
+                                                loop
+                                                muted
+                                                preload="none"
+                                                data-video=""
+                                            >
+                                                {/* data-src used by IntersectionObserver for true lazy loading */}
+                                                <source data-src={video.src} src={video.src} type="video/mp4" />
                                             </video>
                                         </div>
                                         <button type="button" data-video-button="" aria-label="Sound on/off" className={`testimonial-sound-btn ${video.buttonPosition}`}>

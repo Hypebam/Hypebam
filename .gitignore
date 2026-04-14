@@ -17,6 +17,12 @@ dist-ssr
 out
 next-env.d.ts
 
+# Large original video files (use compressed versions in /compressed/ instead)
+# Story 01-05 originals are 20-96MB — excluded to keep repo size manageable
+public/img/video/*.mp4
+# Keep compressed versions tracked
+!public/img/video/compressed/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

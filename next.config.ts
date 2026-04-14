@@ -35,6 +35,29 @@ const nextConfig: NextConfig = {
                         key: 'Cache-Control',
                         value: 'public, max-age=31536000, immutable',
                     },
+                    {
+                        // Let Vercel CDN serve different formats (WebP/AVIF) per browser capability
+                        key: 'Vary',
+                        value: 'Accept',
+                    },
+                    {
+                        key: 'X-Content-Type-Options',
+                        value: 'nosniff',
+                    },
+                ],
+            },
+            {
+                // Compressed testimonial videos — served locally, cache aggressively
+                source: '/img/video/compressed/:path*',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=31536000, immutable',
+                    },
+                    {
+                        key: 'Accept-Ranges',
+                        value: 'bytes',
+                    },
                 ],
             },
             {

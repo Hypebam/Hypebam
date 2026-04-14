@@ -63,12 +63,12 @@ export const HeroSection: React.FC = () => {
                             <div className="stage-left">
                                 <div className="stage-deco">
                                     <div data-load-stage-deco-text="" style={{ '--animation-delay': '.05s' } as React.CSSProperties} className="stage-deco-text-wrap">
-                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68d41a7021c95a7f4ce8cd14_4bb0c9727f3cc3cf72d4fe155fa50163_Real%20Matcha%2C%20Origin%20al%20Taste.svg" loading="lazy" width="300" height="112" alt="Hype Bam Energy" className="stage-deco-text" />
-                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68d41a7021c95a7f4ce8cd14_4bb0c9727f3cc3cf72d4fe155fa50163_Real%20Matcha%2C%20Origin%20al%20Taste.svg" loading="eager" width="300" height="112" alt="Hype Bam Energy" className="stage-deco-text is-wiggle" />
+                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68d41a7021c95a7f4ce8cd14_4bb0c9727f3cc3cf72d4fe155fa50163_Real%20Matcha%2C%20Origin%20al%20Taste.svg" loading="eager" fetchPriority="high" width="300" height="112" alt="Hype Bam Energy" className="stage-deco-text" />
+                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68d41a7021c95a7f4ce8cd14_4bb0c9727f3cc3cf72d4fe155fa50163_Real%20Matcha%2C%20Origin%20al%20Taste.svg" loading="lazy" width="300" height="112" alt="Hype Bam Energy" className="stage-deco-text is-wiggle" />
                                     </div>
                                     <div data-load-stage-deco-arrow="" style={{ '--animation-delay': '.15s' } as React.CSSProperties} className="stage-deco-arrow-wrap">
-                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68a9a089d73e5cf84d4ded67_stage-sketch-arrow.svg" loading="eager" width="150" height="150" alt="stage-sketch-arrow" className="stage-deco-arrow" />
-                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68a9a089d73e5cf84d4ded67_stage-sketch-arrow.svg" loading="eager" width="150" height="150" alt="stage-sketch-arrow" className="stage-deco-arrow is-wiggle" />
+                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68a9a089d73e5cf84d4ded67_stage-sketch-arrow.svg" loading="eager" fetchPriority="high" width="150" height="150" alt="stage-sketch-arrow" className="stage-deco-arrow" />
+                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68a9a089d73e5cf84d4ded67_stage-sketch-arrow.svg" loading="lazy" width="150" height="150" alt="stage-sketch-arrow" className="stage-deco-arrow is-wiggle" />
                                     </div>
                                 </div>
                                 <div data-load-stage-visual="" className="stage-visual">
@@ -119,8 +119,8 @@ export const HeroSection: React.FC = () => {
                                             For the dreamers. Rule Breakers. Do-ers. More than just a caffeine kick. Infused with flavour and a rebellious spirit.
                                         </p>
                                         <div data-load-stage-underline="" style={{ '--animation-delay': '.2s' } as React.CSSProperties} className="stage-subline-wrap">
-                                            <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/688655fd2fed5f707c038914_Layer_1%20(3).svg" loading="eager" width="152" height="42" alt="Underline" className="subline-img" />
-                                            <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/688655fd2fed5f707c038914_Layer_1%20(3).svg" loading="eager" width="152" height="42" alt="Underline" className="subline-img is-wiggle" />
+                                            <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/688655fd2fed5f707c038914_Layer_1%20(3).svg" loading="eager" fetchPriority="high" width="152" height="42" alt="Underline" className="subline-img" />
+                                            <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/688655fd2fed5f707c038914_Layer_1%20(3).svg" loading="lazy" width="152" height="42" alt="Underline" className="subline-img is-wiggle" />
                                         </div>
                                     </div>
                                 </div>

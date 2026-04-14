@@ -332,7 +332,10 @@ export const FlavourSection: React.FC = () => {
                                 src={f.image}
                                 alt={`Hype Bam ${f.name}`}
                                 draggable={false}
-                                loading="lazy"
+                                /* First flavour is the default active — load eagerly so it's
+                                   ready when the GSAP entrance animation fires */
+                                loading={i === 0 ? "eager" : "lazy"}
+                                fetchPriority={i === 0 ? "high" : "low"}
                                 decoding="async"
                             />
                         </div>
