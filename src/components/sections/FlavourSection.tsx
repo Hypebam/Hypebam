@@ -148,17 +148,21 @@ export const FlavourSection: React.FC = () => {
                 /* ── Header ── */
                 .hbf-head { padding: 0 20px; margin-bottom: clamp(20px, 4vw, 50px); position: relative; z-index: 2; }
                 .hbf-t1 {
-                    font-family: 'Founders Grotesk Condensed','Impact',sans-serif;
+                    font-family: var(--font-primary), 'Impact', sans-serif;
                     font-size: clamp(32px, 5vw, 60px);
                     font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 1rem;
                     color: #3a2a1a;
                     line-height: 1.1;
                     margin: 0 0 4px;
                 }
                 .hbf-t2 {
-                    font-family: 'Founders Grotesk Condensed','Impact',sans-serif;
+                    font-family: var(--font-primary), 'Impact', sans-serif;
                     font-size: clamp(46px, 8vw, 100px);
                     font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 1rem;
                     color: #E65100;
                     line-height: 0.95;
                     margin: 0;
@@ -248,7 +252,7 @@ export const FlavourSection: React.FC = () => {
                 /* ── Info ── */
                 .hbf-info { margin-top: clamp(16px, 2vw, 32px); position: relative; z-index: 2; }
                 .hbf-lbl {
-                    font-family: 'Inter',sans-serif;
+                    font-family: var(--font-sub), sans-serif;
                     font-size: clamp(11px, 1.1vw, 15px);
                     color: #E65100;
                     text-transform: uppercase;
@@ -258,7 +262,7 @@ export const FlavourSection: React.FC = () => {
                     transition: all 0.3s ease;
                 }
                 .hbf-name {
-                    font-family: 'Founders Grotesk Condensed','Impact',sans-serif;
+                    font-family: var(--font-primary), 'Impact', sans-serif;
                     font-size: clamp(36px, 5.5vw, 72px);
                     font-weight: 800;
                     color: #3a2a1a;
@@ -276,7 +280,7 @@ export const FlavourSection: React.FC = () => {
                     background: #3a2a1a;
                     color: white;
                     border-radius: 50px;
-                    font-family: 'Inter',sans-serif;
+                    font-family: var(--font-secondary), sans-serif;
                     font-size: 15px;
                     font-weight: 600;
                     text-decoration: none;

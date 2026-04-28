@@ -64,7 +64,7 @@ body {
 /* === Override hardcoded green colors in Webflow CSS === */
 /* .nav-text has hardcoded #335c3033 (green with alpha) */
 .nav-text {
-    background-color: rgba(230, 81, 0, 0.2) !important;
+    background-color: #3D1800 !important;
 }
 
 /* .stage-fact has hardcoded #b6cba4 border at 991px */
@@ -420,6 +420,8 @@ body.body {
 /* Benefit table title image (More Nutrition logo in table header) */
 .benefit-table-title-img {
     filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+    height: 4em;
+    width: auto;
 }
 
 /* Stage overlay pattern - keep but match orange */
@@ -472,6 +474,11 @@ body.body {
     filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
 }
 
+/* Insider CTA button arrow — force white for contrast */
+.insider-cta .button-arrow {
+    filter: brightness(0) saturate(100%) invert(100%) !important;
+}
+
 /* ========================================
    MARQUEE SECTION FIXES
    Grid stacking + color overrides ONLY
@@ -515,9 +522,13 @@ body.body {
     fill: currentColor !important;
 }
 
-/* Smiley face icon (green SVG) */
+/* Smiley icon (now a colored PNG) */
 .top-smiley img {
-    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: normal;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.18)) !important;
 }
 
 /* Check marks in benefits table */
@@ -566,6 +577,21 @@ html.lenis body {
     opacity: 0 !important;
     z-index: 40 !important;
     pointer-events: none !important;
+}
+
+/* Hero background texture (full stage area) */
+.stage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("/img/texture.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center top;
+    opacity: 0.4;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
 }
 
 .lenis:not(.lenis-autoToggle).lenis-stopped {
@@ -968,7 +994,7 @@ body {
 
 @media (hover: hover) and (pointer: fine) {
 
-    .button:is(:hover, : focus-visible) .button-bg,
+    .button:is(:hover, :focus-visible) .button-bg,
     .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-bg {
         translate: -2.5em -.325em 0;
         rotate: -4deg;
@@ -980,7 +1006,7 @@ body {
 
 @media (hover: hover) and (pointer: fine) {
 
-    .button:is(:hover, : focus-visible) .button-cycle.is-first .button-cycle-bg,
+    .button:is(:hover, :focus-visible) .button-cycle.is-first .button-cycle-bg,
     .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-cycle.is-first .button-cycle-bg {
         scale: 0;
         opacity: 0;
@@ -990,7 +1016,7 @@ body {
 
 @media (hover: hover) and (pointer: fine) {
 
-    .button:is(:hover, : focus-visible) .button-cycle.is-first .button-arrow,
+    .button:is(:hover, :focus-visible) .button-cycle.is-first .button-arrow,
     .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-cycle.is-first .button-arrow {
         translate: -.75em .75em 0;
         filter: blur(.5rem);
@@ -1002,7 +1028,7 @@ body {
 
 @media (hover: hover) and (pointer: fine) {
 
-    .button:is(:hover, : focus-visible) .button-cycle.is-second .button-cycle-bg,
+    .button:is(:hover, :focus-visible) .button-cycle.is-second .button-cycle-bg,
     .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-cycle.is-second .button-cycle-bg {
         scale: 1;
         opacity: 1;
@@ -1012,7 +1038,7 @@ body {
 
 @media (hover: hover) and (pointer: fine) {
 
-    .button:is(:hover, : focus-visible) .button-cycle.is-second .button-arrow,
+    .button:is(:hover, :focus-visible) .button-cycle.is-second .button-arrow,
     .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-cycle.is-second .button-arrow {
         translate: 0 0 0;
         filter: blur(0);
@@ -1061,7 +1087,7 @@ body {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .social-media-link:is(:hover, : focus-visible) .social-media-circle {
+    .social-media-link:is(:hover, :focus-visible) .social-media-circle {
         scale: .945 .915;
         transform: scale(1.0582010582, 1.0928961749);
         transition: translate .725s .1s var(--elastic-ease-out), rotate .725s .1s var(--elastic-ease-out), scale .15s .1s var(--default-ease), transform .35s .25s var(--bouncy-ease), box-shadow .35s var(--smooth-ease)
@@ -1069,21 +1095,21 @@ body {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .social-media-link:is(:hover, : focus-visible):nth-child(1) .social-media-circle {
+    .social-media-link:is(:hover, :focus-visible):nth-child(1) .social-media-circle {
         translate: -.125em -.325em 0;
         rotate: -4deg
     }
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .social-media-link:is(:hover, : focus-visible):nth-child(2) .social-media-circle {
+    .social-media-link:is(:hover, :focus-visible):nth-child(2) .social-media-circle {
         translate: -.0675em -.4em 0;
         rotate: -1deg
     }
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .social-media-link:is(:hover, : focus-visible):nth-child(3) .social-media-circle {
+    .social-media-link:is(:hover, :focus-visible):nth-child(3) .social-media-circle {
         translate: .125em -.325em 0;
         rotate: 3deg
     }
@@ -1102,7 +1128,7 @@ body {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .nav-link:is(:hover, : focus-visible) .nav-text {
+    .nav-link:is(:hover, :focus-visible) .nav-text {
         scale: .945 .915;
         transform: scale(1.0582010582, 1.0928961749);
         transition: translate .725s .1s var(--elastic-ease-out), rotate .725s .1s var(--elastic-ease-out), scale .15s .1s var(--default-ease), transform .35s .25s var(--bouncy-ease), box-shadow .35s var(--smooth-ease)
@@ -1132,25 +1158,10 @@ body {
     box-shadow: 0 0 0 3px var(--dark-green)
 }
 
-48% {
-    transform: translate(0)
-}
-
-64% {
-    transform: translate(1px)
-}
-
-80% {
-    transform: translateY(-1px)
-}
-
 to {
-    transform: translate(0)
-}
-}
 
+/* End of animation keyframes and media queries fix */
 @media (orientation: portrait) {
-    .stage-logo {
         width: 100%;
         height: auto
     }
@@ -1164,7 +1175,7 @@ to {
 
 @media (hover: hover) and (pointer: fine) {
 
-    .button:is(:hover, : focus-visible) .button-bg,
+    .button:is(:hover, :focus-visible) .button-bg,
     .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-bg {
         translate: -2.5em -.325em 0;
         rotate: -4deg;
@@ -1176,7 +1187,7 @@ to {
 
 @media (hover: hover) and (pointer: fine) {
 
-    .button:is(:hover, : focus-visible) .button-cycle.is-first .button-cycle-bg,
+    .button:is(:hover, :focus-visible) .button-cycle.is-first .button-cycle-bg,
     .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-cycle.is-first .button-cycle-bg {
         scale: 0;
         opacity: 0;
@@ -1186,7 +1197,7 @@ to {
 
 @media (hover: hover) and (pointer: fine) {
 
-    .button:is(:hover, : focus-visible) .button-cycle.is-first .button-arrow,
+    .button:is(:hover, :focus-visible) .button-cycle.is-first .button-arrow,
     .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-cycle.is-first .button-arrow {
         translate: -.75em .75em 0;
         filter: blur(.5rem);
@@ -1198,7 +1209,7 @@ to {
 
 @media (hover: hover) and (pointer: fine) {
 
-    .button:is(:hover, : focus-visible) .button-cycle.is-second .button-cycle-bg,
+    .button:is(:hover, :focus-visible) .button-cycle.is-second .button-cycle-bg,
     .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-cycle.is-second .button-cycle-bg {
         scale: 1;
         opacity: 1;
@@ -1208,7 +1219,7 @@ to {
 
 @media (hover: hover) and (pointer: fine) {
 
-    .button:is(:hover, : focus-visible) .button-cycle.is-second .button-arrow,
+    .button:is(:hover, :focus-visible) .button-cycle.is-second .button-arrow,
     .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-cycle.is-second .button-arrow {
         translate: 0 0 0;
         filter: blur(0);
@@ -1257,7 +1268,7 @@ to {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .social-media-link:is(:hover, : focus-visible) .social-media-circle {
+    .social-media-link:is(:hover, :focus-visible) .social-media-circle {
         scale: .945 .915;
         transform: scale(1.0582010582, 1.0928961749);
         transition: translate .725s .1s var(--elastic-ease-out), rotate .725s .1s var(--elastic-ease-out), scale .15s .1s var(--default-ease), transform .35s .25s var(--bouncy-ease), box-shadow .35s var(--smooth-ease)
@@ -1265,21 +1276,21 @@ to {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .social-media-link:is(:hover, : focus-visible):nth-child(1) .social-media-circle {
+    .social-media-link:is(:hover, :focus-visible):nth-child(1) .social-media-circle {
         translate: -.125em -.325em 0;
         rotate: -4deg
     }
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .social-media-link:is(:hover, : focus-visible):nth-child(2) .social-media-circle {
+    .social-media-link:is(:hover, :focus-visible):nth-child(2) .social-media-circle {
         translate: -.0675em -.4em 0;
         rotate: -1deg
     }
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .social-media-link:is(:hover, : focus-visible):nth-child(3) .social-media-circle {
+    .social-media-link:is(:hover, :focus-visible):nth-child(3) .social-media-circle {
         translate: .125em -.325em 0;
         rotate: 3deg
     }
@@ -1298,7 +1309,7 @@ to {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .nav-link:is(:hover, : focus-visible) .nav-text {
+    .nav-link:is(:hover, :focus-visible) .nav-text {
         scale: .945 .915;
         transform: scale(1.0582010582, 1.0928961749);
         transition: translate .725s .1s var(--elastic-ease-out), rotate .725s .1s var(--elastic-ease-out), scale .15s .1s var(--default-ease), transform .35s .25s var(--bouncy-ease), box-shadow .35s var(--smooth-ease)
@@ -1336,12 +1347,12 @@ to {
 
 .marquee-text-svg text {
     fill: var(--bg-light);
-    letter-spacing: -.03em;
+    letter-spacing: 1rem;
     text-transform: uppercase;
     /* font-size handled by SVG fontSize attribute for natural scaling */
     font-weight: 600;
     line-height: 70%;
-    font-family: Founders Grotesk Condensed, Arial, sans-serif;
+    font-family: var(--font-primary), Arial, sans-serif;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none
@@ -1432,7 +1443,7 @@ to {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .testimonial-slider-button:is(:hover, : focus-visible) {
+    .testimonial-slider-button:is(:hover, :focus-visible) {
         scale: .945 .915;
         transform: scale(1.0582010582, 1.0928961749);
         transition: translate .725s .1s var(--elastic-ease-out), rotate .725s .1s var(--elastic-ease-out), scale .15s .1s var(--default-ease), transform .35s .25s var(--bouncy-ease), box-shadow .35s var(--smooth-ease)
@@ -1440,14 +1451,14 @@ to {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .testimonial-slider-button:is(:hover, : focus-visible).is-left {
+    .testimonial-slider-button:is(:hover, :focus-visible).is-left {
         translate: -.375em 0 0;
         rotate: -4deg
     }
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .testimonial-slider-button:is(:hover, : focus-visible).is-right {
+    .testimonial-slider-button:is(:hover, :focus-visible).is-right {
         translate: .375em 0 0;
         rotate: 4deg
     }
@@ -1481,7 +1492,7 @@ to {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .testimonial-sound-btn:is(:hover, : focus-visible) {
+    .testimonial-sound-btn:is(:hover, :focus-visible) {
         background-color: color-mix(in hsl, var(--dark-green), transparent 35%)
     }
 }
@@ -1520,7 +1531,7 @@ to {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .footer-product:has(.footer-product-link: is(:hover, :focus-visible)) {
+    .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) {
         scale: .975;
         transform: scale(1.0256410256);
         transition: translate .725s .1s var(--elastic-ease-out), rotate .725s .1s var(--elastic-ease-out), scale .15s .1s var(--default-ease), transform .35s .25s var(--bouncy-ease), box-shadow .35s var(--smooth-ease);
@@ -1543,7 +1554,7 @@ to {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .footer-product-link:is(:hover, : focus-visible):after {
+    .footer-product-link:is(:hover, :focus-visible):after {
         transition: translate .725s var(--elastic-ease-out), rotate .725s var(--elastic-ease-out), transform .35s var(--bouncy-ease);
         translate: .375em 3em 0;
         rotate: 2deg
@@ -1556,7 +1567,7 @@ to {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .footer-info:is(:hover, : focus-visible) {
+    .footer-info:is(:hover, :focus-visible) {
         scale: .95;
         transform: scale(1.0526315789);
         transition: translate .725s .1s var(--elastic-ease-out), rotate .725s .1s var(--elastic-ease-out), scale .15s .1s var(--default-ease), transform .35s .25s var(--bouncy-ease), box-shadow .35s var(--smooth-ease)
@@ -1564,7 +1575,7 @@ to {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .footer-info:is(:hover, : focus-visible):after {
+    .footer-info:is(:hover, :focus-visible):after {
         transition: translate .725s var(--elastic-ease-out), rotate .725s var(--elastic-ease-out), transform .35s var(--bouncy-ease)
     }
 }
@@ -1719,7 +1730,7 @@ to {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .flavour-slider-button:is(:hover, : focus-visible) {
+    .flavour-slider-button:is(:hover, :focus-visible) {
         scale: .945 .915;
         transform: scale(1.0582010582, 1.0928961749);
         transition: translate .725s .1s var(--elastic-ease-out), rotate .725s .1s var(--elastic-ease-out), scale .15s .1s var(--default-ease), transform .35s .25s var(--bouncy-ease), box-shadow .35s var(--smooth-ease)
@@ -1727,14 +1738,14 @@ to {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .flavour-slider-button:is(:hover, : focus-visible).is-left {
+    .flavour-slider-button:is(:hover, :focus-visible).is-left {
         translate: -.375em 0 0;
         rotate: -4deg
     }
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .flavour-slider-button:is(:hover, : focus-visible).is-right {
+    .flavour-slider-button:is(:hover, :focus-visible).is-right {
         translate: .375em 0 0;
         rotate: 4deg
     }
@@ -2205,6 +2216,11 @@ to {
     z-index: 2;
 }
 
+/* Insider heading size (desktop) */
+.insider-heading {
+    font-size: clamp(2.4rem, 5.2vw, 4.2rem) !important;
+}
+
 
 /* Marquee: match original Webflow shared CSS exactly */
 .marquee-inner {
@@ -2256,7 +2272,7 @@ body {
     }
 
     .insider-heading {
-        font-size: clamp(1.8rem, 4.5vw, 3rem) !important;
+        font-size: clamp(1.6rem, 4vw, 2.6rem) !important;
     }
 }
 
@@ -2284,7 +2300,7 @@ body {
     }
 
     .insider-heading {
-        font-size: clamp(1.5rem, 5vw, 2.2rem) !important;
+        font-size: clamp(1.35rem, 4.2vw, 1.9rem) !important;
     }
 
     .insider-paragraph {
@@ -2419,7 +2435,7 @@ body {
         order: -1 !important;
         margin-bottom: 2rem !important;
         margin-top: 0 !important;
-        font-size: clamp(1.8rem, 4.5vw, 3rem) !important;
+        font-size: clamp(1.6rem, 4vw, 2.6rem) !important;
         line-height: 1.2 !important;
     }
 
@@ -2514,7 +2530,7 @@ body {
 
     /* 2x insider heading — above videos */
     .insider-section .insider-heading {
-        font-size: 3rem !important;
+        font-size: 2.4rem !important;
         line-height: 1.2 !important;
     }
 
@@ -2526,7 +2542,7 @@ body {
 
     .insider-section .insider-heading {
         order: -1 !important;
-        margin-bottom: 2rem !important;
+        margin-bottom: 0rem !important;
         margin-top: 0rem !important;
     }
 
@@ -2607,4 +2623,45 @@ body {
         grid-row: 1 !important;
         text-align: center !important;
     }
+}
+
+/* ── Letter-spacing: 0.3rem on all --font-primary (Bad Brush) headings ──
+    MUST live in main.css: it loads last, so it wins over webflow.css
+    class-level rules (letter-spacing:-.03em) with the same specificity. */
+h1, h2, h3, h4, h5, h6,
+.heading,
+.big-heading,
+.benefit-heading,
+.insider-heading,
+.insider-subheading,
+.statement-heading,
+.testimonial-big-heading,
+.testimonial-item-heading,
+.sequence-title,
+.footer-heading,
+.hbf-t1,
+.hbf-t2 {
+    letter-spacing: 0.3rem;
+    line-height: 1.3;
+}
+
+/* Stage logo: use local SVG instead of the lottie render */
+.stage-logo {
+    filter: none !important;
+    margin-top: 3.5em;
+}
+
+.stage-logo-img {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    display: block;
+    filter: none !important;
+    transform: scale(1.3);
+    transform-origin: center bottom;
+}
+
+/* Keep lottie element for app.js, but hide it visually */
+.stage-logo-lottie {
+    display: none !important;
 }

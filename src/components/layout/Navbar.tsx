@@ -34,7 +34,7 @@ export const Navbar: React.FC = () => {
                         variant="white"
                         className="w-node-c4e2d712-b9aa-e56d-102b-73576293bdd9-4811c289"
                     >
-                        Shop all
+                        Shop All
                     </Button>
                 </div>
             </div>

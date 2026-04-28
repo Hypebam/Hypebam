@@ -1,7 +1,44 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
 import { ResourcePreloader } from "@/components/ui";
+
+// ── Local fonts ──────────────────────────────────────────────────────────────
+const badBrush = localFont({
+  src: [
+    { path: "../../public/fonts/bad-brush/BadBrush.woff2", format: "woff2" },
+    { path: "../../public/fonts/bad-brush/BadBrush.woff",  format: "woff" },
+  ],
+  variable: "--font-bad-brush",
+  display: "swap",
+});
+
+const goga = localFont({
+  src: [
+    { path: "../../public/fonts/goga/GogaTest-Hairline-BF6646d5d845dae.otf",   weight: "100" },
+    { path: "../../public/fonts/goga/GogaTest-Thin-BF6646d5d8040a9.otf",       weight: "200" },
+    { path: "../../public/fonts/goga/GogaTest-Extralight-BF6646d5d82fb83.otf", weight: "300" },
+    { path: "../../public/fonts/goga/GogaTest-Light-BF6646d5d84c8a2.otf",      weight: "350" },
+    { path: "../../public/fonts/goga/GogaTest-Regular-BF6646d5d84f69b.otf",    weight: "400" },
+    { path: "../../public/fonts/goga/GogaTest-Medium-BF6646d5d84754e.otf",     weight: "500" },
+    { path: "../../public/fonts/goga/GogaTest-Semibold-BF6646d5d8544cf.otf",   weight: "600" },
+    { path: "../../public/fonts/goga/GogaTest-Bold-BF6646d5d83c978.otf",       weight: "700" },
+    { path: "../../public/fonts/goga/GogaTest-Extrabold-BF6646d5d7d0a2b.otf", weight: "800" },
+    { path: "../../public/fonts/goga/GogaTest-Black-BF6646d5d78e551.otf",      weight: "900" },
+  ],
+  variable: "--font-goga",
+  display: "swap",
+});
+
+const caveat = localFont({
+  src: [
+    { path: "../../public/fonts/caveat/Caveat-VariableFont_wght.ttf", format: "truetype" },
+  ],
+  weight: "400 700",
+  variable: "--font-caveat",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Hype Bam — Sri Lankanized Energy Drink",
@@ -18,22 +55,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${badBrush.variable} ${goga.variable} ${caveat.variable}`}>
       <head>
-        {/* ── DNS Preconnect: resolve CDN hostnames before requests fire ── */}
-        <link rel="preconnect" href="https://cdn.prod.website-files.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://cdn.prod.website-files.com" />
+        {/* ── DNS Preconnect: Webflow CDN removed — served locally now ── */}
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
 
         {/* ── Critical above-fold CSS ── */}
-        <link
-          href="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/css/more-nutrition.shared.e35377ec8.min.css"
-          rel="stylesheet"
-          type="text/css"
-        />
+        <link href="/styles/webflow.css" rel="stylesheet" type="text/css" />
         <link href="/styles/main.css" rel="stylesheet" type="text/css" />
         <link
           href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"

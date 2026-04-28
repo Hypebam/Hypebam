@@ -4,6 +4,36 @@
    This file only contains functional CSS that Next.js bundles.
    ======================================== */
 
+/* ── Local font families (populated by next/font/local via CSS vars on <html>) ── */
+:root {
+  --font-primary:   var(--font-bad-brush);  /* Bad Brush  — display/brush script   */
+  --font-secondary: var(--font-goga);       /* Goga Test  — geometric sans-serif   */
+  --font-sub:       var(--font-caveat);     /* Caveat     — handwriting / variable */
+}
+
+/* ── Base font assignments ── */
+body, .body {
+  font-family: var(--font-secondary), sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-primary), sans-serif;
+}
+
+/* ── Uppercase all titles that weren't already uppercase ── */
+.benefit-heading,
+.insider-heading,
+.insider-subheading,
+.testimonial-big-heading,
+.testimonial-item-heading,
+.sequence-title,
+.footer-heading,
+.hbf-t1,
+.hbf-t2 {
+    text-transform: uppercase;
+}
+
+
 /* Prevent horizontal overflow on mobile.
    IMPORTANT: Do NOT use overflow-x:hidden on html — it breaks position:fixed (GSAP pin).
    Do NOT use overflow-x:clip on .stage — it clips the canvas animation. */
@@ -346,7 +376,7 @@ html.is-ready.lenis-stopped {
 
     .insider-section .insider-heading {
         order: -1 !important;
-        margin-bottom: 2rem !important;
+        margin-bottom: 0rem !important;
         margin-top: 0 !important;
         font-size: clamp(1.8rem, 4.5vw, 3rem) !important;
         line-height: 1.2 !important;

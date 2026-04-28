@@ -136,7 +136,7 @@ export const InsiderSection: React.FC = () => {
                                         <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68ae178a30a512b269607fbe_icon-star-half.svg" loading="lazy" width="20" height="20" alt="icon-star" className="rating-star" />
                                     </div>
                                     <div className="rating-text-wrap">
-                                        <div className="rating-text">3158 Reviews</div>
+                                        <div className="rating-text">1000+ Reviews</div>
                                     </div>
                                 </a>
                             </div>

@@ -71,7 +71,7 @@ export const SequenceSection: React.FC = () => {
                                         data-sequence-smiley=""
                                         className="top-smiley is-card"
                                     >
-                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689534f1390e42ee1492e9df_Group%2042.svg" loading="lazy" alt="Smiley" />
+                                        <img src="/img/original-flavor-icon.png" loading="lazy" alt="Original flavor icon" />
                                     </div>
                                     <h2 className="statement-heading">{card.title}</h2>
                                     <div className="statement-card-paragraph-wrap">
