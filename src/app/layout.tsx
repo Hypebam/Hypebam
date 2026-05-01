@@ -7,8 +7,8 @@ import { ResourcePreloader } from "@/components/ui";
 // ── Local fonts ──────────────────────────────────────────────────────────────
 const badBrush = localFont({
   src: [
-    { path: "../../public/fonts/bad-brush/BadBrush.woff2", format: "woff2" },
-    { path: "../../public/fonts/bad-brush/BadBrush.woff",  format: "woff" },
+    { path: "../../public/fonts/bad-brush/BadBrush.woff2" },
+    { path: "../../public/fonts/bad-brush/BadBrush.woff" },
   ],
   variable: "--font-bad-brush",
   display: "swap",
@@ -33,7 +33,7 @@ const goga = localFont({
 
 const caveat = localFont({
   src: [
-    { path: "../../public/fonts/caveat/Caveat-VariableFont_wght.ttf", format: "truetype" },
+    { path: "../../public/fonts/caveat/Caveat-VariableFont_wght.ttf" },
   ],
   weight: "400 700",
   variable: "--font-caveat",

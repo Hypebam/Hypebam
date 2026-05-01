@@ -89,7 +89,7 @@ export const HeroSection: React.FC = () => {
                                                 <div className="stage-fact-number">80</div>
                                                 <div className="stage-fact-unit">mg</div>
                                             </div>
-                                            <div className="stage-fact-text">caffeine</div>
+                                            <div className="stage-fact-text">Caffeine</div>
                                         </div>
                                     </div>
                                     <div data-inertia-item="" className="stage-fact-outer">
@@ -107,7 +107,7 @@ export const HeroSection: React.FC = () => {
                                                 <div className="stage-fact-number">200</div>
                                                 <div className="stage-fact-unit">mg</div>
                                             </div>
-                                            <div className="stage-fact-text">of electrolytes</div>
+                                            <div className="stage-fact-text">of Electrolytes</div>
                                         </div>
                                     </div>
                                 </div>
@@ -124,7 +124,7 @@ export const HeroSection: React.FC = () => {
                                     </h1>
                                     <div className="stage-paragraph-wrap">
                                         <p data-load-stage-text="" className="paragraph is-stage-paragraph">
-                                            For the dreamers. Rule Breakers. Do-ers. More than just a caffeine kick. Infused with flavour and a rebellious spirit.
+                                            For the Dreamers. Rule Breakers. Do-ers. More than just a caffeine kick. Infused with flavour and a rebellious spirit.
                                         </p>
                                         <div data-load-stage-underline="" style={{ '--animation-delay': '.2s' } as React.CSSProperties} className="stage-subline-wrap">
                                             <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/688655fd2fed5f707c038914_Layer_1%20(3).svg" loading="eager" fetchPriority="high" width="152" height="42" alt="Underline" className="subline-img" />
