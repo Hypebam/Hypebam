@@ -9,7 +9,16 @@ const statementCards = [
         iconSrc: 'https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689bbc7e54e7ae27ef30fe2a_Layer_1%20(7).svg',
         iconClass: 'first-statement-icon',
         iconImgClass: 'first-statement-icon-img',
-        text: <>80mg of caffeine - feels like a cup of coffee,<br />blended with taurine &amp; ashwagandha for<br />smooth focus and calm energy.</>,
+        text: <>
+            <span className="sequence-text-target is-caffeine">80mg of caffeine<img
+                src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689bbc7e54e7ae27ef30fe2a_Layer_1%20(7).svg"
+                loading="lazy"
+                alt=""
+                aria-hidden="true"
+                className="sequence-text-target-icon is-caffeine"
+            /></span>{' '}
+            - feels like a cup of coffee,<br />blended with taurine &amp; ashwagandha for<br />smooth focus and calm energy.
+        </>,
         isLeft: false
     },
     {
@@ -27,7 +36,17 @@ const statementCards = [
         iconSrc: 'https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689c4ee13616a5bb6e89d831_Vector%20(6).svg',
         iconClass: 'third-statement-icon',
         iconImgClass: 'third-statement-icon-img',
-        text: <>Just 5g of sugar per serving -<br />clean energy, no guilt attached.</>,
+        text: <>
+            Just{' '}
+            <span className="sequence-text-target is-sugar">5g<img
+                src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689c4ee13616a5bb6e89d831_Vector%20(6).svg"
+                loading="lazy"
+                alt=""
+                aria-hidden="true"
+                className="sequence-text-target-icon is-sugar"
+            /></span>{' '}
+            of sugar per serving -<br />clean energy, no guilt attached.
+        </>,
         isLeft: false
     },
     {
@@ -36,7 +55,16 @@ const statementCards = [
         iconSrc: 'https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689c4f47af9547f0f5223089_Vector%20(7).svg',
         iconClass: 'fourth-statement-icon',
         iconImgClass: 'fourth-statement-icon-img',
-        text: <>5 Flavours to make you go 'aaaahhh'</>,
+        text: <>
+            <span className="sequence-text-target is-flavours">5<img
+                src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689c4f47af9547f0f5223089_Vector%20(7).svg"
+                loading="lazy"
+                alt=""
+                aria-hidden="true"
+                className="sequence-text-target-icon is-flavours"
+            /></span>{' '}
+            Flavours to make you go 'aaaahhh'
+        </>,
         isLeft: true
     }
 ];

@@ -322,6 +322,139 @@ body.body {
     background-color: #FFB74D !important;
 }
 
+/* === Sequence statement doodle alignment fixes === */
+.sequence-section .statement-card .statement-card-paragraph-wrap {
+    position: relative;
+}
+
+.sequence-section .statement-card .paragraph.center-align {
+    position: relative;
+    z-index: 1;
+}
+
+/* Hide legacy floating wrappers. Word-anchored markers below are more stable. */
+.sequence-section .statement-card-paragraph-wrap>.first-statement-icon,
+.sequence-section .statement-card-paragraph-wrap>.third-statement-icon,
+.sequence-section .statement-card-paragraph-wrap>.fourth-statement-icon {
+    display: none !important;
+}
+
+.sequence-section .sequence-text-target {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.sequence-section .sequence-text-target.is-caffeine,
+.sequence-section .sequence-text-target.is-sugar,
+.sequence-section .sequence-text-target.is-flavours {
+    line-height: 1;
+}
+
+.sequence-section .sequence-text-target.is-flavours {
+    margin-right: 0.08em;
+}
+
+.sequence-section .sequence-text-target-icon {
+    position: absolute;
+    display: block;
+    width: auto;
+    height: auto;
+    pointer-events: none;
+    z-index: 2;
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+}
+
+/* Draw circles from text bounds to avoid drift across breakpoints */
+.sequence-section .sequence-text-target.is-caffeine::before,
+.sequence-section .sequence-text-target.is-flavours::before {
+    content: "";
+    position: absolute;
+    border: 0.085em solid currentColor;
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.sequence-section .sequence-text-target.is-caffeine::after,
+.sequence-section .sequence-text-target.is-flavours::after,
+.sequence-section .sequence-text-target.is-sugar::before,
+.sequence-section .sequence-text-target.is-sugar::after {
+    content: none;
+}
+
+.sequence-section .sequence-text-target-icon.is-caffeine,
+.sequence-section .sequence-text-target-icon.is-flavours {
+    display: none;
+}
+
+/* Circle around "80mg of caffeine" */
+.sequence-section .sequence-text-target.is-caffeine::before {
+    left: -0.08em;
+    right: -0.08em;
+    top: -0.27em;
+    bottom: -0.04em;
+    transform: rotate(-5deg);
+}
+
+/* Arrow pointing to "5g" */
+.sequence-section .sequence-text-target.is-sugar .sequence-text-target-icon.is-sugar {
+    width: 1.04em;
+    left: 0.44em;
+    top: -0.62em;
+    transform: rotate(-11deg);
+}
+
+/* Circle around the leading "5" in "5 Flavours" */
+.sequence-section .sequence-text-target.is-flavours::before {
+    left: -0.15em;
+    right: -0.12em;
+    top: -0.2em;
+    bottom: -0.08em;
+    transform: rotate(-8deg);
+}
+
+@media screen and (max-width: 991px) {
+    .sequence-section .sequence-text-target.is-caffeine::before {
+        top: -0.25em;
+        bottom: -0.04em;
+    }
+
+    .sequence-section .sequence-text-target.is-sugar .sequence-text-target-icon.is-sugar {
+        width: 0.96em;
+        left: 0.4em;
+        top: -0.56em;
+    }
+
+    .sequence-section .sequence-text-target.is-flavours::before {
+        top: -0.18em;
+        bottom: -0.07em;
+    }
+}
+
+@media screen and (max-width: 479px) {
+    .sequence-section .sequence-text-target.is-caffeine::before {
+        left: -0.06em;
+        right: -0.06em;
+        top: -0.24em;
+        bottom: -0.02em;
+    }
+
+    .sequence-section .sequence-text-target.is-sugar .sequence-text-target-icon.is-sugar {
+        width: 0.9em;
+        left: 0.37em;
+        top: -0.52em;
+    }
+
+    .sequence-section .sequence-text-target.is-flavours::before {
+        left: -0.12em;
+        right: -0.1em;
+        top: -0.16em;
+        bottom: -0.05em;
+    }
+}
+
 /* === Testimonial slider items === */
 .testimonial-slider-button {
     background-color: white !important;
