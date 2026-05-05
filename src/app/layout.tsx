@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   description:
     "Hype Bam: The Sri Lankanized energy drink. 80mg caffeine, 200mg electrolytes, 5g sugar. 5 incredible flavours. Fuel the rebel in you.",
   icons: {
-    icon: "https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689b29bd3caff6492c34a95c_More-32.png",
+    icon: "/img/hypebam-logo-final-vector-02-orange.svg",
   },
 };
 
