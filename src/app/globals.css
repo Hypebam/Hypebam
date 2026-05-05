@@ -201,7 +201,7 @@ html.is-ready.lenis-stopped {
 
 /* Responsive marquee anchoring to prevent resize drift */
 :root {
-    --hero-marquee-shift: clamp(110px, 8vw, 170px);
+    --hero-marquee-shift: clamp(150px, 10vw, 170px);
 }
 
 .page-wrapper .stage {
