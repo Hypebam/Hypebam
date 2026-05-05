@@ -520,13 +520,16 @@ html.is-ready.lenis-stopped {
 [data-typography-target="navbar-text-fields"] .nav-link {
     display: flex !important;
     align-items: center !important;
+    font-size: 1.15em !important;
+    line-height: 1 !important;
 }
 
 [data-typography-target="navbar-text-fields"] .nav-text {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    padding: 0.38em 0.62em !important;
+    padding: 0.24em 0.5em !important;
+    font-size: 1.05em !important;
     line-height: 1 !important;
     border-radius: 999px !important;
 }

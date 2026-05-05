@@ -67,6 +67,33 @@ body {
     background-color: #3D1800 !important;
 }
 
+/* Navbar buttons: smaller size for the top nav */
+[data-typography-target="navbar-text-fields"] .nav-link {
+    font-size: 1.15em !important;
+    line-height: 1 !important;
+}
+
+[data-typography-target="navbar-text-fields"] .nav-text {
+    padding: 0.24em 0.5em !important;
+    font-size: 1.05em !important;
+    line-height: 1 !important;
+}
+
+/* Navbar layout: pull the right button closer to the edge */
+.navbar .nav-container {
+    padding-right: 2em !important;
+}
+
+.navbar .button.is-white {
+    margin-right: 0 !important;
+}
+
+.navbar .w-node-c4e2d712-b9aa-e56d-102b-73576293bdd9-4811c289 {
+    justify-self: end !important;
+    grid-column: 11 / span 2 !important;
+    margin-right: 0 !important;
+}
+
 /* .stage-fact has hardcoded #b6cba4 border at 991px */
 @media screen and (max-width: 991px) {
     .stage-fact {
