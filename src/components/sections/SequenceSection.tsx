@@ -85,7 +85,7 @@ export const SequenceSection: React.FC = () => {
             <div data-sequence-trigger="" className="sequence-scroll-wrap">
                 <div data-sequence-stage="" className="sequence-sticky">
                     <canvas data-sequence-canvas-img-path="/img/" data-sequence-canvas="" className="sequence-canvas"></canvas>
-                    <div className="sequence-cards">
+                    <div data-typography-target="sequence-cards-text-field" className="sequence-cards">
                         {statementCards.map((card, index) => (
                             <div
                                 key={index}

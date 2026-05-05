@@ -120,7 +120,7 @@ export const InsiderSection: React.FC = () => {
                         </div>
                     </div>
                     {/* Text section — inside grid-layout but after insider-wrapper so it renders below */}
-                    <div id="w-node-_1ac78251-f73b-1f50-5984-75b855ef30eb-0ac01850" className="insider-text-inner" style={{ marginTop: '12rem', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
+                    <div id="w-node-_1ac78251-f73b-1f50-5984-75b855ef30eb-0ac01850" data-typography-target="insider-text-field" className="insider-text-inner" style={{ marginTop: '12rem', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
                         <h3 className="insider-subheading">Taste as Bold as Your Ambitions</h3>
                         <p className="paragraph">Hype Bam is more than just an energy drink; it&apos;s a symbol of Sri Lankan resilience. We&apos;ve faced countless challenges, yet we rise stronger every time. We defy the odds, push boundaries, and keep moving forward…and that&apos;s the spirit we&apos;ve infused into every can.</p>
                         <div className="insider-cta">

@@ -14,7 +14,7 @@ export const Navbar: React.FC = () => {
             className="navbar w-nav"
         >
             <div className="nav-container">
-                <div className="grid-layout">
+                <div data-typography-target="navbar-text-fields" className="grid-layout">
                     <div id="w-node-_084a53a4-1315-9fde-31ee-e99a4811c28c-4811c289" className="nav-social-media-inner">
                         <SocialLinks />
                     </div>

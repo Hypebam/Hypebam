@@ -318,7 +318,7 @@ export const FlavourSection: React.FC = () => {
             `}</style>
 
             {/* ── Header ── */}
-            <div className="hbf-head">
+            <div className="hbf-head" data-typography-target="flavour-head-text-field">
                 <h2 ref={titleRef} className="hbf-t1">Sri Lankanized, just the way you like it.</h2>
                 <h3 ref={subRef} className="hbf-t2">What&apos;s your flavour?</h3>
             </div>

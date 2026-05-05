@@ -27,7 +27,11 @@ export const BenefitsSection: React.FC = () => {
                         </svg>
                         <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68953755a9a7a338f1c66af8_2bc96c5443dd740a3309d483ae39d3da60cc7e2c.webp" loading="lazy" alt="Iced Matcha Latte - Hype Bam" className="img" />
                     </div>
-                    <div id="w-node-_32be253f-aa6e-8103-6d3f-40e63162832f-0ac01850" className="benefit-wrapper">
+                    <div
+                        id="w-node-_32be253f-aa6e-8103-6d3f-40e63162832f-0ac01850"
+                        className="benefit-wrapper"
+                        data-typography-target="benefits-text-field"
+                    >
                         <h2 className="benefit-heading"><span data-highlight-text="" className="light-green-span">What you get.</span><br />Hype Bam vs Typical Energy Drinks</h2>
                         <div data-benefit-table="" className="benefit-table">
                             <div id="w-node-_244ca70f-4fb8-4324-7d1f-6e5cebd97f1e-0ac01850" className="benefit-table-title-wrapper">

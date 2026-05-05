@@ -635,7 +635,7 @@ body.body {
     grid-area: 1 / 1 / 2 / 2 !important;
     z-index: 1 !important;
     position: relative !important;
-    top: 0 !important;
+    top: 20px !important;
     margin-top: 0 !important;
     width: 100% !important;
     height: auto !important;
@@ -1478,14 +1478,15 @@ to {
 
 /* marquee-text-svg offset handled by shared CSS margin-top: 8.5em */
 
-.marquee-text-svg text {
+.marquee-text-svg text,
+.marquee-text-svg textPath {
     fill: var(--bg-light);
-    letter-spacing: 1rem;
+    letter-spacing: 0.3rem;
     text-transform: uppercase;
     /* font-size handled by SVG fontSize attribute for natural scaling */
-    font-weight: 600;
+    font-weight: 700;
     line-height: 70%;
-    font-family: var(--font-primary), Arial, sans-serif;
+    font-family: var(--font-secondary), Arial, sans-serif !important;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none
@@ -2338,7 +2339,7 @@ to {
 }
 
 .marquee {
-    transform: translateY(0em) !important;
+    transform: translateY(100px) !important;
     z-index: 2 !important;
 }
 
@@ -2781,7 +2782,7 @@ h1, h2, h3, h4, h5, h6,
 /* Stage logo: use local SVG instead of the lottie render */
 .stage-logo {
     filter: none !important;
-    margin-top: 3.5em;
+    margin-top: 4em;
 }
 
 .stage-logo-img {
@@ -2797,4 +2798,15 @@ h1, h2, h3, h4, h5, h6,
 /* Keep lottie element for app.js, but hide it visually */
 .stage-logo-lottie {
     display: none !important;
+}
+
+/* Final marquee tuning override */
+.marquee-text-svg {
+    top: 20px !important;
+}
+
+.marquee-text-svg text,
+.marquee-text-svg textPath {
+    letter-spacing: 0.3rem !important;
+    font-weight: 700 !important;
 }

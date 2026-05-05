@@ -4,14 +4,6 @@ import React from 'react';
 import { ArrowIcon } from '@/components/icons';
 import { SocialLinks } from '@/components/ui';
 
-const credits = [
-    { role: '3D Design', name: 'Tobias Anderssohn', link: 'https://www.tobias-anderssohn.com/en/' },
-    { role: 'Web Design', name: 'Somefolk®', link: 'https://www.somefolk.co/' },
-    { role: 'Web Development', name: 'Future Three®', link: 'https://www.futurethree.studio/' },
-    { role: 'Web Animation', name: 'Eduard Bodak', link: 'https://www.eduardbodak.com/' },
-    { role: 'Copywriting', name: 'Psychologie.Biz', link: 'https://psychologie.biz/' },
-];
-
 export const Footer: React.FC = () => {
     return (
         <div className="footer">
@@ -55,12 +47,12 @@ export const Footer: React.FC = () => {
                         <div className="footer-shipping-wrapper">
                             <a href="#" className="shipping-link w-inline-block">
                                 <div className="shipping-link-wrap">
-                                    <div className="shipping-link-text">Shipping and Delivery</div>
+                                    <div data-typography-target="footer-shipping-text" className="shipping-link-text">Shipping and Delivery</div>
                                 </div>
                             </a>
                             <a href="#" className="shipping-link w-inline-block">
                                 <div className="shipping-link-wrap">
-                                    <div className="shipping-link-text">Returns and Exchanges</div>
+                                    <div data-typography-target="footer-shipping-text" className="shipping-link-text">Returns and Exchanges</div>
                                 </div>
                             </a>
                         </div>
@@ -72,21 +64,6 @@ export const Footer: React.FC = () => {
                 <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/6899e6d17cc0ae7334395045_Vector%20(5).svg" loading="lazy" id="w-node-_9cf1d991-93c8-9876-0a84-cf07ed027319-0ac01850" alt="Hype Bam Logo" className="footer-logo mobile" />
                 <div id="w-node-_440e9322-e28d-ad9e-9ab8-9d51f2096f5d-0ac01850" className="footer-bottom">
                     <div className="footer-bottom-text">© Hype Bam. All Rights Reserved.</div>
-                    <button type="button" className="footer-credits-toggle"><span className="footer-credits-toggle-wrap"><span className="footer-credits-toggle-text">Site Credits</span></span></button>
-                    <div className="footer-credits">
-                        <div className="footer-credits-inner">
-                            {credits.map((credit, index) => (
-                                <div key={index} className="footer-credits-detail">
-                                    <div className="footer-credits-text">{credit.role}</div>
-                                    <a href={credit.link} target="_blank" rel="noreferrer" className="credits-link w-inline-block">
-                                        <div className="credits-link-wrap">
-                                            <div className="credits-link-text">{credit.name}</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

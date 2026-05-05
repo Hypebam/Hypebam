@@ -29,7 +29,11 @@ export const TestimonialsSection: React.FC = () => {
                     </div>
                     <div id="w-node-d56024cf-9b70-fc24-7ba0-e2b3ea8d1769-0ac01850" className="testimonial-slider">
                         <h3 className="testimonial-heading">why they keep<br />coming back</h3>
-                        <div data-testimonial-inview="" className="testimonial-slider-wrapper">
+                        <div
+                            data-testimonial-inview=""
+                            className="testimonial-slider-wrapper"
+                            data-typography-target="testimonial-cards-text-field"
+                        >
                             <div data-slider-interface="" className="testimonial-slider-interface">
                                 <div data-slider-arrows="" className="testimonial-slider-button-wrapper">
                                     <button type="button" data-slider-left-button="" className="testimonial-slider-button is-left">

@@ -62,7 +62,7 @@ export const HeroSection: React.FC = () => {
                                 className="stage-logo-img"
                             />
                         </div>
-                        <div data-load-stage-cta="" className="stage-cta">
+                        <div data-load-stage-cta="" data-typography-target="hero-buy-button" className="stage-cta">
                             <Button href="#">
                                 Buy now
                             </Button>
@@ -82,7 +82,7 @@ export const HeroSection: React.FC = () => {
                                 <div data-load-stage-visual="" className="stage-visual">
                                     <canvas data-load-stage-canvas-img-path="/img/" data-load-stage-canvas="" className="stage-canvas"></canvas>
                                 </div>
-                                <div className="stage-facts">
+                                <div data-typography-target="stage-fact-circles" className="stage-facts">
                                     <div data-inertia-item="" className="stage-fact-outer">
                                         <div data-load-stage-fact="" data-inertia-item-child="" className="stage-fact is-first">
                                             <div className="stage-fact-wrap">
@@ -123,7 +123,7 @@ export const HeroSection: React.FC = () => {
                                         <span className="white-span"></span><br />Sri Lankanized<br /> <span data-white-text="">Energy Drink</span>
                                     </h1>
                                     <div className="stage-paragraph-wrap">
-                                        <p data-load-stage-text="" className="paragraph is-stage-paragraph">
+                                        <p data-load-stage-text="" data-typography-target="hero-stage-paragraph" className="paragraph is-stage-paragraph">
                                             For the Dreamers. Rule Breakers. Do-ers. More than just a caffeine kick. Infused with flavour and a rebellious spirit.
                                         </p>
                                         <div data-load-stage-underline="" style={{ '--animation-delay': '.2s' } as React.CSSProperties} className="stage-subline-wrap">
@@ -138,8 +138,8 @@ export const HeroSection: React.FC = () => {
                 </div>
             </div>
 
-            <div data-marquee="" className="marquee" style={{ transform: 'translateY(clamp(-20vw, -15vw, -10vw))' }}>
-                <div className="marquee-inner" style={{ transform: 'translateY(250px)' }}>
+            <div data-marquee="" className="marquee">
+                <div className="marquee-inner">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1440 442" width="100%" style={{ overflow: 'visible' }} className="marquee-bg-svg">
                         <path stroke="currentColor" strokeWidth="160" d="M-71 371.6C126.3 260 593.5 65.8 934.5 80.8c313 13.8 497 136 572 200"></path>
                     </svg>
