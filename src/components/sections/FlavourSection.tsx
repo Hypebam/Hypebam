@@ -149,20 +149,20 @@ export const FlavourSection: React.FC = () => {
                 .hbf-head { padding: 0 20px; margin-bottom: clamp(20px, 4vw, 50px); position: relative; z-index: 2; }
                 .hbf-t1 {
                     font-family: var(--font-primary), 'Impact', sans-serif;
-                    font-size: clamp(32px, 5vw, 60px);
+                    font-size: clamp(24px, 4vw, 50px);
                     font-weight: 700;
                     text-transform: uppercase;
-                    letter-spacing: 1rem;
+                    letter-spacing: 0.15em;
                     color: #3a2a1a;
                     line-height: 1.1;
                     margin: 0 0 4px;
                 }
                 .hbf-t2 {
                     font-family: var(--font-primary), 'Impact', sans-serif;
-                    font-size: clamp(46px, 8vw, 100px);
+                    font-size: clamp(36px, 7vw, 90px);
                     font-weight: 800;
                     text-transform: uppercase;
-                    letter-spacing: 1rem;
+                    letter-spacing: 0.15em;
                     color: #E65100;
                     line-height: 0.95;
                     margin: 0;
@@ -205,7 +205,7 @@ export const FlavourSection: React.FC = () => {
                     z-index: 1;
                 }
                 .hbf-can {
-                    width: clamp(340px, 42vw, 620px);
+                    width: clamp(220px, 38vw, 520px);
                     height: auto;
                     object-fit: contain;
                     filter: drop-shadow(0 40px 80px rgba(0,0,0,0.3)) drop-shadow(0 10px 30px rgba(230,81,0,0.15));

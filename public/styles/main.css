@@ -48,12 +48,12 @@ body {
 }
 
 /* ========================================
-   HYPE BAM Ã¢â‚¬â€ ORANGE THEME OVERRIDES
+   HYPE BAM ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â ORANGE THEME OVERRIDES
    This MUST load AFTER Webflow shared CSS
    to override the green color variables.
    ======================================== */
 :root {
-    /* Remap Webflow green Ã¢â€ â€™ Hype Bam orange */
+    /* Remap Webflow green ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Hype Bam orange */
     --dark-green: #E65100 !important;
     --light-green: #FF8C00 !important;
     --bg-pale: #FFF8EF !important;
@@ -222,21 +222,21 @@ body.body {
     color: #E65100 !important;
 }
 
-/* === Stage / Hero — Brand gradient background === */
-/* Colour stops sampled from brand image: red → orange → gold */
+/* === Stage / Hero â€” Brand gradient background === */
+/* Colour stops sampled from brand image: red â†’ orange â†’ gold */
 .stage {
     background-color: #E8180C !important; /* fallback for browsers that don't support gradients */
     background-image: linear-gradient(
         180deg,
-        #E8180C 0%,       /* vivid red — top */
+        #E8180C 0%,       /* vivid red â€” top */
         #F03A08 28%,      /* orange-red */
         #F55000 55%,      /* deep orange */
         #F98000 78%,      /* amber orange */
-        #FFD000 100%      /* golden yellow — bottom */
+        #FFD000 100%      /* golden yellow â€” bottom */
     ) !important;
 }
 
-/* Dark text for contrast on orange background — deep espresso brown */
+/* Dark text for contrast on orange background â€” deep espresso brown */
 .stage .paragraph,
 .stage .stage-fact-number,
 .stage .stage-fact-unit,
@@ -249,18 +249,18 @@ body.body {
     color: #3D1800 !important;
 }
 
-/* "Energy Drink" text — separate div outside GSAP SplitText */
+/* "Energy Drink" text â€” separate div outside GSAP SplitText */
 .stage .hero-heading-white {
     color: white !important;
     margin-top: -0.2em;
 }
 
-/* Stage bg-svg stroke — white glow on gradient */
+/* Stage bg-svg stroke â€” white glow on gradient */
 .stage .stage-bg-svg {
     color: rgba(255, 255, 255, 0.75) !important;
 }
 
-/* Deco SVGs — white for contrast on orange background */
+/* Deco SVGs â€” white for contrast on orange background */
 .stage .stage-deco-text,
 .stage .stage-deco-text.is-wiggle,
 .stage .stage-deco-arrow,
@@ -268,21 +268,25 @@ body.body {
     filter: brightness(0) saturate(100%) invert(100%) !important;
 }
 
-/* Navbar buttons — 1.2x bigger */
-.navbar .button {
-    scale: 1.25;
+/* Navbar buttons â€” bigger on desktop only */
+@media (min-width: 992px) {
+    .navbar .button {
+        scale: 1.25;
+    }
 }
 
-/* Hero Buy now button — 2x bigger with dark brown bg */
-.stage-cta .button {
-    scale: 1.25;
+/* Hero Buy now button â€” bigger on desktop only */
+@media (min-width: 992px) {
+    .stage-cta .button {
+        scale: 1.25;
+    }
 }
 
 .stage-cta .button .button-bg {
     background-color: #3D1800 !important;
 }
 
-/* Hero button circle — dark bg with white arrow */
+/* Hero button circle â€” dark bg with white arrow */
 .stage-cta .button .button-cycle-bg {
     background-color: #3D1800 !important;
 }
@@ -508,9 +512,9 @@ body.body {
 }
 
 /* === Override remaining green SVG/image assets via CSS filters === */
-/* Hue-rotate green (120Â°) â†’ orange (30Â°) = -90Â° rotation, with saturation boost */
+/* Hue-rotate green (120Ã‚Â°) Ã¢â€ â€™ orange (30Ã‚Â°) = -90Ã‚Â° rotation, with saturation boost */
 
-/* "More" logo loaded via Lottie â€” CSS fill/color won't work on canvas.
+/* "More" logo loaded via Lottie Ã¢â‚¬â€ CSS fill/color won't work on canvas.
    Use filter on the CONTAINER to transform all rendered content. */
 .stage-logo,
 .stage-logo-svg {
@@ -533,7 +537,7 @@ body.body {
     filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
 }
 
-/* Marquee background SVG â€” has hardcoded #214a1e */
+/* Marquee background SVG Ã¢â‚¬â€ has hardcoded #214a1e */
 .marquee-bg-svg {
     color: #8B3A00 !important;
 }
@@ -558,7 +562,7 @@ body.body {
     filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
 }
 
-/* Signature images (handwritten style) â€” all green */
+/* Signature images (handwritten style) Ã¢â‚¬â€ all green */
 .hero-signature-img,
 .animation-signature-img,
 .payment-signature-img,
@@ -634,7 +638,7 @@ body.body {
     filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
 }
 
-/* Insider CTA button arrow — force white for contrast */
+/* Insider CTA button arrow â€” force white for contrast */
 .insider-cta .button-arrow {
     filter: brightness(0) saturate(100%) invert(100%) !important;
 }
@@ -728,6 +732,18 @@ html.lenis body {
     pointer-events: none;
     rotate: 20deg !important;
     scale: 1.125 !important;
+}
+
+@media (max-width: 991px) {
+    .stage-canvas {
+        scale: 0.85 !important;
+    }
+}
+
+@media (max-width: 479px) {
+    .stage-canvas {
+        scale: 0.7 !important;
+    }
 }
 
 .stage-overlay {
@@ -2313,7 +2329,7 @@ to {
     display: none;
 }
 
-/* === Sequence section Ã¢â‚¬â€ ensure mobile cards layout === */
+/* === Sequence section ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â ensure mobile cards layout === */
 .sequence-cards-mobile {
     z-index: -1;
     flex-flow: column;
@@ -2345,48 +2361,52 @@ to {
 /* ========================================
    RESPONSIVE OVERRIDES
    Match Webflow breakpoints: 991, 767, 479
+   Uses em units compatible with Osmo scaling.
    ======================================== */
 
-.hero-heading {
-    font-size: clamp(2.5rem, 6vw, 5.5rem) !important;
+/* â”€â”€ Hero heading & paragraph â€” desktop base â”€â”€ */
+h1.hero-heading {
+    font-size: 3.5em !important;
     line-height: 1.05 !important;
     word-break: break-word;
 }
 
 .paragraph.is-stage-paragraph {
-    font-size: clamp(1.5rem, 2.5vw, 2.25rem) !important;
-    line-height: 1.4 !important;
+    font-size: 1.3em !important;
+    line-height: 1.3 !important;
 }
 
-/* Push marquee higher within the stage section */
+/* â”€â”€ Stage layout â”€â”€ */
 .stage {
-    padding-bottom: 0em !important;
+    padding-bottom: 0 !important;
     overflow: visible !important;
-    margin-bottom: 5em !important;
+    margin-bottom: 3em !important;
 }
 
 .marquee {
-    transform: translateY(100px) !important;
+    transform: translateY(60px) !important;
     z-index: 2 !important;
 }
 
-/* Pull insider section up to cover any remaining gap */
+/* â”€â”€ Insider section â”€â”€ */
 .insider-section {
-    margin-top: 12em !important;
+    margin-top: 6em !important;
     position: relative;
     z-index: 2;
 }
 
-/* Insider heading size (desktop) */
 .insider-heading {
-    font-size: clamp(2.4rem, 5.2vw, 4.2rem) !important;
+    font-size: 2.8em !important;
 }
 
+/* â”€â”€ Insider text section â”€â”€ */
+.insider-text-inner {
+    margin-top: 6em !important;
+}
 
-/* Marquee: match original Webflow shared CSS exactly */
+/* â”€â”€ Marquee grid stacking â”€â”€ */
 .marquee-inner {
     display: grid;
-    /* transform handled by inline style in HeroSection.tsx */
 }
 
 .marquee-bg-svg,
@@ -2397,10 +2417,7 @@ to {
     height: auto !important;
 }
 
-/* IMPORTANT: Use overflow-x: clip (NOT hidden) on .page-wrapper and body.
-   overflow-x: hidden creates a new scroll container and BREAKS position: sticky
-   on descendant elements like .sequence-sticky. overflow-x: clip provides
-   the same visual clipping without affecting sticky positioning. */
+/* â”€â”€ Page wrapper clip â”€â”€ */
 .page-wrapper {
     overflow-x: clip;
     max-width: 100vw;
@@ -2410,100 +2427,8 @@ body {
     overflow-x: clip;
 }
 
-@media screen and (max-width: 991px) {
-    .hero-heading {
-        font-size: clamp(2rem, 5.5vw, 3.5rem) !important;
-        text-align: center !important;
-    }
-
-    .paragraph.is-stage-paragraph {
-        text-align: center !important;
-    }
-
-    .stage-right {
-        text-align: center;
-    }
-
-    .stage-text-wrap {
-        align-items: center !important;
-    }
-
-    .stage-fact-number {
-        font-size: 2em !important;
-    }
-
-    .insider-heading {
-        font-size: clamp(1.6rem, 4vw, 2.6rem) !important;
-    }
-}
-
-@media screen and (max-width: 767px) {
-    .hero-heading {
-        font-size: clamp(1.8rem, 7vw, 2.8rem) !important;
-    }
-
-    .stage-container {
-        padding-left: 1em !important;
-        padding-right: 1em !important;
-    }
-
-    .stage-fact-number {
-        font-size: 1.5em !important;
-    }
-
-    .stage-fact-text,
-    .stage-fact-unit {
-        font-size: 0.65em !important;
-    }
-
-    .sequence-title {
-        font-size: clamp(1.5rem, 6vw, 2.5rem) !important;
-    }
-
-    .insider-heading {
-        font-size: clamp(1.35rem, 4.2vw, 1.9rem) !important;
-    }
-
-    .insider-paragraph {
-        font-size: clamp(0.85rem, 2.5vw, 1rem) !important;
-    }
-}
-
-@media screen and (max-width: 479px) {
-    .hero-heading {
-        font-size: clamp(1.5rem, 8vw, 2.2rem) !important;
-    }
-
-    .stage-wrap {
-        flex-direction: column !important;
-    }
-
-    .stage-left,
-    .stage-right {
-        width: 100% !important;
-    }
-
-    .stage-deco {
-        display: none !important;
-    }
-
-    .sequence-title {
-        font-size: clamp(1.2rem, 7vw, 2rem) !important;
-    }
-
-    .footer-inner {
-        flex-direction: column !important;
-        gap: 2em;
-    }
-
-    .footer-col {
-        width: 100% !important;
-        text-align: center;
-    }
-}
-
 /* ==============================================
-   5-VIDEO GRID FIX (must be at end to override Webflow shared CSS)
+   5-VIDEO GRID â€” DESKTOP
    ============================================== */
 #w-node-_93a09ee3-b180-b755-d23e-d7d2b5f676da-0ac01850 {
     grid-area: span 1 / span 12 / span 1 / span 12 !important;
@@ -2527,14 +2452,16 @@ body {
 
 .testimonial-inner {
     width: 100% !important;
-    scale: 1.3;
 }
 
-/* Insider text section — 1.5x bigger */
-.insider-text-inner {
-    font-size: 1.5em !important;
+/* Desktop only: scale up video cards */
+@media (min-width: 992px) {
+    .testimonial-inner {
+        scale: 1.3;
+    }
 }
 
+/* Desktop scattered layout */
 .testimonial-inner-wrap.is-first {
     top: 3em !important;
     rotate: -8deg !important;
@@ -2570,9 +2497,11 @@ body {
     margin-right: -0.5em !important;
 }
 
-.testimonial-inner-wrap:hover {
-    z-index: 10 !important;
-    transform: scale(1.05) translateY(-0.5em) !important;
+@media (hover: hover) and (pointer: fine) {
+    .testimonial-inner-wrap:hover {
+        z-index: 10 !important;
+        transform: scale(1.05) translateY(-0.5em) !important;
+    }
 }
 
 #w-node-_1ac78251-f73b-1f50-5984-75b855ef30eb-0ac01850 {
@@ -2584,9 +2513,90 @@ body {
     overflow: visible !important;
 }
 
+/* ========================================
+   TABLET â€” max-width: 991px
+   ======================================== */
 @media screen and (max-width: 991px) {
 
-    /* Reorder heading above videos on tablet */
+    /* â”€â”€ Hero â”€â”€ */
+    h1.hero-heading {
+        font-size: 2.4em !important;
+        text-align: center !important;
+    }
+
+    .paragraph.is-stage-paragraph {
+        font-size: 1.05em !important;
+        text-align: center !important;
+    }
+
+    .stage-right {
+        text-align: center;
+    }
+
+    .stage-text-wrap {
+        align-items: center !important;
+    }
+
+    .stage {
+        margin-bottom: 2em !important;
+    }
+
+    .marquee {
+        transform: translateY(40px) !important;
+    }
+
+    /* â”€â”€ Stage facts â”€â”€ */
+    .stage-fact-number {
+        font-size: 1.8em !important;
+    }
+
+    .stage-fact-unit {
+        font-size: 0.9em !important;
+    }
+
+    .stage-fact-text {
+        font-size: 0.7em !important;
+    }
+
+    /* â”€â”€ Stage logo â”€â”€ */
+    .stage-logo {
+        margin-top: 2em !important;
+    }
+
+    .stage-logo-img {
+        transform: scale(1) !important;
+    }
+
+    /* â”€â”€ Stage deco â”€â”€ */
+    .stage-deco {
+        display: none !important;
+    }
+
+    /* â”€â”€ Stage wrap stack â”€â”€ */
+    .stage-wrap {
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .stage-left,
+    .stage-right {
+        width: 100% !important;
+    }
+
+    /* â”€â”€ Insider â”€â”€ */
+    .insider-section {
+        margin-top: 4em !important;
+    }
+
+    .insider-heading {
+        font-size: 1.8em !important;
+    }
+
+    .insider-text-inner {
+        margin-top: 2em !important;
+        font-size: 1em !important;
+    }
+
     .insider-section .grid-layout {
         display: flex !important;
         flex-direction: column !important;
@@ -2594,23 +2604,12 @@ body {
 
     .insider-section .insider-heading {
         order: -1 !important;
-        margin-bottom: 2rem !important;
+        margin-bottom: 1.5em !important;
         margin-top: 0 !important;
-        font-size: clamp(1.6rem, 4vw, 2.6rem) !important;
         line-height: 1.2 !important;
     }
 
-    /* Force sequence statement cards container visible on mobile */
-    .sequence-cards {
-        display: flex !important;
-        overflow: visible !important;
-    }
-
-    .statement-card {
-        width: 90% !important;
-        max-width: 400px !important;
-    }
-
+    /* â”€â”€ Insider videos â€” stacked scattered pile â”€â”€ */
     #w-node-_93a09ee3-b180-b755-d23e-d7d2b5f676da-0ac01850 {
         grid-area: span 1 / span 6 / span 1 / span 6 !important;
     }
@@ -2631,11 +2630,13 @@ body {
     .testimonial-inner-wrap.is-fourth,
     .testimonial-inner-wrap.is-fifth {
         display: block !important;
-        width: 75vw !important;
-        max-width: 320px !important;
-        margin-top: -12rem !important;
+        width: 55vw !important;
+        max-width: 280px !important;
+        margin-top: -4em !important;
         left: auto !important;
         right: auto !important;
+        top: auto !important;
+        transform: none !important;
     }
 
     .testimonial-inner-wrap:first-child {
@@ -2645,6 +2646,7 @@ body {
     .testimonial-inner {
         width: 100% !important;
         height: auto !important;
+        scale: 1 !important;
     }
 
     .testimonial-inner-wrap.is-first {
@@ -2671,73 +2673,131 @@ body {
         align-self: flex-end !important;
         rotate: 4deg !important;
     }
+
+    /* â”€â”€ Sequence cards â”€â”€ */
+    .sequence-cards {
+        display: flex !important;
+        overflow: visible !important;
+    }
+
+    .statement-card {
+        width: 90% !important;
+        max-width: 360px !important;
+    }
+
+    /* â”€â”€ Sequence title â”€â”€ */
+    .sequence-title {
+        font-size: 1.8em !important;
+    }
+
+    /* â”€â”€ Benefits â”€â”€ */
+    .benefit-heading {
+        text-align: center;
+    }
 }
 
-/* ==========================================
-   MOBILE TEXT SIZE OVERRIDES (must be last)
-   ========================================== */
+/* ========================================
+   MOBILE LANDSCAPE â€” max-width: 767px
+   ======================================== */
 @media screen and (max-width: 767px) {
 
-    /* 2x hero heading */
-    .stage .hero-heading {
-        font-size: 5rem !important;
+    /* â”€â”€ Hero â”€â”€ */
+    h1.hero-heading {
+        font-size: 2em !important;
     }
 
-    /* 2x hero paragraph */
-    .stage .paragraph.is-stage-paragraph {
-        font-size: 2rem !important;
-        line-height: 1.2 !important;
+    .paragraph.is-stage-paragraph {
+        font-size: 0.9em !important;
     }
 
-    /* 2x insider heading — above videos */
-    .insider-section .insider-heading {
-        font-size: 2.4rem !important;
-        line-height: 1.2 !important;
+    .stage-container {
+        padding-left: 1em !important;
+        padding-right: 1em !important;
     }
 
-    /* Reorder: heading above videos */
-    .insider-section .grid-layout {
-        display: flex !important;
-        flex-direction: column !important;
+    .stage {
+        margin-bottom: 1em !important;
     }
 
-    .insider-section .insider-heading {
-        order: -1 !important;
-        margin-bottom: 0rem !important;
-        margin-top: 0rem !important;
+    .marquee {
+        transform: translateY(20px) !important;
     }
 
-    /* Smaller video cards on mobile */
-    .testimonial-inner {
-        scale: 0.85 !important;
+    /* â”€â”€ Stage facts â”€â”€ */
+    .stage-fact-number {
+        font-size: 1.4em !important;
     }
 
-    /* 3x stage facts on mobile */
-    .stage .stage-fact-number {
-        font-size: 3.5rem !important;
+    .stage-fact-unit {
+        font-size: 0.7em !important;
     }
 
-    .stage .stage-fact-unit {
-        font-size: 2rem !important;
+    .stage-fact-text {
+        font-size: 0.55em !important;
     }
 
-    .stage .stage-fact-text {
-        font-size: 1.2rem !important;
+    .stage-fact {
+        padding: 0.6em !important;
     }
 
-    .stage .stage-fact {
-        padding: 1.5em !important;
+    /* â”€â”€ Stage logo â”€â”€ */
+    .stage-logo {
+        margin-top: 1.5em !important;
     }
 
-    /* Fix benefit table: 3-col layout on mobile */
+    .stage-logo-img {
+        transform: scale(0.85) !important;
+    }
+
+    /* â”€â”€ Insider â”€â”€ */
+    .insider-section {
+        margin-top: 2.5em !important;
+    }
+
+    .insider-heading {
+        font-size: 1.5em !important;
+    }
+
+    .insider-text-inner {
+        margin-top: 1.5em !important;
+        font-size: 0.85em !important;
+    }
+
+    /* â”€â”€ Insider videos â€” smaller cards â”€â”€ */
+    .testimonial-inner-wrap,
+    .testimonial-inner-wrap.is-first,
+    .testimonial-inner-wrap.is-second,
+    .testimonial-inner-wrap.is-third,
+    .testimonial-inner-wrap.is-fourth,
+    .testimonial-inner-wrap.is-fifth {
+        width: 50vw !important;
+        max-width: 220px !important;
+        margin-top: -3em !important;
+    }
+
+    .testimonial-inner-wrap:first-child {
+        margin-top: 0 !important;
+    }
+
+    /* â”€â”€ Sequence â”€â”€ */
+    .sequence-title {
+        font-size: 1.4em !important;
+    }
+
+    .statement-card {
+        width: 85% !important;
+        max-width: 300px !important;
+    }
+
+    /* â”€â”€ Benefits table â”€â”€ */
     .benefit-table-item {
-        grid-template-columns: 3fr 1fr 1fr !important;
+        grid-template-columns: 2.5fr 1fr 1fr !important;
         align-items: center !important;
     }
 
     .benefit-item-title {
         grid-column: 1 / 2 !important;
-        font-size: 0.9rem !important;
+        font-size: 0.85em !important;
     }
 
     .benefit-checker-inner {
@@ -2755,22 +2815,22 @@ body {
 
     .benefit-table-title-wrapper {
         display: grid !important;
-        grid-template-columns: 3fr 1fr 1fr !important;
+        grid-template-columns: 2.5fr 1fr 1fr !important;
         align-items: center !important;
     }
 
-    /* Benefits label → col 1 */
+    /* Benefits label â†’ col 1 */
     .benefit-table-title-wrapper>.benefit-table-title:first-child {
         grid-column: 1 !important;
         grid-row: 1 !important;
     }
 
-    /* Desktop logo → hidden */
+    /* Desktop logo â†’ hidden */
     .benefit-table-title-img.is-desktop {
         display: none !important;
     }
 
-    /* "Hype Bam" mobile → col 2, centered */
+    /* "Hype Bam" mobile â†’ col 2 */
     .benefit-table-title.is-mobile-only {
         display: block !important;
         grid-column: 2 !important;
@@ -2778,17 +2838,130 @@ body {
         text-align: center !important;
     }
 
-    /* "Typical Energy Drinks" → col 3, centered */
+    /* "Typical Energy Drinks" â†’ col 3 */
     .benefit-table-title-wrapper>.benefit-table-title:last-child {
         grid-column: 3 !important;
         grid-row: 1 !important;
         text-align: center !important;
     }
+
+    /* â”€â”€ Footer â”€â”€ */
+    .footer-full-height-container {
+        grid-template-columns: 1fr !important;
+    }
+
+    .footer-product {
+        min-height: 50vh !important;
+    }
 }
 
-/* ── Letter-spacing: 0.3rem on all --font-primary (Bad Brush) headings ──
-    MUST live in main.css: it loads last, so it wins over webflow.css
-    class-level rules (letter-spacing:-.03em) with the same specificity. */
+/* ========================================
+   SMALL MOBILE â€” max-width: 479px
+   ======================================== */
+@media screen and (max-width: 479px) {
+
+    /* â”€â”€ Hero â”€â”€ */
+    h1.hero-heading {
+        font-size: 1.6em !important;
+    }
+
+    .paragraph.is-stage-paragraph {
+        font-size: 0.8em !important;
+    }
+
+    /* â”€â”€ Stage facts â”€â”€ */
+    .stage-fact-number {
+        font-size: 1.2em !important;
+    }
+
+    .stage-fact-unit {
+        font-size: 0.6em !important;
+    }
+
+    .stage-fact-text {
+        font-size: 0.5em !important;
+    }
+
+    .stage-fact {
+        padding: 0.5em !important;
+    }
+
+    /* â”€â”€ Stage logo â”€â”€ */
+    .stage-logo-img {
+        transform: scale(0.7) !important;
+    }
+
+    /* â”€â”€ Insider videos â”€â”€ */
+    .testimonial-inner-wrap,
+    .testimonial-inner-wrap.is-first,
+    .testimonial-inner-wrap.is-second,
+    .testimonial-inner-wrap.is-third,
+    .testimonial-inner-wrap.is-fourth,
+    .testimonial-inner-wrap.is-fifth {
+        width: 55vw !important;
+        max-width: 200px !important;
+        margin-top: -2.5em !important;
+    }
+
+    /* â”€â”€ Sequence â”€â”€ */
+    .sequence-title {
+        font-size: 1.2em !important;
+    }
+
+    .statement-card {
+        max-width: 260px !important;
+    }
+
+    /* â”€â”€ Benefits â”€â”€ */
+    .benefit-table-title-wrapper {
+        grid-template-columns: 1.8fr 1fr 1fr !important;
+        padding: 0.4em 0.5em !important;
+        gap: 0.25em !important;
+    }
+
+    .benefit-table-title {
+        font-size: 0.7em !important;
+        white-space: nowrap;
+    }
+
+    .benefit-table-item {
+        grid-template-columns: 1.8fr 1fr 1fr !important;
+        padding: 0.5em !important;
+        gap: 0.25em !important;
+    }
+
+    .benefit-item-title {
+        font-size: 0.75em !important;
+    }
+
+    .check {
+        width: 1em;
+        height: 1em;
+    }
+
+    .top-smiley.is-benefit {
+        width: 3em;
+        height: 3em;
+        top: -1.5em;
+    }
+
+    /* â”€â”€ Footer â”€â”€ */
+    .footer-inner {
+        flex-direction: column !important;
+        gap: 2em;
+    }
+
+    .footer-col {
+        width: 100% !important;
+        text-align: center;
+    }
+
+    .footer-product {
+        min-height: 40vh !important;
+    }
+}
+
+/* â”€â”€ Letter-spacing for headings â”€â”€ */
 h1, h2, h3, h4, h5, h6,
 .heading,
 .big-heading,
@@ -2802,11 +2975,11 @@ h1, h2, h3, h4, h5, h6,
 .footer-heading,
 .hbf-t1,
 .hbf-t2 {
-    letter-spacing: 0.3rem;
-    line-height: 1.3;
+    letter-spacing: 0.15em;
+    line-height: 1.2;
 }
 
-/* Stage logo: use local SVG instead of the lottie render */
+/* â”€â”€ Stage logo â”€â”€ */
 .stage-logo {
     filter: none !important;
     margin-top: 4em;
@@ -2822,18 +2995,44 @@ h1, h2, h3, h4, h5, h6,
     transform-origin: center bottom;
 }
 
-/* Keep lottie element for app.js, but hide it visually */
+/* Keep lottie for app.js but hide visually */
 .stage-logo-lottie {
     display: none !important;
 }
 
-/* Final marquee tuning override */
+/* â”€â”€ Sequence mobile cards â”€â”€ */
+.sequence-cards-mobile {
+    z-index: -1;
+    flex-flow: column;
+    grid-area: 1/1;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    padding-left: 2.5em;
+    padding-right: 2.5em;
+    display: none;
+    position: relative;
+    overflow: clip;
+}
+
+/* â”€â”€ Marquee text â”€â”€ */
 .marquee-text-svg {
     top: 20px !important;
 }
 
 .marquee-text-svg text,
 .marquee-text-svg textPath {
-    letter-spacing: 0.3rem !important;
+    letter-spacing: 0.15em !important;
     font-weight: 700 !important;
+}
+
+/* â”€â”€ Footer logo â”€â”€ */
+.footer-logo.desktop {
+    display: none;
+}
+
+/* â”€â”€ Benefit mobile-only title â”€â”€ */
+.benefit-table-title.is-mobile-only {
+    display: none;
 }

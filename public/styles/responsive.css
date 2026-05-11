@@ -1,0 +1,327 @@
+/* ========================================
+   RESPONSIVE OVERRIDES — FINAL AUTHORITY
+   This file loads LAST in the cascade.
+   ALL rules use !important to guarantee override.
+   ======================================== */
+
+/* ── Desktop base ── */
+h1.hero-heading {
+    font-size: 3.5em !important;
+    line-height: 1.05 !important;
+    word-break: break-word !important;
+}
+
+.paragraph.is-stage-paragraph {
+    font-size: 1.3em !important;
+    line-height: 1.3 !important;
+}
+
+.insider-heading {
+    font-size: 2.8em !important;
+}
+
+.insider-text-inner {
+    margin-top: 6em !important;
+}
+
+.stage {
+    padding-bottom: 0 !important;
+    overflow: visible !important;
+    margin-bottom: 3em !important;
+}
+
+.marquee {
+    transform: translateY(60px) !important;
+    z-index: 2 !important;
+}
+
+.insider-section {
+    margin-top: 6em !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+.insider-wrapper,
+.insider-section {
+    overflow: visible !important;
+}
+
+/* ── Stage canvas & logo ── */
+.stage-canvas {
+    rotate: 20deg !important;
+    scale: 1.125 !important;
+}
+
+.stage-logo {
+    filter: none !important;
+    margin-top: 4em !important;
+}
+
+.stage-logo-img {
+    transform: scale(1.3) !important;
+    transform-origin: center bottom !important;
+}
+
+.stage-logo-lottie {
+    display: none !important;
+}
+
+/* ── Desktop only scale-ups ── */
+@media (min-width: 992px) {
+    .navbar .button {
+        scale: 1.25 !important;
+    }
+    .stage-cta .button {
+        scale: 1.25 !important;
+    }
+    .testimonial-inner {
+        scale: 1.3 !important;
+    }
+}
+
+/* ── 5-Video grid desktop ── */
+.testimonial-wrapper {
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 1rem !important;
+    align-items: start !important;
+    padding-top: 0 !important;
+}
+
+.testimonial-inner-wrap {
+    position: relative !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.testimonial-inner {
+    width: 100% !important;
+}
+
+.testimonial-inner-wrap.is-first  { top: 3em !important; rotate: -8deg !important; z-index: 2 !important; margin-left: -0.5em !important; }
+.testimonial-inner-wrap.is-second { top: 6em !important; rotate: 3deg !important; z-index: 3 !important; margin-left: -1.5em !important; }
+.testimonial-inner-wrap.is-third  { top: 0 !important; rotate: -4deg !important; z-index: 5 !important; transform: scale(1.08) !important; }
+.testimonial-inner-wrap.is-fourth { top: 5em !important; rotate: 5deg !important; z-index: 3 !important; margin-left: -1em !important; }
+.testimonial-inner-wrap.is-fifth  { top: 2em !important; rotate: -6deg !important; z-index: 2 !important; margin-right: -0.5em !important; }
+
+/* ── Letter spacing ── */
+h1, h2, h3, h4, h5, h6,
+.heading, .big-heading, .benefit-heading,
+.insider-heading, .insider-subheading,
+.statement-heading, .testimonial-big-heading,
+.testimonial-item-heading, .sequence-title,
+.footer-heading, .hbf-t1, .hbf-t2 {
+    letter-spacing: 0.15em !important;
+}
+
+/* ── Marquee text ── */
+.marquee-text-svg { top: 20px !important; }
+.marquee-text-svg text, .marquee-text-svg textPath {
+    letter-spacing: 0.15em !important;
+    font-weight: 700 !important;
+}
+.marquee-text-svg text { font-size: 160px !important; }
+
+/* ── Benefit table mobile-only title ── */
+.benefit-table-title.is-mobile-only { display: none !important; }
+
+/* ── Footer logo ── */
+.footer-logo.desktop { display: none !important; }
+
+
+/* ========================================
+   TABLET — max-width: 991px
+   ======================================== */
+@media screen and (max-width: 991px) {
+
+    /* ── Navbar collapse ── */
+    .navbar .nav-social-media-inner,
+    #w-node-_084a53a4-1315-9fde-31ee-e99a4811c28c-4811c289 {
+        display: none !important;
+    }
+
+    .navbar .nav-link-inner,
+    #w-node-_084a53a4-1315-9fde-31ee-e99a4811c293-4811c289 {
+        display: none !important;
+    }
+
+    .navbar .grid-layout {
+        display: flex !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+    }
+
+    .navbar .button {
+        margin-left: auto !important;
+        scale: 1 !important;
+    }
+
+    /* ── Hero ── */
+    h1.hero-heading {
+        font-size: 2.4em !important;
+        text-align: center !important;
+    }
+
+    .paragraph.is-stage-paragraph {
+        font-size: 1.05em !important;
+        text-align: center !important;
+    }
+
+    .stage-right { text-align: center !important; }
+    .stage-text-wrap { align-items: center !important; }
+    .stage { margin-bottom: 2em !important; }
+    .marquee { transform: translateY(40px) !important; }
+
+    /* ── Stage facts ── */
+    .stage-fact-number { font-size: 1.8em !important; }
+    .stage-fact-unit { font-size: 0.9em !important; }
+    .stage-fact-text { font-size: 0.7em !important; }
+
+    /* ── Stage logo ── */
+    .stage-logo { margin-top: 2em !important; }
+    .stage-logo-img { transform: scale(1) !important; }
+
+    /* ── Stage layout ── */
+    .stage-deco { display: none !important; }
+    .stage-wrap { flex-direction: column !important; align-items: center !important; }
+    .stage-left, .stage-right { width: 100% !important; }
+    .stage-canvas { scale: 0.85 !important; }
+
+    /* ── Insider ── */
+    .insider-section { margin-top: 4em !important; }
+    .insider-heading { font-size: 1.8em !important; }
+    .insider-text-inner { margin-top: 2em !important; font-size: 1em !important; }
+    .insider-section .grid-layout { display: flex !important; flex-direction: column !important; }
+    .insider-section .insider-heading { order: -1 !important; margin-bottom: 1.5em !important; margin-top: 0 !important; }
+
+    /* ── Insider videos — stacked pile ── */
+    .testimonial-wrapper {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 0 !important;
+        transform: none !important;
+    }
+
+    .testimonial-inner-wrap,
+    .testimonial-inner-wrap.is-first,
+    .testimonial-inner-wrap.is-second,
+    .testimonial-inner-wrap.is-third,
+    .testimonial-inner-wrap.is-fourth,
+    .testimonial-inner-wrap.is-fifth {
+        display: block !important;
+        width: 55vw !important;
+        max-width: 280px !important;
+        margin-top: -4em !important;
+        left: auto !important;
+        right: auto !important;
+        top: auto !important;
+        transform: none !important;
+    }
+
+    .testimonial-inner-wrap:first-child { margin-top: 0 !important; }
+    .testimonial-inner { width: 100% !important; height: auto !important; scale: 1 !important; }
+
+    .testimonial-inner-wrap.is-first  { align-self: flex-end !important; rotate: 5deg !important; }
+    .testimonial-inner-wrap.is-second { align-self: flex-start !important; rotate: -4deg !important; }
+    .testimonial-inner-wrap.is-third  { align-self: flex-end !important; rotate: 6deg !important; }
+    .testimonial-inner-wrap.is-fourth { align-self: flex-start !important; rotate: -5deg !important; }
+    .testimonial-inner-wrap.is-fifth  { align-self: flex-end !important; rotate: 4deg !important; }
+
+    /* ── Sequence ── */
+    .sequence-cards { display: flex !important; overflow: visible !important; }
+    .statement-card { width: 90% !important; max-width: 360px !important; }
+    .sequence-title { font-size: 1.8em !important; }
+    .marquee-text-svg text { font-size: 120px !important; }
+
+    /* ── Benefits ── */
+    .benefit-heading { font-size: 2.8em !important; text-align: center !important; }
+}
+
+/* ========================================
+   MOBILE — max-width: 767px
+   ======================================== */
+@media screen and (max-width: 767px) {
+    h1.hero-heading { font-size: 2em !important; }
+    .paragraph.is-stage-paragraph { font-size: 0.9em !important; }
+    .stage-container { padding-left: 1em !important; padding-right: 1em !important; }
+    .stage { margin-bottom: 1em !important; }
+    .marquee { transform: translateY(20px) !important; }
+
+    .stage-fact-number { font-size: 1.4em !important; }
+    .stage-fact-unit { font-size: 0.7em !important; }
+    .stage-fact-text { font-size: 0.55em !important; }
+    .stage-fact { padding: 0.6em !important; }
+
+    .stage-logo { margin-top: 1.5em !important; }
+    .stage-logo-img { transform: scale(0.85) !important; }
+
+    .insider-section { margin-top: 2.5em !important; }
+    .insider-heading { font-size: 1.5em !important; }
+    .insider-text-inner { margin-top: 1.5em !important; font-size: 0.85em !important; }
+
+    .testimonial-inner-wrap,
+    .testimonial-inner-wrap.is-first,
+    .testimonial-inner-wrap.is-second,
+    .testimonial-inner-wrap.is-third,
+    .testimonial-inner-wrap.is-fourth,
+    .testimonial-inner-wrap.is-fifth {
+        width: 50vw !important;
+        max-width: 220px !important;
+        margin-top: -3em !important;
+    }
+    .testimonial-inner-wrap:first-child { margin-top: 0 !important; }
+
+    .sequence-title { font-size: 1.4em !important; }
+    .statement-card { width: 85% !important; max-width: 300px !important; }
+    .benefit-heading { font-size: 2.2em !important; }
+    .marquee-text-svg text { font-size: 90px !important; }
+
+    .footer-full-height-container { grid-template-columns: 1fr !important; }
+
+    /* ── Benefits table ── */
+    .benefit-table-item { grid-template-columns: 2.5fr 1fr 1fr !important; align-items: center !important; }
+    .benefit-item-title { grid-column: 1 / 2 !important; font-size: 0.85em !important; }
+    .benefit-checker-inner { grid-column: 2 / 4 !important; display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 0.5em !important; }
+    .benefit-item-check, .benefit-item-x { width: 100% !important; justify-content: center !important; }
+    .benefit-table-title-wrapper { display: grid !important; grid-template-columns: 2.5fr 1fr 1fr !important; align-items: center !important; }
+    .benefit-table-title-wrapper>.benefit-table-title:first-child { grid-column: 1 !important; grid-row: 1 !important; }
+    .benefit-table-title-img.is-desktop { display: none !important; }
+    .benefit-table-title.is-mobile-only { display: block !important; grid-column: 2 !important; grid-row: 1 !important; text-align: center !important; }
+    .benefit-table-title-wrapper>.benefit-table-title:last-child { grid-column: 3 !important; grid-row: 1 !important; text-align: center !important; }
+}
+
+/* ========================================
+   SMALL MOBILE — max-width: 479px
+   ======================================== */
+@media screen and (max-width: 479px) {
+    h1.hero-heading { font-size: 1.6em !important; }
+    .paragraph.is-stage-paragraph { font-size: 0.8em !important; }
+
+    .stage-fact-number { font-size: 1.2em !important; }
+    .stage-fact-unit { font-size: 0.6em !important; }
+    .stage-fact-text { font-size: 0.5em !important; }
+    .stage-fact { padding: 0.5em !important; }
+
+    .stage-logo-img { transform: scale(0.7) !important; }
+    .stage-canvas { scale: 0.7 !important; }
+
+    .testimonial-inner-wrap,
+    .testimonial-inner-wrap.is-first,
+    .testimonial-inner-wrap.is-second,
+    .testimonial-inner-wrap.is-third,
+    .testimonial-inner-wrap.is-fourth,
+    .testimonial-inner-wrap.is-fifth {
+        width: 55vw !important;
+        max-width: 200px !important;
+        margin-top: -2.5em !important;
+    }
+
+    .sequence-title { font-size: 1.2em !important; }
+    .statement-card { max-width: 260px !important; }
+    .benefit-heading { font-size: 1.8em !important; }
+
+    .footer-inner { flex-direction: column !important; gap: 2em !important; }
+    .footer-col { width: 100% !important; text-align: center !important; }
+}

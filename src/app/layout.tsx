@@ -71,6 +71,8 @@ export default function RootLayout({
           rel="stylesheet"
           type="text/css"
         />
+        {/* ── Responsive overrides — MUST be last to win cascade ── */}
+        <link href="/styles/responsive.css" rel="stylesheet" type="text/css" />
 
         {/* ── Preload: Hero canvas — first frame must paint instantly ── */}
         <link rel="preload" href="/img/hypeBamVideo001.webp" as="image" type="image/webp" />
