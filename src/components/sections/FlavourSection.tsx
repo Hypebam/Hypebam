@@ -152,7 +152,7 @@ export const FlavourSection: React.FC = () => {
                     font-size: clamp(24px, 4vw, 50px);
                     font-weight: 700;
                     text-transform: uppercase;
-                    letter-spacing: 0.15em;
+                    letter-spacing: 0.04em;
                     color: #3a2a1a;
                     line-height: 1.1;
                     margin: 0 0 4px;
@@ -162,7 +162,7 @@ export const FlavourSection: React.FC = () => {
                     font-size: clamp(36px, 7vw, 90px);
                     font-weight: 800;
                     text-transform: uppercase;
-                    letter-spacing: 0.15em;
+                    letter-spacing: 0.04em;
                     color: #E65100;
                     line-height: 0.95;
                     margin: 0;

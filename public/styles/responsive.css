@@ -105,20 +105,11 @@ h1.hero-heading {
 .testimonial-inner-wrap.is-fourth { top: 5em !important; rotate: 5deg !important; z-index: 3 !important; margin-left: -1em !important; }
 .testimonial-inner-wrap.is-fifth  { top: 2em !important; rotate: -6deg !important; z-index: 2 !important; margin-right: -0.5em !important; }
 
-/* ── Letter spacing ── */
-h1, h2, h3, h4, h5, h6,
-.heading, .big-heading, .benefit-heading,
-.insider-heading, .insider-subheading,
-.statement-heading, .testimonial-big-heading,
-.testimonial-item-heading, .sequence-title,
-.footer-heading, .hbf-t1, .hbf-t2 {
-    letter-spacing: 0.15em !important;
-}
+/* ── Letter spacing — use original webflow values (-.03em) ── */
 
 /* ── Marquee text ── */
 .marquee-text-svg { top: 20px !important; }
 .marquee-text-svg text, .marquee-text-svg textPath {
-    letter-spacing: 0.15em !important;
     font-weight: 700 !important;
 }
 .marquee-text-svg text { font-size: 160px !important; }
