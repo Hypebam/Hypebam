@@ -10,8 +10,8 @@ export const Footer: React.FC = () => {
             <div id="w-node-_01191fa0-2abf-23ff-44da-acbdf6476df4-0ac01850" className="footer-full-height-container w-layout-grid">
                 <div id="w-node-f35c7284-aa91-03b1-62fc-d15dd1353c80-0ac01850" className="footer-product">
                     <div className="absolute-background">
-                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe408_footer_product-bg-top.webp" loading="lazy" width="700" height="700" alt="footer_product-bg-top" srcSet="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe408_footer_product-bg-top-p-500.webp 500w, https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe408_footer_product-bg-top-p-800.webp 800w, https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe408_footer_product-bg-top-p-1080.webp 1080w, https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe408_footer_product-bg-top.webp 1400w" sizes="(max-width: 767px) 100vw, 700px" className="footer-img top" />
-                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe3f1_footer_product-bg.webp" loading="lazy" width="700" height="700" alt="footer_product-bg" srcSet="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe3f1_footer_product-bg-p-500.webp 500w, https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe3f1_footer_product-bg-p-800.webp 800w, https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe3f1_footer_product-bg-p-1080.webp 1080w, https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b2fe215f8a5cce19bfe3f1_footer_product-bg.webp 1400w" sizes="(max-width: 767px) 100vw, 700px" className="footer-img" />
+                        <img src="/img/cdn/68b2fe215f8a5cce19bfe408_footer_product-bg-top.webp" loading="lazy" width="700" height="700" alt="footer_product-bg-top" srcSet="/img/cdn/68b2fe215f8a5cce19bfe408_footer_product-bg-top-p-500.webp 500w, /img/cdn/68b2fe215f8a5cce19bfe408_footer_product-bg-top-p-800.webp 800w, /img/cdn/68b2fe215f8a5cce19bfe408_footer_product-bg-top-p-1080.webp 1080w, /img/cdn/68b2fe215f8a5cce19bfe408_footer_product-bg-top.webp 1400w" sizes="(max-width: 767px) 100vw, 700px" className="footer-img top" />
+                        <img src="/img/cdn/68b2fe215f8a5cce19bfe3f1_footer_product-bg.webp" loading="lazy" width="700" height="700" alt="footer_product-bg" srcSet="/img/cdn/68b2fe215f8a5cce19bfe3f1_footer_product-bg-p-500.webp 500w, /img/cdn/68b2fe215f8a5cce19bfe3f1_footer_product-bg-p-800.webp 800w, /img/cdn/68b2fe215f8a5cce19bfe3f1_footer_product-bg-p-1080.webp 1080w, /img/cdn/68b2fe215f8a5cce19bfe3f1_footer_product-bg.webp 1400w" sizes="(max-width: 767px) 100vw, 700px" className="footer-img" />
                     </div>
                     <div className="footer-product-text-inner">
                         <h3 className="footer-product-heading">Fuel<br />The<br />Rebel!</h3>
@@ -34,11 +34,11 @@ export const Footer: React.FC = () => {
                 <div id="w-node-_52f3956c-463e-cf84-00da-ec073fe306cc-0ac01850" className="footer-content">
                     <div id="w-node-_103e8af5-3d0c-0c66-5f7b-cd9c707fa04f-0ac01850" className="footer-fact-wrapper">
                         <a href="#" className="footer-info is-first w-inline-block">
-                            <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689754d9448e952a9e6c0aeb_Alle-Produkte_f1ba7a0d-4d19-4202-af26-db495d4d8559_100x100%201.svg" loading="lazy" width="57" height="70" alt="Hype Bam Icon" className="footer-info-img is-first" />
+                            <img src="/img/cdn/689754d9448e952a9e6c0aeb_Alle-Produkte_f1ba7a0d-4d19-4202-af26-db495d4d8559_100x100_1.svg" loading="lazy" width="57" height="70" alt="Hype Bam Icon" className="footer-info-img is-first" />
                             <div className="footer-info-text">shop all<br />Products</div>
                         </a>
                         <a href="#" className="footer-info is-second w-inline-block">
-                            <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689754d9d94ba5b480581df7_Group%2084.svg" loading="lazy" width="58" height="49" alt="Hype Bam Icon" className="footer-info-img is-second" />
+                            <img src="/img/cdn/689754d9d94ba5b480581df7_Group_84.svg" loading="lazy" width="58" height="49" alt="Hype Bam Icon" className="footer-info-img is-second" />
                             <div className="footer-info-text">samples <br />&amp; Singles</div>
                         </a>
                     </div>
@@ -61,7 +61,7 @@ export const Footer: React.FC = () => {
                         </div>
                     </div>
                 </div>
-                <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/6899e6d17cc0ae7334395045_Vector%20(5).svg" loading="lazy" id="w-node-_9cf1d991-93c8-9876-0a84-cf07ed027319-0ac01850" alt="Hype Bam Logo" className="footer-logo mobile" />
+                <img src="/img/cdn/6899e6d17cc0ae7334395045_Vector_5.svg" loading="lazy" id="w-node-_9cf1d991-93c8-9876-0a84-cf07ed027319-0ac01850" alt="Hype Bam Logo" className="footer-logo mobile" />
                 <div id="w-node-_440e9322-e28d-ad9e-9ab8-9d51f2096f5d-0ac01850" className="footer-bottom">
                     <div className="footer-bottom-text">© Hype Bam. All Rights Reserved.</div>
                 </div>

@@ -76,161 +76,68 @@ export default function RootLayout({
 
         {/* ── Preload: Hero canvas — first frame must paint instantly ── */}
         <link rel="preload" href="/img/hypeBamVideo001.webp" as="image" type="image/webp" />
-        {/* Preload frames 2–5 for smooth animation start-up */}
-        <link rel="preload" href="/img/hypeBamVideo002.webp" as="image" type="image/webp" />
-        <link rel="preload" href="/img/hypeBamVideo003.webp" as="image" type="image/webp" />
-        <link rel="preload" href="/img/hypeBamVideo004.webp" as="image" type="image/webp" />
-        <link rel="preload" href="/img/hypeBamVideo005.webp" as="image" type="image/webp" />
 
         {/* ── Preload: Sequence section — first frame so canvas isn't blank ── */}
         <link rel="preload" href="/img/seq_0_0.webp" as="image" type="image/webp" />
         <link rel="preload" href="/img/seq_1_0.webp" as="image" type="image/webp" />
 
+        {/* ── Adaptive preload: extra hero frames 2-5 only on fast connections ── */}
+        <Script id="adaptive-frame-preload" strategy="beforeInteractive">
+          {`
+            (function () {
+              try {
+                var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                var slow = conn && (conn.saveData === true ||
+                                    conn.effectiveType === 'slow-2g' ||
+                                    conn.effectiveType === '2g' ||
+                                    conn.effectiveType === '3g');
+                if (slow) return;
+                ['002','003','004','005'].forEach(function (n) {
+                  var l = document.createElement('link');
+                  l.rel = 'preload';
+                  l.as = 'image';
+                  l.type = 'image/webp';
+                  l.href = '/img/hypeBamVideo' + n + '.webp';
+                  document.head.appendChild(l);
+                });
+              } catch (e) { /* opt-out gracefully */ }
+            })();
+          `}
+        </Script>
+
         {/* ── Preload: First flavour can (active by default) ── */}
         <link rel="preload" href="/img/flavours/original.webp" as="image" type="image/webp" />
-
-        {/* ── Prefetch: Lottie hero logo animation JSON ── */}
-        <link
-          rel="prefetch"
-          href="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68bf4595ca06155170fa0b3f_fee5b51503049a55da64bfd6a8ed744f_more-logo-animation.json"
-          as="fetch"
-          crossOrigin="anonymous"
-        />
 
         {/* ── Prefetch: Hero SVG decorations (above fold) ── */}
         <link
           rel="prefetch"
-          href="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68a9a089d73e5cf84d4ded67_stage-sketch-arrow.svg"
+          href="/img/cdn/68a9a089d73e5cf84d4ded67_stage-sketch-arrow.svg"
           as="image"
         />
         <link
           rel="prefetch"
-          href="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/688655fd2fed5f707c038914_Layer_1%20(3).svg"
+          href="/img/cdn/688655fd2fed5f707c038914_Layer_1_3.svg"
           as="image"
         />
 
-        <Script
-          src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
-          strategy="beforeInteractive"
-        />
-        <Script
-          src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
-          strategy="beforeInteractive"
-        />
-        <Script
-          src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"
-          strategy="beforeInteractive"
-        />
+        {/* ── Real GSAP 3.14 + ALL plugins, served locally ──
+            As of GSAP 3.13 (May 2025) every plugin is 100% free — no Club
+            membership. We serve the genuine UMD builds from /vendor/gsap so
+            app.js gets real SplitText / DrawSVG / Inertia / CustomEase /
+            ScrollTrigger instead of hand-written polyfills. Order matters:
+            gsap core first, then plugins (each UMD self-registers when it
+            finds window.gsap; useAnimations also registers explicitly). */}
+        <Script src="/vendor/gsap/gsap.min.js" strategy="afterInteractive" />
+        <Script src="/vendor/gsap/ScrollTrigger.min.js" strategy="afterInteractive" />
+        <Script src="/vendor/gsap/CustomEase.min.js" strategy="afterInteractive" />
+        <Script src="/vendor/gsap/CustomWiggle.min.js" strategy="afterInteractive" />
+        <Script src="/vendor/gsap/CustomBounce.min.js" strategy="afterInteractive" />
+        <Script src="/vendor/gsap/DrawSVGPlugin.min.js" strategy="afterInteractive" />
+        <Script src="/vendor/gsap/InertiaPlugin.min.js" strategy="afterInteractive" />
+        <Script src="/vendor/gsap/SplitText.min.js" strategy="afterInteractive" />
 
-        <Script id="splittext-polyfill" strategy="beforeInteractive">
-          {`
-            window.SplitText = class SplitText {
-              constructor(element, options = {}) {
-                this.element = typeof element === 'string' ? document.querySelector(element) : element;
-                this.options = options;
-                this.words = [];
-                this.lines = [];
-                this.chars = [];
 
-                if (this.element) {
-                  this.split();
-                }
-              }
-
-              static create(element, options) {
-                return new SplitText(element, options);
-              }
-
-              split() {
-                const text = this.element.textContent || '';
-                const type = this.options.type || 'words';
-
-                this.originalHTML = this.element.innerHTML;
-
-                if (type.includes('words') || type.includes('lines')) {
-                  const words = text.trim().split(/\\s+/);
-                  const wordsClass = this.options.wordsClass || 'split-word';
-                  const linesClass = this.options.linesClass || 'split-line';
-
-                  this.element.innerHTML = words.map(word =>
-                    \`<span class="\${wordsClass}" style="display: inline-block;">\${word}</span>\`
-                  ).join(' ');
-
-                  this.words = Array.from(this.element.querySelectorAll('.' + wordsClass));
-
-                  if (type.includes('lines')) {
-                    const wrapper = document.createElement('span');
-                    wrapper.className = linesClass;
-                    wrapper.style.display = 'block';
-                    while (this.element.firstChild) {
-                      wrapper.appendChild(this.element.firstChild);
-                    }
-                    this.element.appendChild(wrapper);
-                    this.lines = [wrapper];
-                  }
-                }
-
-                if (type.includes('chars')) {
-                  const chars = text.split('');
-                  const charsClass = this.options.charsClass || 'split-char';
-                  this.element.innerHTML = chars.map(char =>
-                    char === ' ' ? ' ' : \`<span class="\${charsClass}" style="display: inline-block;">\${char}</span>\`
-                  ).join('');
-                  this.chars = Array.from(this.element.querySelectorAll('.' + charsClass));
-                }
-              }
-
-              revert() {
-                if (this.originalHTML) {
-                  this.element.innerHTML = this.originalHTML;
-                }
-              }
-            };
-
-            if (window.gsap) {
-              gsap.registerPlugin(SplitText);
-            }
-          `}
-        </Script>
-
-        <Script id="drawsvg-polyfill" strategy="beforeInteractive">
-          {`
-            if (window.gsap) {
-              gsap.registerPlugin({
-                name: "drawSVG",
-                init(target, value) {
-                  if (target.tagName === 'path' || target.tagName === 'line' || target.tagName === 'circle' || target.tagName === 'ellipse' || target.tagName === 'rect' || target.tagName === 'polygon' || target.tagName === 'polyline') {
-                    const length = target.getTotalLength ? target.getTotalLength() : 100;
-                    target.style.strokeDasharray = length;
-
-                    let start = 0, end = length;
-                    if (typeof value === 'string') {
-                      const match = value.match(/(\\d+)%?\\s*(\\d+)?%?/);
-                      if (match) {
-                        start = (parseFloat(match[1]) / 100) * length;
-                        end = match[2] ? (parseFloat(match[2]) / 100) * length : length;
-                      }
-                    }
-
-                    this.target = target;
-                    this.length = length;
-                    this.startOffset = length - start;
-                    this.endOffset = length - end;
-                  }
-                  return true;
-                },
-                render(progress) {
-                  if (this.target) {
-                    const offset = this.startOffset + (this.endOffset - this.startOffset) * progress;
-                    this.target.style.strokeDashoffset = offset;
-                  }
-                }
-              });
-            }
-          `}
-        </Script>
-
-        <Script id="webflow-classes" strategy="beforeInteractive">
+        <Script id="webflow-classes" strategy="afterInteractive">
           {`
             (function (o, c) {
               var n = c.documentElement,
@@ -249,28 +156,26 @@ export default function RootLayout({
         <ResourcePreloader />
         <Script id="fallback-loader" strategy="afterInteractive">
           {`
+            var __DEV__ = ${JSON.stringify(process.env.NODE_ENV !== 'production')};
             setTimeout(function () {
               if (!document.documentElement.classList.contains('is-ready')) {
-                console.log('Fallback: Forcing loader to hide and enabling scroll');
+                if (__DEV__) console.warn('Fallback: forcing loader hide after 6s');
                 document.documentElement.classList.add('fonts-loaded', 'is-ready', 'has-seq-ready');
               }
               document.documentElement.classList.remove('lenis-stopped');
               document.body.classList.remove('lenis-stopped');
               document.documentElement.style.overflow = '';
               document.body.style.overflow = '';
-
-              if (window.lenis) {
-                window.lenis.start();
-              }
-            }, 4000);
+              if (window.lenis) window.lenis.start();
+            }, 6000);
 
             setTimeout(function () {
               if (document.documentElement.classList.contains('lenis-stopped')) {
                 document.documentElement.classList.remove('lenis', 'lenis-stopped');
                 document.body.classList.remove('lenis', 'lenis-stopped');
-                console.log('Forced native scroll mode');
+                if (__DEV__) console.warn('Fallback: switched to native scroll after 8s');
               }
-            }, 6000);
+            }, 8000);
 
             window.onerror = function (msg, url, lineNo, columnNo, error) {
               console.error('Error caught, enabling scroll fallback:', msg);

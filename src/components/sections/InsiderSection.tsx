@@ -54,20 +54,21 @@ export const InsiderSection: React.FC = () => {
         // Lazy-play videos only when they scroll into view
         const videos = wrapper.querySelectorAll<HTMLVideoElement>('video[data-video]');
 
+        // Lazy-load source + pause when off-screen. Initial play() is owned by
+        // useAnimations.ts initVideoButtons so unmute-via-click works correctly.
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
                     const video = entry.target as HTMLVideoElement;
                     if (entry.isIntersecting) {
-                        // Set src from data-src if not already loaded
                         const source = video.querySelector('source');
                         if (source && source.dataset.src && !source.src) {
                             source.src = source.dataset.src;
                             video.load();
                         }
-                        video.play().catch(() => {
-                            // Autoplay blocked — silently ignore (muted videos usually allowed)
-                        });
+                        if (video.paused) {
+                            video.play().catch(() => { /* muted videos usually allowed */ });
+                        }
                     } else {
                         video.pause();
                     }
@@ -96,7 +97,6 @@ export const InsiderSection: React.FC = () => {
                                     data-inertia-item=""
                                     id={index > 0 ? `w-node-testimonial-${index}` : undefined}
                                     className={`testimonial-inner-wrap ${video.position}`}
-                                    style={{ display: 'block', width: '100%' }}
                                 >
                                     <div data-inertia-item-child="" className={`testimonial-inner _${index + 1}`}>
                                         <div className="testimonial-media w-embed">
@@ -106,12 +106,19 @@ export const InsiderSection: React.FC = () => {
                                                 muted
                                                 preload="none"
                                                 data-video=""
+                                                data-video-id={`v${index}`}
                                             >
                                                 {/* data-src used by IntersectionObserver for true lazy loading */}
                                                 <source data-src={video.src} src={video.src} type="video/mp4" />
                                             </video>
                                         </div>
-                                        <button type="button" data-video-button="" aria-label="Sound on/off" className={`testimonial-sound-btn ${video.buttonPosition}`}>
+                                        <button
+                                            type="button"
+                                            data-video-button=""
+                                            data-video-button-id={`v${index}`}
+                                            aria-label="Sound on/off"
+                                            className={`testimonial-sound-btn ${video.buttonPosition}`}
+                                        >
                                             <SoundButtonIcons />
                                         </button>
                                     </div>
@@ -131,9 +138,9 @@ export const InsiderSection: React.FC = () => {
                                 <a href="#" className="rating-link w-inline-block">
                                     <div className="rating-star-wrap">
                                         {[1, 2, 3, 4].map(i => (
-                                            <img key={i} src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68ae178a6c618dbc4bb25c48_icon-star.svg" loading="lazy" width="20" height="20" alt="icon-star" className="rating-star" />
+                                            <img key={i} src="/img/cdn/68ae178a6c618dbc4bb25c48_icon-star.svg" loading="lazy" width="20" height="20" alt="icon-star" className="rating-star" />
                                         ))}
-                                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68ae178a30a512b269607fbe_icon-star-half.svg" loading="lazy" width="20" height="20" alt="icon-star" className="rating-star" />
+                                        <img src="/img/cdn/68ae178a30a512b269607fbe_icon-star-half.svg" loading="lazy" width="20" height="20" alt="icon-star" className="rating-star" />
                                     </div>
                                     <div className="rating-text-wrap">
                                         <div className="rating-text">1000+ Reviews</div>

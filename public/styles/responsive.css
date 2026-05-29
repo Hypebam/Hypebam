@@ -220,9 +220,12 @@ h1.hero-heading {
     .testimonial-inner-wrap.is-fourth { align-self: flex-start !important; rotate: -5deg !important; }
     .testimonial-inner-wrap.is-fifth  { align-self: flex-end !important; rotate: 4deg !important; }
 
-    /* ── Sequence ── */
-    .sequence-cards { display: flex !important; overflow: visible !important; }
-    .statement-card { width: 90% !important; max-width: 360px !important; }
+    /* ── Sequence ──
+       DO NOT re-show .sequence-cards here. webflow.css hides the desktop
+       cards on mobile (display:none) and shows .sequence-cards-mobile.
+       Forcing display:flex made BOTH card sets render at grid-area:1/1,
+       stacking on top of each other. .statement-card sizing is left to
+       webflow.css originals too. */
     .sequence-title { font-size: 1.8em !important; }
     .marquee-text-svg text { font-size: 120px !important; }
 
@@ -265,7 +268,6 @@ h1.hero-heading {
     .testimonial-inner-wrap:first-child { margin-top: 0 !important; }
 
     .sequence-title { font-size: 1.4em !important; }
-    .statement-card { width: 85% !important; max-width: 300px !important; }
     .benefit-heading { font-size: 2.2em !important; }
     .marquee-text-svg text { font-size: 90px !important; }
 
@@ -310,7 +312,6 @@ h1.hero-heading {
     }
 
     .sequence-title { font-size: 1.2em !important; }
-    .statement-card { max-width: 260px !important; }
     .benefit-heading { font-size: 1.8em !important; }
 
     .footer-inner { flex-direction: column !important; gap: 2em !important; }

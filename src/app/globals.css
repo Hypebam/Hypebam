@@ -111,7 +111,7 @@ html.is-ready .loader {
     z-index: 1;
     pointer-events: none;
     mix-blend-mode: soft-light;
-    background-image: url(https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68b0b1e2ae528702c898a058_pattern.png);
+    background-image: url(/img/cdn/68b0b1e2ae528702c898a058_pattern.png);
     background-position: 0 0;
     background-size: 7rem 7rem;
     position: absolute;
@@ -170,26 +170,125 @@ html.is-ready.lenis-stopped {
 }
 
 /* ========================================
-   SEQUENCE ANIMATION — Mobile scroll speed
+   MARQUEE — responsive alignment
+   Both SVGs share the same viewBox + preserveAspectRatio so they scale
+   identically. The hardcoded top:20px in main.css is replaced with a
+   percentage so the text rides the orange band at any width.
    ======================================== */
+.marquee-inner {
+    position: relative !important;
+    overflow: visible !important;
+}
+.marquee-bg-svg,
+.marquee-text-svg {
+    grid-area: 1 / 1 / 2 / 2 !important;
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    overflow: visible !important;
+}
+.marquee-text-svg {
+    /* Push text up just enough to sit centered on the 160px stroke band.
+       Stroke width 160 in a 442-tall viewBox = ~36% of height — the band
+       runs roughly along y=370, so a small percentage offset works at any width. */
+    top: 0 !important;
+    margin-top: -1% !important;
+    z-index: 2 !important;
+    position: relative !important;
+}
+
+/* ========================================
+   HERO HEADING — keep the "Energy Drink" span white even after GSAP
+   SplitText wraps each word/char. Selector covers the original span
+   and any descendant SplitText created.
+   ======================================== */
+[data-white-text],
+[data-white-text] *,
+[data-white-text] .split-word,
+[data-white-text] .split-char {
+    color: #ffffff !important;
+}
+
+/* ========================================
+   STAGE LEFT — grid overlap so circle + can + facts share one cell
+   Original site uses display:grid on .stage-left with all 3 children
+   (.stage-bg, .stage-visual, .stage-facts) at grid-area 1/1. Without
+   this, our flex layout stacks them vertically and the circle SVG
+   (last in DOM) renders BELOW the can — user only sees its top half.
+   ======================================== */
+.stage-left {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 1fr !important;
+    position: relative !important;
+}
+.stage-left > .stage-bg,
+.stage-left > .stage-visual,
+.stage-left > .stage-facts,
+.stage-left > .stage-deco {
+    grid-area: 1 / 1 !important;
+    align-self: center !important;
+    justify-self: center !important;
+    width: 100% !important;
+}
+
+/* Circle SVG: extend past stage-bg sides so it surrounds the can */
+.stage-bg {
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+.stage-bg-svg {
+    width: 120% !important;
+    margin-left: -10% !important;
+    height: auto !important;
+    display: block !important;
+}
+.stage-visual { z-index: 2 !important; }
+.stage-facts  { z-index: 3 !important; pointer-events: none !important; }
+.stage-facts > * { pointer-events: auto !important; }
+.stage-deco   { z-index: 4 !important; pointer-events: none !important; }
+
 @media (max-width: 991px) {
-    .sequence-scroll-wrap {
-        height: 400vh !important;
-        min-height: 2500px !important;
+    .stage-bg-svg {
+        width: 135% !important;
+        margin-left: -17.5% !important;
     }
 }
 
-@media (max-width: 767px) {
-    .sequence-scroll-wrap {
-        height: 450vh !important;
-        min-height: 2800px !important;
-    }
+/* ========================================
+   SEQUENCE LINES — lightning rotations
+   Match original site: each line is wider than the viewport
+   and rotated so the lightning crosses the section from a
+   different angle, then drawn-in one at a time on scroll.
+   ======================================== */
+.sequence-line-svg.is-first  { width: 180% !important; rotate: -40deg; }
+.sequence-line-svg.is-second { width: 180% !important; rotate:  70deg; }
+.sequence-line-svg.is-third  { width: 180% !important; rotate: -20deg; }
+
+/* Make the lightning crisp & glowing — orange on the dark sequence bg.
+   Use higher specificity than .sequence-lines { color:white !important } in main.css */
+.sequence-lines .sequence-line-svg path {
+    color: #FFB05A !important;
+    filter: drop-shadow(0 0 8px rgba(255, 176, 90, 0.4));
 }
 
-@media (max-width: 479px) {
-    .sequence-scroll-wrap {
-        height: 500vh !important;
-        min-height: 3000px !important;
+/* ========================================
+   SEQUENCE — MOBILE LAYOUT
+   The original pinned-can + scroll-over-cards layout is fully defined in
+   the vendored webflow.css at (max-width:991px):
+     .sequence-scroll-wrap{height:auto}
+     .sequence-sticky{height:100lvh}  (sticky/top:0/grid from base)
+     .sequence-cards{display:none}    .sequence-cards-mobile{grid-area:1/1;
+       flex column; gap:65lvh; margin-top:-100lvh; padding-top:50lvh; flex}
+     .sequence-final-mobile{min-height:100lvh}
+   We deliberately add NO overrides here so those originals win and the
+   mobile section behaves exactly like the source site. (Desktop hides the
+   -mobile blocks via webflow.css too.) Mobile lightning width bump only: */
+@media (max-width: 991px) {
+    .sequence-line-svg.is-first,
+    .sequence-line-svg.is-second,
+    .sequence-line-svg.is-third {
+        width: 220% !important;
     }
 }
 
@@ -513,7 +612,7 @@ html.is-ready.lenis-stopped {
 }
 
 [data-typography-target="sequence-cards-text-field"] .statement-heading {
-    font-size: clamp(1.2em, 2.5vw, 2.5em) !important;
+    font-size: clamp(1.4em, 3vw, 2.5em) !important;
     line-height: 0.92 !important;
     letter-spacing: 0.08em !important;
 }
@@ -565,11 +664,10 @@ h1.hero-heading {
     z-index: 2;
 }
 
-/* Desktop only: scale up buttons */
+/* Desktop only: scale up the stage CTA + the testimonial card stack.
+   Navbar button scale is owned by responsive.css to avoid the duplicate
+   that previously appeared in two places. */
 @media (min-width: 992px) {
-    .navbar .button {
-        scale: 1.25 !important;
-    }
     .stage-cta .button {
         scale: 1.25 !important;
     }
@@ -642,6 +740,7 @@ h1.hero-heading {
 .stage-logo {
     filter: none !important;
     margin-top: 4em !important;
+    position: relative !important;
 }
 
 .stage-logo-img {
@@ -649,9 +748,11 @@ h1.hero-heading {
     transform-origin: center bottom;
 }
 
-.stage-logo-lottie {
-    display: none !important;
-}
+/* The Hype Bam static SVG logo is the real logo and must stay visible.
+   The [data-load-stage-logo-lottie] element exists ONLY as app.js yo()'s
+   r.play() target (kept hidden via main.css display:none) — the bundled
+   Lottie JSON is the original "more nutrition" brand logo, not ours, so we
+   never show it. No crossfade, no hiding of the static logo. */
 
 /* Letter-spacing for all headings */
 h1, h2, h3, h4, h5, h6,
@@ -741,9 +842,22 @@ h1, h2, h3, h4, h5, h6,
         width: 100% !important;
     }
 
-    /* ── Stage canvas ── */
+    /* ── Stage canvas (match original mobile sizing) ── */
     .stage-canvas {
-        scale: 0.85 !important;
+        scale: 1 !important;
+        width: 90% !important;
+        max-width: none !important;
+        position: relative !important;
+        left: -5% !important;
+    }
+
+    /* Make sure the grid-overlap stays active even when .stage-wrap is flex-column */
+    .stage-left {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        grid-template-rows: 1fr !important;
+        min-height: 60vw !important;
+        position: relative !important;
     }
 
     /* ── Insider ── */
@@ -832,18 +946,10 @@ h1, h2, h3, h4, h5, h6,
         rotate: 4deg !important;
     }
 
-    /* ── Sequence ── */
-    .sequence-cards {
-        display: flex !important;
-        overflow: visible !important;
-    }
-
-    .statement-card {
-        width: 90% !important;
-        max-width: 360px !important;
-    }
-
-    .sequence-title {
+    /* ── Sequence ── mobile layout owned by webflow.css originals.
+       Do NOT re-show .sequence-cards here (original hides it & uses
+       .sequence-cards-mobile). Only the final-title font is tweaked. */
+    .sequence-final-mobile .sequence-title {
         font-size: 1.8em !important;
     }
 
@@ -932,13 +1038,8 @@ h1, h2, h3, h4, h5, h6,
         margin-top: 0 !important;
     }
 
-    .sequence-title {
+    .sequence-final-mobile .sequence-title {
         font-size: 1.4em !important;
-    }
-
-    .statement-card {
-        width: 85% !important;
-        max-width: 300px !important;
     }
 
     .benefit-heading {
@@ -947,7 +1048,19 @@ h1, h2, h3, h4, h5, h6,
 
     .footer-full-height-container {
         grid-template-columns: 1fr !important;
+        padding: 1.25em 1em !important;
+        gap: 1.5em !important;
     }
+    .footer-product {
+        width: 100% !important;
+        height: auto !important;
+        max-height: 32em !important;
+        aspect-ratio: 1 / 1 !important;
+        left: auto !important;
+        margin: 0 auto !important;
+    }
+    .footer-content { padding: 1em 0 !important; }
+    .footer-bottom { padding: 1.25em 0.75em !important; flex-wrap: wrap !important; gap: 0.5em !important; }
 }
 
 /* ========================================
@@ -998,12 +1111,8 @@ h1, h2, h3, h4, h5, h6,
         margin-top: -2.5em !important;
     }
 
-    .sequence-title {
+    .sequence-final-mobile .sequence-title {
         font-size: 1.2em !important;
-    }
-
-    .statement-card {
-        max-width: 260px !important;
     }
 
     .benefit-heading {
@@ -1019,4 +1128,259 @@ h1, h2, h3, h4, h5, h6,
         width: 100% !important;
         text-align: center !important;
     }
+}
+
+/* ========================================
+   PAYMENT — desktop/mobile signature visibility swap
+   Original hides .is-mobile variants on desktop and .is-desktop on phones.
+   Also vertically stack the payment-methods on mobile so cards don't squish.
+   ======================================== */
+.payment-signature-days.is-mobile,
+.payment-signature-mobile {
+    display: none;
+}
+@media (min-width: 992px) {
+    .payment-signature-days.is-mobile,
+    .payment-signature-mobile { display: none !important; }
+}
+@media (max-width: 991px) {
+    .payment-signature-days.is-desktop { display: none !important; }
+    .payment-signature-days.is-mobile,
+    .payment-signature-mobile { display: grid !important; }
+
+    .pament-methods {
+        flex-flow: column !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        width: 100% !important;
+        position: relative !important;
+    }
+    .payment-method-item-outer { width: 100%; max-width: 320px; }
+    .payment-method-item {
+        width: 100% !important;
+        max-width: 220px !important;
+        height: auto !important;
+        aspect-ratio: 1 !important;
+        bottom: auto !important;
+    }
+}
+
+/* ========================================
+   FLAVOUR SECTION (.hbf*)
+   Extracted from FlavourSection.tsx <style> tag so responsive
+   overrides cascade properly. Mobile clamps tightened so the
+   can + headings stay readable down to 320px.
+   ======================================== */
+.hbf {
+    background: #FFF8EF;
+    padding: clamp(56px, 9vw, 160px) 0 clamp(64px, 10vw, 200px);
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+}
+.hbf::before {
+    content: '';
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: min(900px, 70vw);
+    height: min(900px, 70vw);
+    border: 3px solid rgba(230, 81, 0, 0.05);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+.hbf::after {
+    content: '';
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    width: min(1200px, 90vw);
+    height: min(1200px, 90vw);
+    border: 2px solid rgba(230, 81, 0, 0.03);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+@keyframes hbf-float {
+    0%, 100% { transform: translateY(0); }
+    50%     { transform: translateY(-12px); }
+}
+.hbf-head    { padding: 0 20px; margin-bottom: clamp(20px, 4vw, 50px); position: relative; z-index: 2; }
+.hbf-t1 {
+    font-family: var(--font-primary), 'Impact', sans-serif;
+    font-size: clamp(20px, 4.2vw, 50px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #3a2a1a;
+    line-height: 1.1;
+    margin: 0 0 4px;
+}
+.hbf-t2 {
+    font-family: var(--font-primary), 'Impact', sans-serif;
+    font-size: clamp(32px, 8vw, 90px);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #E65100;
+    line-height: 0.95;
+    margin: 0;
+    opacity: 0.9;
+}
+.hbf-stage {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    min-height: clamp(320px, 55vw, 750px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hbf-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: clamp(220px, 40vw, 600px);
+    height: clamp(220px, 40vw, 600px);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(80px);
+    opacity: 0.2;
+    transition: background 0.8s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+.hbf-can-wrap {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    animation: hbf-float 4s ease-in-out infinite;
+    z-index: 1;
+}
+.hbf-can {
+    width: clamp(180px, 42vw, 520px);
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 40px 80px rgba(0, 0, 0, 0.3)) drop-shadow(0 10px 30px rgba(230, 81, 0, 0.15));
+    pointer-events: auto;
+    will-change: transform, opacity;
+}
+.hbf-can.hidden { opacity: 0; pointer-events: none; }
+.hbf-arrows {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 clamp(8px, 3vw, 40px);
+    pointer-events: none;
+    z-index: 10;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.hbf-arr {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.92);
+    color: #3a2a1a;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: auto;
+}
+@media (hover: hover) {
+    .hbf-arr:hover {
+        background: #E65100;
+        color: white;
+        transform: scale(1.15);
+        box-shadow: 0 6px 28px rgba(230, 81, 0, 0.3);
+    }
+}
+.hbf-arr:active { transform: scale(0.92); }
+.hbf-info { margin-top: clamp(16px, 2vw, 32px); position: relative; z-index: 2; }
+.hbf-lbl {
+    font-family: var(--font-sub), sans-serif;
+    font-size: clamp(11px, 1.4vw, 15px);
+    color: #E65100;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin: 0 0 6px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+.hbf-name {
+    font-family: var(--font-primary), 'Impact', sans-serif;
+    font-size: clamp(30px, 6vw, 72px);
+    font-weight: 800;
+    color: #3a2a1a;
+    text-transform: uppercase;
+    line-height: 1;
+    margin: 0 0 20px;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.hbf-name.slide-out { opacity: 0; transform: translateY(12px); }
+.hbf-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    background: #3a2a1a;
+    color: white;
+    border-radius: 50px;
+    font-family: var(--font-secondary), sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+}
+@media (hover: hover) {
+    .hbf-cta:hover {
+        background: #E65100;
+        transform: translateY(-3px) scale(1.04);
+        box-shadow: 0 10px 32px rgba(230, 81, 0, 0.3);
+    }
+}
+.hbf-dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+.hbf-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(230, 81, 0, 0.15);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+.hbf-dot.on {
+    background: #E65100;
+    transform: scale(1.5);
+}
+
+@media (max-width: 991px) {
+    .hbf { padding: 56px 0 64px; }
+    .hbf-arrows { padding: 0 8px; }
+    .hbf-arr { width: 44px; height: 44px; } /* ≥44px tap target */
+    .hbf-cta { padding: 12px 26px; font-size: 14px; }
+    .hbf-dot { width: 12px; height: 12px; } /* easier tap target on phones */
+}
+
+@media (max-width: 479px) {
+    .hbf-stage { min-height: 290px; }
+    .hbf-can { width: 70vw; max-width: 320px; }
+    .hbf-arr { width: 40px; height: 40px; }
+    .hbf::before, .hbf::after { display: none; } /* decorative rings off on tiny screens */
 }

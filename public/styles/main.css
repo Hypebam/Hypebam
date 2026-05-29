@@ -1164,7 +1164,7 @@ body {
 
 @media (orientation: landscape) {
     .stage-container {
-        min-height: 100svh
+        min-height: 240svh
     }
 }
 
@@ -1345,7 +1345,7 @@ to {
 
 @media (orientation: landscape) {
     .stage-container {
-        min-height: 100svh
+        min-height: 240svh
     }
 }
 
@@ -2330,20 +2330,13 @@ to {
 }
 
 /* === Sequence section ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â ensure mobile cards layout === */
-.sequence-cards-mobile {
-    z-index: -1;
-    flex-flow: column;
-    grid-area: 1/1;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh;
-    padding-left: 2.5em;
-    padding-right: 2.5em;
-    display: none;
-    position: relative;
-    overflow: clip;
-}
+/* .sequence-cards-mobile base rules intentionally removed.
+   They are governed by webflow.css: base display:none (hidden on desktop),
+   @media(max-width:991px) display:flex + grid-area:1/1 + margin-top:-100lvh +
+   gap:65lvh (shown on mobile, scrolls over the pinned can). This duplicate
+   loaded AFTER webflow.css and, at equal specificity, its display:none beat
+   webflow's ≤991 display:flex — collapsing the mobile cards to 0 height and
+   starving the scroll runway, which made the canvas scrub far too fast. */
 
 /* === Ensure slider works with overflow === */
 .testimonial-slider-inner {
@@ -2674,16 +2667,10 @@ body {
         rotate: 4deg !important;
     }
 
-    /* â”€â”€ Sequence cards â”€â”€ */
-    .sequence-cards {
-        display: flex !important;
-        overflow: visible !important;
-    }
-
-    .statement-card {
-        width: 90% !important;
-        max-width: 360px !important;
-    }
+    /* â”€â”€ Sequence cards â”€â”€
+       Desktop .sequence-cards must stay display:none on mobile (webflow.css);
+       .sequence-cards-mobile is what shows. Do NOT force display:flex here —
+       it stacked both card sets at grid-area:1/1. Sizing left to webflow. */
 
     /* â”€â”€ Sequence title â”€â”€ */
     .sequence-title {
@@ -2782,11 +2769,6 @@ body {
     /* â”€â”€ Sequence â”€â”€ */
     .sequence-title {
         font-size: 1.4em !important;
-    }
-
-    .statement-card {
-        width: 85% !important;
-        max-width: 300px !important;
     }
 
     /* â”€â”€ Benefits table â”€â”€ */
@@ -2908,10 +2890,6 @@ body {
         font-size: 1.2em !important;
     }
 
-    .statement-card {
-        max-width: 260px !important;
-    }
-
     /* â”€â”€ Benefits â”€â”€ */
     .benefit-table-title-wrapper {
         grid-template-columns: 1.8fr 1fr 1fr !important;
@@ -3001,20 +2979,13 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /* â”€â”€ Sequence mobile cards â”€â”€ */
-.sequence-cards-mobile {
-    z-index: -1;
-    flex-flow: column;
-    grid-area: 1/1;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh;
-    padding-left: 2.5em;
-    padding-right: 2.5em;
-    display: none;
-    position: relative;
-    overflow: clip;
-}
+/* .sequence-cards-mobile base rules intentionally removed.
+   They are governed by webflow.css: base display:none (hidden on desktop),
+   @media(max-width:991px) display:flex + grid-area:1/1 + margin-top:-100lvh +
+   gap:65lvh (shown on mobile, scrolls over the pinned can). This duplicate
+   loaded AFTER webflow.css and, at equal specificity, its display:none beat
+   webflow's ≤991 display:flex — collapsing the mobile cards to 0 height and
+   starving the scroll runway, which made the canvas scrub far too fast. */
 
 /* â”€â”€ Marquee text â”€â”€ */
 .marquee-text-svg {

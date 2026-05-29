@@ -14,17 +14,17 @@ interface SocialLinksProps {
 const defaultLinks: SocialLink[] = [
     {
         href: 'https://www.instagram.com/hypebam/',
-        icon: 'https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/688651ae6f6e0e5669c9d465_instagram.svg',
+        icon: '/img/cdn/688651ae6f6e0e5669c9d465_instagram.svg',
         alt: 'Instagram'
     },
     {
         href: 'https://www.tiktok.com/@hypebam',
-        icon: 'https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/688651aeea8f52f9e4d418f2_tiktok.svg',
+        icon: '/img/cdn/688651aeea8f52f9e4d418f2_tiktok.svg',
         alt: 'TikTok'
     },
     {
         href: 'https://www.youtube.com/@hypebam',
-        icon: 'https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68d40d4b080c864fb3ec6e0f_youtube-svgrepo-com.svg',
+        icon: '/img/cdn/68d40d4b080c864fb3ec6e0f_youtube-svgrepo-com.svg',
         alt: 'YouTube'
     }
 ];

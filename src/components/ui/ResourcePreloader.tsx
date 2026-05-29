@@ -150,8 +150,8 @@ export function ResourcePreloader() {
     if (reviewsSection) {
       let done = false;
       const reviewImages = [
-        "https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689541efc32332b4d96332e4_5aa593a5c181883619e1ec2e48b9a77009ae6ddd.webp",
-        "https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/689541d1c4bb0b452cb46e3e_b525d1f05540193d88caa60b825b8887a650d649.webp",
+        "/img/cdn/689541efc32332b4d96332e4_5aa593a5c181883619e1ec2e48b9a77009ae6ddd.webp",
+        "/img/cdn/689541d1c4bb0b452cb46e3e_b525d1f05540193d88caa60b825b8887a650d649.webp",
       ];
       const obs = new IntersectionObserver(
         ([entry]) => {

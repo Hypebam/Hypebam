@@ -7,194 +7,55 @@ declare global {
         Swiper: any;
         gsap: any;
         ScrollTrigger: any;
+        CustomEase: any;
+        CustomWiggle: any;
+        CustomBounce: any;
+        DrawSVGPlugin: any;
+        InertiaPlugin: any;
+        SplitText: any;
         lenis: any;
     }
 }
 
+// ──────────────────────────────────────────────────────────────
+// Load coordinator: a single promise-based init pipeline replaces
+// the previous chain of arbitrary setTimeouts. Each stage waits on
+// what it actually depends on, so init succeeds on slow phones too.
+// ──────────────────────────────────────────────────────────────
+
+const waitFor = <T,>(test: () => T | undefined | null, timeoutMs = 8000, intervalMs = 50): Promise<T> =>
+    new Promise((resolve, reject) => {
+        const start = performance.now();
+        const tick = () => {
+            const value = test();
+            if (value) return resolve(value);
+            if (performance.now() - start > timeoutMs) return reject(new Error('waitFor timeout'));
+            setTimeout(tick, intervalMs);
+        };
+        tick();
+    });
+
+const loadScript = (src: string): Promise<void> =>
+    new Promise((resolve, reject) => {
+        if (document.querySelector(`script[src="${src}"]`)) return resolve();
+        const el = document.createElement('script');
+        el.src = src;
+        el.defer = false;
+        el.onload = () => resolve();
+        el.onerror = () => reject(new Error(`failed to load ${src}`));
+        document.body.appendChild(el);
+    });
+
 export const useAnimations = () => {
     useEffect(() => {
-        // =============================================
-        // 1. LOAD APP.JS (Webflow animations)
-        // =============================================
-        const loadAppScript = () => {
-            if (document.querySelector('script[src="/scripts/app.js"]')) return;
+        const cleanups: Array<() => void> = [];
+        let animationId: number | undefined;
 
-            const script = document.createElement('script');
-            script.src = '/scripts/app.js';
-            script.async = false;
-            script.onload = () => console.log('app.js loaded successfully');
-            script.onerror = () => {
-                console.error('Failed to load app.js — enabling fallback');
-                document.documentElement.classList.add('fonts-loaded', 'is-ready', 'has-seq-ready');
-            };
-            document.body.appendChild(script);
-        };
-
-        const appTimer = setTimeout(loadAppScript, 200);
-
-        // =============================================
-        // 2. SWIPER — Flavour Section
-        // =============================================
-        const initSwiper = () => {
-            const flavourSliderEl = document.querySelector('[data-flavour-slider]');
-            const contentSliderEl = document.querySelector('[data-flavour-content-slider]');
-            if (!flavourSliderEl || !contentSliderEl) return;
-
-            // Dynamically load Swiper CSS + JS if not already loaded
-            if (!document.querySelector('link[href*="swiper"]')) {
-                const swiperCSS = document.createElement('link');
-                swiperCSS.rel = 'stylesheet';
-                swiperCSS.href = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css';
-                document.head.appendChild(swiperCSS);
-            }
-
-            const loadSwiperJS = () => {
-                if (window.Swiper) {
-                    createSwipers();
-                    return;
-                }
-                const script = document.createElement('script');
-                script.src = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js';
-                script.onload = () => createSwipers();
-                document.head.appendChild(script);
-            };
-
-            const createSwipers = () => {
-                if (!window.Swiper) return;
-
-                const contentSwiper = new window.Swiper('[data-flavour-content-slider]', {
-                    slidesPerView: 1,
-                    allowTouchMove: false,
-                    effect: 'fade',
-                    fadeEffect: { crossFade: true },
-                    speed: 600,
-                });
-
-                const mainSwiper = new window.Swiper('[data-flavour-slider]', {
-                    slidesPerView: 1,
-                    centeredSlides: true,
-                    speed: 800,
-                    loop: false,
-                    grabCursor: true,
-                    breakpoints: {
-                        992: { slidesPerView: 1.5 },
-                    },
-                    thumbs: { swiper: contentSwiper },
-                });
-
-                // Navigation buttons
-                const leftBtn = document.querySelector('[data-flavour-slider-left-button]');
-                const rightBtn = document.querySelector('[data-flavour-slider-right-button]');
-
-                leftBtn?.addEventListener('click', () => {
-                    mainSwiper.slidePrev();
-                    contentSwiper.slidePrev();
-                });
-                rightBtn?.addEventListener('click', () => {
-                    mainSwiper.slideNext();
-                    contentSwiper.slideNext();
-                });
-
-                // Sync content slider on main slide change
-                mainSwiper.on('slideChange', () => {
-                    contentSwiper.slideTo(mainSwiper.activeIndex);
-                });
-            };
-
-            setTimeout(loadSwiperJS, 500);
-        };
-
-        initSwiper();
-
-        // =============================================
-        // 3. TESTIMONIAL SLIDER
-        // =============================================
-        const initTestimonialSlider = () => {
-            const slider = document.querySelector('[data-slider]') as HTMLElement;
-            const leftBtn = document.querySelector('[data-slider-left-button]');
-            const rightBtn = document.querySelector('[data-slider-right-button]');
-            if (!slider) return;
-
-            let currentIndex = 0;
-            const items = slider.querySelectorAll('.testimonial-slider-item-wrap');
-            const totalItems = items.length;
-
-            const updateSlider = () => {
-                items.forEach((item, i) => {
-                    item.classList.toggle('is-active', i === currentIndex);
-                });
-
-                // Calculate scroll position
-                const activeItem = items[currentIndex] as HTMLElement;
-                if (!activeItem) return;
-
-                const sliderRect = slider.getBoundingClientRect();
-                const itemRect = activeItem.getBoundingClientRect();
-                const scrollOffset = itemRect.left - sliderRect.left - (sliderRect.width / 2) + (itemRect.width / 2) + slider.scrollLeft;
-
-                slider.scrollTo({ left: scrollOffset, behavior: 'smooth' });
-            };
-
-            leftBtn?.addEventListener('click', () => {
-                currentIndex = Math.max(0, currentIndex - 1);
-                updateSlider();
-            });
-
-            rightBtn?.addEventListener('click', () => {
-                currentIndex = Math.min(totalItems - 1, currentIndex + 1);
-                updateSlider();
-            });
-
-            // Set first item as active
-            updateSlider();
-        };
-
-        setTimeout(initTestimonialSlider, 800);
-
-        // =============================================
-        // 4. VIDEO PLAY/PAUSE WITH SOUND TOGGLE
-        // =============================================
-        const initVideoButtons = () => {
-            const buttons = document.querySelectorAll('[data-video-button]');
-            const videos = document.querySelectorAll('[data-video]') as NodeListOf<HTMLVideoElement>;
-
-            // Auto-play videos muted
-            videos.forEach(video => {
-                video.muted = true;
-                video.play().catch(() => { /* autoplay blocked */ });
-            });
-
-            buttons.forEach((btn, index) => {
-                btn.addEventListener('click', () => {
-                    const video = videos[index];
-                    if (!video) return;
-
-                    btn.classList.toggle('is-clicked');
-
-                    if (video.muted) {
-                        // Unmute this, mute others
-                        videos.forEach((v, i) => {
-                            if (i !== index) {
-                                v.muted = true;
-                                buttons[i]?.classList.remove('is-clicked');
-                            }
-                        });
-                        video.muted = false;
-                    } else {
-                        video.muted = true;
-                    }
-                });
-            });
-        };
-
-        setTimeout(initVideoButtons, 600);
-
-        // =============================================
-        // 5. GOLD MOUSE-TRACKING SPOTLIGHT
-        // =============================================
+        // ────────────────────────────────────────────────
+        // 1. MOUSE-TRACKING SPOTLIGHT (desktop pointer only)
+        // ────────────────────────────────────────────────
         let mouseX = 0, mouseY = 0;
         let currentX = 0, currentY = 0;
-        let animationId: number;
 
         const handleMouseMove = (e: MouseEvent) => {
             mouseX = e.clientX;
@@ -204,161 +65,148 @@ export const useAnimations = () => {
         const animate = () => {
             currentX += (mouseX - currentX) * 0.08;
             currentY += (mouseY - currentY) * 0.08;
-
-            const xPercent = (currentX / window.innerWidth) * 100;
-            const yPercent = (currentY / window.innerHeight) * 100;
-
-            const glowOverlay = document.getElementById('mouse-glow-overlay');
-            if (glowOverlay) {
-                glowOverlay.style.background = `
-                    radial-gradient(
-                        600px circle at ${xPercent}% ${yPercent}%,
-                        rgba(230, 81, 0, 0.06) 0%,
-                        rgba(230, 81, 0, 0.02) 40%,
-                        transparent 70%
-                    )
-                `;
+            const xPct = (currentX / window.innerWidth) * 100;
+            const yPct = (currentY / window.innerHeight) * 100;
+            const overlay = document.getElementById('mouse-glow-overlay');
+            if (overlay) {
+                overlay.style.background = `radial-gradient(600px circle at ${xPct}% ${yPct}%, rgba(230,81,0,0.06) 0%, rgba(230,81,0,0.02) 40%, transparent 70%)`;
             }
             animationId = requestAnimationFrame(animate);
         };
 
         if (!document.getElementById('mouse-glow-overlay')) {
-            const glowOverlay = document.createElement('div');
-            glowOverlay.id = 'mouse-glow-overlay';
-            glowOverlay.style.cssText = `
-                position: fixed;
-                top: 0; left: 0;
-                width: 100%; height: 100%;
-                pointer-events: none;
-                z-index: 1;
-                background: transparent;
-            `;
-            document.body.appendChild(glowOverlay);
+            const overlay = document.createElement('div');
+            overlay.id = 'mouse-glow-overlay';
+            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;background:transparent';
+            document.body.appendChild(overlay);
         }
 
-        const hasPointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-        if (hasPointer) {
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
             window.addEventListener('mousemove', handleMouseMove);
             animationId = requestAnimationFrame(animate);
         }
 
-        // =============================================
-        // 6. GSAP SCROLL ANIMATIONS (fallback if app.js fails)
-        // =============================================
-        const initGSAPAnimations = () => {
-            const gsap = window.gsap;
-            const ScrollTrigger = window.ScrollTrigger;
-            if (!gsap || !ScrollTrigger) return;
+        // ────────────────────────────────────────────────
+        // 2. SWIPER (flavour slider) — needs Swiper global
+        // ────────────────────────────────────────────────
+        const initSwiper = async () => {
+            const flavourSliderEl = document.querySelector('[data-flavour-slider]');
+            const contentSliderEl = document.querySelector('[data-flavour-content-slider]');
+            if (!flavourSliderEl || !contentSliderEl) return;
 
-            gsap.registerPlugin(ScrollTrigger);
-
-            // Animate benefit table items on scroll
-            const benefitItems = document.querySelectorAll('.benefit-table-item');
-            benefitItems.forEach((item, i) => {
-                gsap.fromTo(item,
-                    { opacity: 0, y: 30 },
-                    {
-                        scrollTrigger: {
-                            trigger: item,
-                            start: 'top 90%',
-                            toggleActions: 'play none none reverse',
-                        },
-                        opacity: 1,
-                        y: 0,
-                        duration: 0.6,
-                        delay: i * 0.08,
-                        ease: 'power2.out',
-                    }
-                );
-            });
-
-            // Animate benefit check marks
-            const checks = document.querySelectorAll('[data-benefit-table-check]');
-            checks.forEach((check, i) => {
-                gsap.fromTo(check,
-                    { scale: 0, opacity: 0 },
-                    {
-                        scrollTrigger: {
-                            trigger: check,
-                            start: 'top 90%',
-                            toggleActions: 'play none none reverse',
-                        },
-                        scale: 1,
-                        opacity: 1,
-                        duration: 0.5,
-                        delay: i * 0.1 + 0.3,
-                        ease: 'back.out(1.7)',
-                    }
-                );
-            });
-
-            // Animate SVG lines (drawSVG-like effect)
-            const svgPaths = document.querySelectorAll('[data-fill-line] path, [data-sequence-svg] path');
-            svgPaths.forEach(path => {
-                const el = path as SVGPathElement;
-                if (!el.getTotalLength) return;
-                const length = el.getTotalLength();
-                el.style.strokeDasharray = `${length}`;
-                el.style.strokeDashoffset = `${length}`;
-
-                gsap.to(el, {
-                    scrollTrigger: {
-                        trigger: el.closest('svg'),
-                        start: 'top 80%',
-                        end: 'bottom 20%',
-                        scrub: 1,
-                    },
-                    strokeDashoffset: 0,
-                    duration: 2,
-                    ease: 'none',
-                });
-            });
-
-            // Parallax for testimonial background images
-            const parallaxItems = document.querySelectorAll('[data-testimonial-parallax-item]');
-            parallaxItems.forEach(item => {
-                gsap.to(item, {
-                    scrollTrigger: {
-                        trigger: '[data-testimonial-parallax]',
-                        start: 'top bottom',
-                        end: 'bottom top',
-                        scrub: 1,
-                    },
-                    y: -80,
-                    ease: 'none',
-                });
-            });
-
-            // Payment method items stagger animation — FIXED
-            // Using fromTo() + immediateRender:false prevents items
-            // from becoming invisible if GSAP loads after scroll
-            const paymentItems = document.querySelectorAll('[data-payment-item]');
-            if (paymentItems.length) {
-                gsap.fromTo(paymentItems,
-                    { scale: 0, opacity: 0 },
-                    {
-                        scrollTrigger: {
-                            trigger: '[data-payment]',
-                            start: 'top 85%',
-                            toggleActions: 'play none none reverse',
-                        },
-                        scale: 1,
-                        opacity: 1,
-                        duration: 0.6,
-                        stagger: 0.1,
-                        ease: 'back.out(1.7)',
-                        immediateRender: false,
-                    }
-                );
+            if (!document.querySelector('link[href*="swiper"]')) {
+                const css = document.createElement('link');
+                css.rel = 'stylesheet';
+                css.href = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css';
+                document.head.appendChild(css);
             }
+
+            if (!window.Swiper) {
+                try { await loadScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js'); }
+                catch { return; }
+            }
+            if (!window.Swiper) return;
+
+            const contentSwiper = new window.Swiper('[data-flavour-content-slider]', {
+                slidesPerView: 1,
+                allowTouchMove: false,
+                effect: 'fade',
+                fadeEffect: { crossFade: true },
+                speed: 600,
+            });
+
+            const mainSwiper = new window.Swiper('[data-flavour-slider]', {
+                slidesPerView: 1,
+                centeredSlides: true,
+                speed: 800,
+                loop: false,
+                grabCursor: true,
+                breakpoints: { 992: { slidesPerView: 1.5 } },
+                thumbs: { swiper: contentSwiper },
+            });
+
+            const leftBtn = document.querySelector('[data-flavour-slider-left-button]');
+            const rightBtn = document.querySelector('[data-flavour-slider-right-button]');
+            leftBtn?.addEventListener('click', () => { mainSwiper.slidePrev(); contentSwiper.slidePrev(); });
+            rightBtn?.addEventListener('click', () => { mainSwiper.slideNext(); contentSwiper.slideNext(); });
+            mainSwiper.on('slideChange', () => { contentSwiper.slideTo(mainSwiper.activeIndex); });
         };
 
-        // Wait for GSAP to be available, then init our custom animations
-        const gsapTimer = setTimeout(initGSAPAnimations, 1500);
+        // ────────────────────────────────────────────────
+        // 3. TESTIMONIAL SLIDER (custom horizontal scroll)
+        // ────────────────────────────────────────────────
+        const initTestimonialSlider = () => {
+            const slider = document.querySelector('[data-slider]') as HTMLElement;
+            const leftBtn = document.querySelector('[data-slider-left-button]');
+            const rightBtn = document.querySelector('[data-slider-right-button]');
+            if (!slider) return;
 
-        // =============================================
-        // 7. FOOTER CREDITS TOGGLE
-        // =============================================
+            const items = slider.querySelectorAll('.testimonial-slider-item-wrap');
+            const totalItems = items.length;
+            let currentIndex = 0;
+
+            const updateSlider = () => {
+                items.forEach((item, i) => item.classList.toggle('is-active', i === currentIndex));
+                const activeItem = items[currentIndex] as HTMLElement;
+                if (!activeItem) return;
+                const sliderRect = slider.getBoundingClientRect();
+                const itemRect = activeItem.getBoundingClientRect();
+                const scrollOffset = itemRect.left - sliderRect.left - (sliderRect.width / 2) + (itemRect.width / 2) + slider.scrollLeft;
+                slider.scrollTo({ left: scrollOffset, behavior: 'smooth' });
+            };
+
+            leftBtn?.addEventListener('click', () => { currentIndex = Math.max(0, currentIndex - 1); updateSlider(); });
+            rightBtn?.addEventListener('click', () => { currentIndex = Math.min(totalItems - 1, currentIndex + 1); updateSlider(); });
+            updateSlider();
+        };
+
+        // ────────────────────────────────────────────────
+        // 4. VIDEO PLAY/PAUSE WITH SOUND TOGGLE
+        //    Explicit data-video-id ↔ data-video-button-id pairing.
+        //    On unmute, re-call video.play() inside the click event
+        //    so the user gesture unblocks audio.
+        // ────────────────────────────────────────────────
+        const initVideoButtons = () => {
+            const videos = Array.from(document.querySelectorAll<HTMLVideoElement>('[data-video]'));
+            const buttonsById = new Map<string, HTMLElement>();
+            document.querySelectorAll<HTMLElement>('[data-video-button]').forEach((b) => {
+                const id = b.getAttribute('data-video-button-id') || '';
+                if (id) buttonsById.set(id, b);
+            });
+
+            const pairs: Array<{ video: HTMLVideoElement; button: HTMLElement }> = [];
+            videos.forEach((video) => {
+                const id = video.getAttribute('data-video-id') || '';
+                const button = buttonsById.get(id);
+                if (!button) return;
+                pairs.push({ video, button });
+
+                video.muted = true;
+                // Initial play attempt (muted autoplay is browser-allowed). Audio
+                // requires user-gesture-initiated play() below.
+                video.play().catch(() => { /* autoplay blocked is fine */ });
+
+                button.addEventListener('click', () => {
+                    const wasMuted = video.muted;
+                    video.muted = !wasMuted;
+                    button.classList.toggle('is-clicked', wasMuted);
+
+                    if (wasMuted) {
+                        // Mute every OTHER video so only one plays sound at a time
+                        pairs.forEach(({ video: v, button: b }) => {
+                            if (v !== video) { v.muted = true; b.classList.remove('is-clicked'); }
+                        });
+                        // CRITICAL: re-call play() inside the click handler
+                        const p = video.play();
+                        if (p && typeof p.catch === 'function') p.catch(() => { });
+                    }
+                });
+            });
+        };
+
+        // ────────────────────────────────────────────────
+        // 5. FOOTER CREDITS TOGGLE
+        // ────────────────────────────────────────────────
         const initFooterCredits = () => {
             const toggle = document.querySelector('.footer-credits-toggle');
             const credits = document.querySelector('.footer-credits');
@@ -367,7 +215,6 @@ export const useAnimations = () => {
             toggle.addEventListener('click', () => {
                 const inner = credits.querySelector('.footer-credits-inner') as HTMLElement;
                 if (!inner) return;
-
                 const isVisible = inner.style.opacity === '1';
                 if (isVisible) {
                     inner.style.opacity = '0';
@@ -383,18 +230,151 @@ export const useAnimations = () => {
             });
         };
 
-        setTimeout(initFooterCredits, 800);
+        // ────────────────────────────────────────────────
+        // 6. CUSTOM GSAP ANIMATIONS (benefits, payment, mobile cards, parallax)
+        //    Uses gsap.matchMedia so contexts auto-revert on resize.
+        // ────────────────────────────────────────────────
+        const initGSAPAnimations = () => {
+            const gsap = window.gsap;
+            const ScrollTrigger = window.ScrollTrigger;
+            if (!gsap || !ScrollTrigger) return;
+            // Plugins already registered in the init pipeline above.
 
-        // =============================================
+            // — Benefit table items (all viewports) —
+            document.querySelectorAll('.benefit-table-item').forEach((item, i) => {
+                gsap.fromTo(item,
+                    { opacity: 0, y: 30 },
+                    {
+                        scrollTrigger: { trigger: item, start: 'top 90%', toggleActions: 'play none none reverse' },
+                        opacity: 1, y: 0, duration: 0.6, delay: i * 0.08, ease: 'power2.out',
+                    });
+            });
+
+            // — Benefit check marks (all viewports) —
+            document.querySelectorAll('[data-benefit-table-check]').forEach((check, i) => {
+                gsap.fromTo(check,
+                    { scale: 0, opacity: 0 },
+                    {
+                        scrollTrigger: { trigger: check, start: 'top 90%', toggleActions: 'play none none reverse' },
+                        scale: 1, opacity: 1, duration: 0.5, delay: i * 0.1 + 0.3, ease: 'back.out(1.7)',
+                    });
+            });
+
+            // — Payment item stagger (all viewports) —
+            const paymentItems = document.querySelectorAll('[data-payment-item]');
+            if (paymentItems.length) {
+                gsap.fromTo(paymentItems,
+                    { scale: 0, opacity: 0 },
+                    {
+                        scrollTrigger: { trigger: '[data-payment]', start: 'top 85%', toggleActions: 'play none none reverse' },
+                        scale: 1, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'back.out(1.7)', immediateRender: false,
+                    });
+            }
+
+            // — Desktop-only: testimonial parallax (mobile has no scroll runway to parallax over) —
+            const mm = gsap.matchMedia();
+            mm.add('(min-width: 992px)', () => {
+                document.querySelectorAll('[data-testimonial-parallax-item]').forEach((item) => {
+                    gsap.to(item, {
+                        scrollTrigger: { trigger: '[data-testimonial-parallax]', start: 'top bottom', end: 'bottom top', scrub: 1 },
+                        y: -80, ease: 'none',
+                    });
+                });
+            });
+
+            // NOTE: mobile sequence cards are NOT JS-animated. The original
+            // (and app.js mo() ri() branch) pins the can canvas and lets the
+            // statement cards scroll up over it via the original webflow.css
+            // sticky + negative-margin layout. No IntersectionObserver here.
+
+            cleanups.push(() => mm.revert());
+        };
+
+        // ────────────────────────────────────────────────
+        // Init pipeline — promises, not arbitrary timers
+        //
+        // CRITICAL ORDER: app.js uses real GSAP plugins (SplitText.create,
+        // CustomEase.create, ScrollTrigger, drawSVG + inertia tween props).
+        // Those plugins load as async <Script> tags in layout.tsx, so we
+        // must (1) wait for every plugin global, (2) register them into the
+        // gsap core, and only THEN (3) load app.js. Loading app.js first
+        // meant drawSVG/inertia/SplitText silently no-op'd.
+        // ────────────────────────────────────────────────
+        let cancelled = false;
+        (async () => {
+            // 1. Wait for gsap core + every plugin global injected by layout.tsx
+            let gsapReady = false;
+            try {
+                await waitFor(() => {
+                    const w = window as any;
+                    return w.gsap && w.ScrollTrigger && w.CustomEase &&
+                           w.DrawSVGPlugin && w.InertiaPlugin && w.SplitText;
+                }, 8000);
+                gsapReady = true;
+            } catch {
+                if (process.env.NODE_ENV !== 'production') {
+                    console.warn('[gsap] not all plugins loaded in time — continuing degraded');
+                }
+            }
+            if (cancelled) return;
+
+            // 2. Register every plugin into the gsap core so tween properties
+            //    (drawSVG, inertia) and eases (CustomEase/Wiggle/Bounce) resolve.
+            if (gsapReady) {
+                const w = window as any;
+                try {
+                    w.gsap.registerPlugin(
+                        w.ScrollTrigger,
+                        w.CustomEase,
+                        w.DrawSVGPlugin,
+                        w.InertiaPlugin,
+                        w.SplitText,
+                        ...(w.CustomWiggle ? [w.CustomWiggle] : []),
+                        ...(w.CustomBounce ? [w.CustomBounce] : []),
+                    );
+                } catch (err) {
+                    console.error('[gsap] registerPlugin failed', err);
+                }
+            }
+
+            // 3. Crash-proof the hero intro: app.js yo() calls
+            //    [data-load-stage-logo-lottie].play(). HeroSection lazy-loads the
+            //    real lottie, but it may not be ready yet — guarantee a no-op
+            //    .play() exists so yo() never throws (which would block the
+            //    hero canvas draw). HeroSection upgrades this to the real call.
+            const lottieEl = document.querySelector('[data-load-stage-logo-lottie]') as any;
+            if (lottieEl && typeof lottieEl.play !== 'function') {
+                lottieEl.play = () => {};
+            }
+
+            // 4. Load the Webflow animation bundle now that plugins are live.
+            try {
+                await loadScript('/scripts/app.js');
+            } catch (err) {
+                console.error('Failed to load app.js — enabling fallback', err);
+                document.documentElement.classList.add('fonts-loaded', 'is-ready', 'has-seq-ready');
+            }
+            if (cancelled) return;
+
+            // 5. Our own init tasks (each no-ops gracefully if its DOM is absent).
+            initSwiper();
+            initTestimonialSlider();
+            initVideoButtons();
+            initFooterCredits();
+
+            if (gsapReady) initGSAPAnimations();
+        })();
+
+        // ────────────────────────────────────────────────
         // CLEANUP
-        // =============================================
+        // ────────────────────────────────────────────────
         return () => {
-            clearTimeout(appTimer);
-            clearTimeout(gsapTimer);
+            cancelled = true;
             window.removeEventListener('mousemove', handleMouseMove);
             if (animationId) cancelAnimationFrame(animationId);
             const overlay = document.getElementById('mouse-glow-overlay');
             if (overlay) overlay.remove();
+            cleanups.forEach((c) => { try { c(); } catch { /* ignore */ } });
         };
     }, []);
 };

@@ -21,11 +21,11 @@ export const BenefitsSection: React.FC = () => {
             <div className="container smaller">
                 <div className="grid-layout">
                     <div id="w-node-_6f3e86b5-5cf7-4a62-19af-d6d71a8517d6-0ac01850" className="img-wrapper">
-                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68953da4d0d5f048beedcb6e_4d640528cda9b637c74a05194f165bad1f5131c0.webp" loading="lazy" alt="Iced Matcha Latte - Hype Bam" className="top-img" />
+                        <img src="/img/cdn/68953da4d0d5f048beedcb6e_4d640528cda9b637c74a05194f165bad1f5131c0.webp" loading="lazy" alt="Iced Matcha Latte - Hype Bam" className="top-img" />
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 575 559" width="100%" data-fill-line="" className="benefit-svg">
                             <path stroke="currentColor" strokeWidth="27" d="M-56.447 495.508C-26.61 513.052 53.628 569.352 87 532.069c46.24-51.66 4.952-146.571-102.084-223.636-107.035-77.065-70.703-150.5-16.274-179.818C100.1 57.804 196.947 412.744 398.5 290.569 583.168 178.628 665-36.931 945 24.953"></path>
                         </svg>
-                        <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68953755a9a7a338f1c66af8_2bc96c5443dd740a3309d483ae39d3da60cc7e2c.webp" loading="lazy" alt="Iced Matcha Latte - Hype Bam" className="img" />
+                        <img src="/img/cdn/68953755a9a7a338f1c66af8_2bc96c5443dd740a3309d483ae39d3da60cc7e2c.webp" loading="lazy" alt="Iced Matcha Latte - Hype Bam" className="img" />
                     </div>
                     <div
                         id="w-node-_32be253f-aa6e-8103-6d3f-40e63162832f-0ac01850"
@@ -48,10 +48,10 @@ export const BenefitsSection: React.FC = () => {
                                             <div className="benefit-item-title">{benefit}</div>
                                             <div className="benefit-checker-inner">
                                                 <div className="benefit-item-check">
-                                                    <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68953a1b9a0c9299ece16c1e_check.svg" loading="lazy" data-benefit-table-check="" alt="Check" className="check" />
+                                                    <img src="/img/cdn/68953a1b9a0c9299ece16c1e_check.svg" loading="lazy" data-benefit-table-check="" alt="Check" className="check" />
                                                 </div>
                                                 <div className="benefit-item-x">
-                                                    <img src="https://cdn.prod.website-files.com/686c09a33211842a0ac0183d/68953b9f3d54aaa40b14e92f_x.svg" loading="lazy" alt="X" className="check" />
+                                                    <img src="/img/cdn/68953b9f3d54aaa40b14e92f_x.svg" loading="lazy" alt="X" className="check" />
                                                 </div>
                                             </div>
                                         </div>
