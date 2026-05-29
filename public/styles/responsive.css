@@ -347,5 +347,5 @@ h1.hero-heading {
 }
 
 @media (orientation: landscape) {
-    .stage-container { min-height: 240vh; min-height: 240svh; }
+    .stage-container { min-height: 210vh; min-height: 210svh; }
 }
