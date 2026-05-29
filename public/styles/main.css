@@ -764,7 +764,7 @@ html.lenis body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center top;
-    opacity: 0.4;
+    opacity: 0.9;
     mix-blend-mode: multiply;
     pointer-events: none;
     z-index: 0;
@@ -2597,7 +2597,7 @@ body {
 
     .insider-section .insider-heading {
         order: -1 !important;
-        margin-bottom: 1.5em !important;
+        margin-bottom: 15em !important;
         margin-top: 0 !important;
         line-height: 1.2 !important;
     }

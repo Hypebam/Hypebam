@@ -7,13 +7,13 @@
 // Note: overwrites in place via toBuffer()+writeFile (no rename) so it tolerates
 // OneDrive file locking; retries briefly on EPERM.
 import sharp from 'sharp';
-import { readdir, stat, writeFile, unlink } from 'node:fs/promises';
+import { readdir, stat, writeFile, rename, unlink } from 'node:fs/promises';
 import path from 'node:path';
 
 const IMG = path.resolve('public/img');
 const Q = 72;          // webp quality
 const MAX_W = 900;     // cap frame width (canvas never renders wider)
-const LOCK = new Set(['EPERM', 'UNKNOWN', 'EBUSY', 'EACCES']); // OneDrive sync locks
+const LOCK = new Set(['EPERM', 'UNKNOWN', 'EBUSY', 'EACCES']); // OneDrive / AV / watcher locks
 
 let savedBytes = 0;
 let count = 0;
@@ -21,19 +21,30 @@ let skipped = 0;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-// Overwrite a file that OneDrive may be locking: delete then create, retrying.
-async function overwrite(file, buf, tries = 12) {
-  for (let i = 0; i < tries; i++) {
-    try {
-      try { await unlink(file); } catch (e) { if (!LOCK.has(e.code) && e.code !== 'ENOENT') throw e; }
-      await writeFile(file, buf, { flag: 'w' });
-      return true;
-    } catch (e) {
+// SAFE overwrite: write the new bytes to a sibling temp file FIRST, then atomically
+// rename it over the original. The original is only removed once valid new bytes
+// exist on disk, so a locked/failed/interrupted run can NEVER delete a file.
+async function overwrite(file, buf, tries = 10) {
+  const tmp = file + '.opt-tmp';
+  // 1) write temp (retry on transient locks)
+  for (let i = 0; ; i++) {
+    try { await writeFile(tmp, buf, { flag: 'w' }); break; }
+    catch (e) {
       if (LOCK.has(e.code) && i < tries - 1) { await sleep(500); continue; }
+      try { await unlink(tmp); } catch {}
       throw e;
     }
   }
-  return false;
+  // 2) rename temp over original (retry on transient locks). Original stays intact
+  //    until this succeeds; if it never does, we delete the temp and keep the original.
+  for (let i = 0; ; i++) {
+    try { await rename(tmp, file); return true; }
+    catch (e) {
+      if (LOCK.has(e.code) && i < tries - 1) { await sleep(500); continue; }
+      try { await unlink(tmp); } catch {} // clean up; original untouched
+      throw e;
+    }
+  }
 }
 
 async function reencode(file, { maxW = MAX_W, quality = Q, format = 'webp' } = {}) {

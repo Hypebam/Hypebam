@@ -126,6 +126,12 @@ h1.hero-heading {
    ======================================== */
 @media screen and (max-width: 991px) {
 
+    /* ── Footer logo hidden on mobile (only .footer-logo.mobile renders) ── */
+    .footer-logo.mobile,
+    .footer-logo {
+        display: none !important;
+    }
+
     /* ── Navbar collapse ── (social icons STAY visible like the original) */
     .navbar .nav-link-inner,
     #w-node-_084a53a4-1315-9fde-31ee-e99a4811c293-4811c289 {
@@ -236,6 +242,8 @@ h1.hero-heading {
     .stage-container { padding-left: 1em !important; padding-right: 1em !important; }
     .stage { margin-bottom: 1em !important; }
     .marquee { transform: translateY(20px) !important; }
+    /* Nudge the marquee text up so it sits centered in the band on mobile */
+    .marquee-text-svg { top: 10px !important; }
 
     .stage-fact-number { font-size: 1.4em !important; }
     .stage-fact-unit { font-size: 0.7em !important; }
@@ -309,4 +317,35 @@ h1.hero-heading {
 
     .footer-inner { flex-direction: column !important; gap: 2em !important; }
     .footer-col { width: 100% !important; text-align: center !important; }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   lvh / svh FALLBACK for Safari < 15.4 (iOS < 15.4) — e.g. iPhone 11 Pro on
+   an older iOS. Those Safari versions treat `lvh`/`svh` as an INVALID unit
+   and drop the whole declaration, so the sequence section loses its height
+   and runway → the layout collapses ("UI broken on iPhone 11 Pro, fine on 13").
+   The original webflow.css declares these with no fallback. Here we declare a
+   `vh` value first, then the `lvh`/`svh` value second: pre-15.4 Safari keeps
+   the `vh` line (visually identical) and ignores the invalid one; 15.4+ uses
+   the `lvh`/`svh` line. This file loads last, so these win by source order
+   (same specificity as webflow.css, no !important needed).
+   ────────────────────────────────────────────────────────────────────────── */
+.sequence-scroll-wrap { height: 720vh; height: 720lvh; }
+.sequence-sticky { height: 100vh; height: 100lvh; }
+.sequence-cards { height: 100vh; height: 100lvh; }
+.stage-logo { height: max(12.5em, 34vh); height: max(12.5em, 34svh); }
+
+@media screen and (max-width: 991px) {
+    .sequence-sticky { height: 100vh; height: 100lvh; }
+    .sequence-cards-mobile {
+        grid-column-gap: 65vh; grid-column-gap: 65lvh;
+        grid-row-gap: 65vh; grid-row-gap: 65lvh;
+        margin-top: -100vh; margin-top: -100lvh;
+        padding-top: 50vh; padding-top: 50lvh;
+    }
+    .sequence-final-mobile { min-height: 100vh; min-height: 100lvh; }
+}
+
+@media (orientation: landscape) {
+    .stage-container { min-height: 240vh; min-height: 240svh; }
 }

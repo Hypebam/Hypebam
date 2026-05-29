@@ -250,8 +250,11 @@ html.is-ready.lenis-stopped {
 .stage-visual {
     z-index: 2 !important;
 }
+/* Fluid shift with a floor so narrow desktop windows keep a clear rightward
+   offset (≈120px), scaling up to a 200px cap near full-screen (~1667px+).
+   A 0-floor felt under-shifted on small windows; full-screen stays at 200px. */
 @media (min-width: 992px) {
-    .stage-visual { translate: 200px 0 !important; }
+    .stage-visual { translate: clamp(120px, 12vw, 200px) 0 !important; }
 }
 .stage-facts  { z-index: 3 !important; pointer-events: none !important; }
 .stage-facts > * { pointer-events: auto !important; }
@@ -626,6 +629,24 @@ html.is-ready.lenis-stopped {
     text-transform: uppercase !important;
 }
 
+/* Testimonial slider heading ("why they keep coming back"): an <h3> that
+   otherwise inherits the primary brush font — switch it to the secondary sans.
+   Reset letter-spacing to normal (it inherited a too-wide tracking). */
+.testimonial-heading {
+    font-family: var(--font-secondary), sans-serif !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: normal !important;
+}
+
+/* The big "Sri Lankanized Hydration" title is oversized on phones — scale down. */
+@media (max-width: 767px) {
+    .testimonial-big-heading { font-size: 2em !important; }
+}
+@media (max-width: 479px) {
+    .testimonial-big-heading { font-size: 1.6em !important; }
+}
+
 /* Container 11: Sequence cards text field */
 [data-typography-target="sequence-cards-text-field"],
 [data-typography-target="sequence-cards-text-field"] * {
@@ -667,10 +688,15 @@ h1.hero-heading {
 
 /* Higher specificity (0,2,0) so it wins over any .insider-text-inner (0,1,0)
    rule in the vendored CSS regardless of stylesheet load order. Desktop only —
-   pushes the text block down so it no longer overlaps the videos above it. */
+   pushes the text block down so it no longer overlaps the videos above it.
+   18em (was 12em) clears the lower-scattered inertia videos. The padding-bottom
+   stops the section's lower content bleeding into the section below it. */
 @media (min-width: 992px) {
     .insider-section .insider-text-inner {
-        margin-top: 12em !important;
+        margin-top: 18em !important;
+    }
+    .insider-section {
+        padding-bottom: 8em !important;
     }
 }
 
@@ -1454,9 +1480,15 @@ h1, h2, h3, h4, h5, h6,
     .hbf-dot { width: 12px; height: 12px; } /* easier tap target on phones */
 }
 
+@media (max-width: 767px) {
+    /* Bigger can on phones/tablets */
+    .hbf-stage { min-height: 460px; }
+    .hbf-can { width: 92vw; max-width: 600px; }
+}
+
 @media (max-width: 479px) {
-    .hbf-stage { min-height: 380px; }
-    .hbf-can { width: 90vw; max-width: 460px; }
+    .hbf-stage { min-height: 520px; }
+    .hbf-can { width: 98vw; max-width: 560px; }
     .hbf-arr { width: 40px; height: 40px; }
     .hbf::before, .hbf::after { display: none; } /* decorative rings off on tiny screens */
 }

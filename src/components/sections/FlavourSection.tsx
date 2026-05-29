@@ -22,6 +22,26 @@ export const FlavourSection: React.FC = () => {
     const [active, setActive] = useState(0);
     const [sliding, setSliding] = useState(false);
 
+    // ── Idle "floating energy" animation on the active can ──
+    // Gentle vertical bob + subtle sway via the shared window.gsap. Only touches
+    // y/rotation; the slide transition (below) owns x/scale/opacity/rotate, and
+    // we stop+reset the float before each slide so the two never fight.
+    const floatTweensRef = useRef<any[]>([]);
+    const stopFloat = useCallback(() => {
+        floatTweensRef.current.forEach((t) => t && t.kill());
+        floatTweensRef.current = [];
+    }, []);
+    const startFloat = useCallback((img: HTMLImageElement | null) => {
+        const gsap = gsapRef.current;
+        if (!gsap || !img) return;
+        floatTweensRef.current.forEach((t) => t && t.kill());
+        gsap.set(img, { y: 0, rotation: 0 });
+        floatTweensRef.current = [
+            gsap.to(img, { y: -16, duration: 2.2, ease: 'sine.inOut', yoyo: true, repeat: -1 }),
+            gsap.to(img, { rotation: 2, duration: 3.1, ease: 'sine.inOut', yoyo: true, repeat: -1 }),
+        ];
+    }, []);
+
     // ── GSAP scroll-triggered entrance ──
     // Use the SAME window.gsap instance that layout.tsx loads (with ScrollTrigger
     // + all plugins already registered). Importing a separate npm gsap created a
@@ -70,11 +90,14 @@ export const FlavourSection: React.FC = () => {
                     { y: 40, opacity: 0 },
                     { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out' }, 0.7);
 
+                // Once the entrance settles, start the idle float on the first can
+                tl.eventCallback('onComplete', () => startFloat(imgRefs.current[0]));
+
             } catch (_) { /* GSAP unavailable */ }
         };
         init();
-        return () => { cancelled = true; };
-    }, []);
+        return () => { cancelled = true; stopFloat(); };
+    }, [startFloat, stopFloat]);
 
     // ── Slide with GSAP animation ──
     const animateSlide = useCallback((newIndex: number) => {
@@ -85,19 +108,20 @@ export const FlavourSection: React.FC = () => {
         const nextImg = imgRefs.current[newIndex];
 
         if (gsap && currentImg && nextImg) {
+            stopFloat(); // freeze the idle bob during the transition
             // Animate current out
             gsap.to(currentImg, {
-                scale: 0.6, opacity: 0, rotate: -15, x: -60,
+                scale: 0.6, opacity: 0, rotate: -15, x: -60, y: 0,
                 duration: 0.35, ease: 'power2.in',
                 onComplete: () => {
                     setActive(newIndex);
-                    // Set next image starting position
-                    gsap.set(nextImg, { scale: 0.6, opacity: 0, rotate: 15, x: 60 });
+                    // Set next image starting position (y:0 — float reset)
+                    gsap.set(nextImg, { scale: 0.6, opacity: 0, rotate: 15, x: 60, y: 0 });
                     // Animate next in with elastic bounce
                     gsap.to(nextImg, {
                         scale: 1, opacity: 1, rotate: 0, x: 0,
                         duration: 0.7, ease: 'elastic.out(1, 0.6)',
-                        onComplete: () => setSliding(false),
+                        onComplete: () => { setSliding(false); startFloat(nextImg); },
                     });
                 },
             });
@@ -105,7 +129,7 @@ export const FlavourSection: React.FC = () => {
             setActive(newIndex);
             setTimeout(() => setSliding(false), 400);
         }
-    }, [active, sliding]);
+    }, [active, sliding, startFloat, stopFloat]);
 
     const goPrev = () => animateSlide((active - 1 + flavours.length) % flavours.length);
     const goNext = () => animateSlide((active + 1) % flavours.length);
