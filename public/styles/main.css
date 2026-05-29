@@ -764,7 +764,7 @@ html.lenis body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center top;
-    opacity: 0.4;
+    opacity: 1;
     mix-blend-mode: multiply;
     pointer-events: none;
     z-index: 0;
