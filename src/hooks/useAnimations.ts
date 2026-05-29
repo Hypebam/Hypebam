@@ -94,17 +94,11 @@ export const useAnimations = () => {
             const contentSliderEl = document.querySelector('[data-flavour-content-slider]');
             if (!flavourSliderEl || !contentSliderEl) return;
 
-            if (!document.querySelector('link[href*="swiper"]')) {
-                const css = document.createElement('link');
-                css.rel = 'stylesheet';
-                css.href = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css';
-                document.head.appendChild(css);
-            }
-
-            if (!window.Swiper) {
-                try { await loadScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js'); }
-                catch { return; }
-            }
+            // Swiper is served locally (public/vendor/swiper) if present — never from
+            // a CDN. CDN loads here were blocked by Firefox/Safari/Edge privacy modes
+            // and broke cross-browser. Our custom FlavourSection doesn't use Swiper,
+            // so this stays a no-op unless a [data-flavour-slider] element exists AND
+            // a local Swiper global is available.
             if (!window.Swiper) return;
 
             const contentSwiper = new window.Swiper('[data-flavour-content-slider]', {

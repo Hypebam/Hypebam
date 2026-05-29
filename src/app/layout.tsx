@@ -57,20 +57,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${badBrush.variable} ${goga.variable} ${caveat.variable}`}>
       <head>
-        {/* ── DNS Preconnect: Webflow CDN removed — served locally now ── */}
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
-        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+        {/* ── All assets are served locally (no CDN). External CDN <link>s and
+             preconnects were removed: Firefox/Safari/Edge privacy & tracking
+             protection block third-party CDN requests, which broke styling
+             cross-browser. Everything below is same-origin. ── */}
 
         {/* ── Critical above-fold CSS ── */}
         <link href="/styles/webflow.css" rel="stylesheet" type="text/css" />
         <link href="/styles/main.css" rel="stylesheet" type="text/css" />
-        <link
-          href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-          rel="stylesheet"
-          type="text/css"
-        />
         {/* ── Responsive overrides — MUST be last to win cascade ── */}
         <link href="/styles/responsive.css" rel="stylesheet" type="text/css" />
 

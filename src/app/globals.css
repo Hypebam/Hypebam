@@ -689,14 +689,21 @@ h1.hero-heading {
 /* Higher specificity (0,2,0) so it wins over any .insider-text-inner (0,1,0)
    rule in the vendored CSS regardless of stylesheet load order. Desktop only —
    pushes the text block down so it no longer overlaps the videos above it.
-   18em (was 12em) clears the lower-scattered inertia videos. The padding-bottom
-   stops the section's lower content bleeding into the section below it. */
+   18em (was 12em) clears the lower-scattered inertia videos.
+   The grid-layout inherits ~100vh from webflow, but heading+videos+text stack
+   taller than that, so the text was overflowing BELOW the section into the
+   sequence section. Letting the grid auto-grow makes the section contain its
+   content, and padding-bottom then reserves real space before the next section. */
 @media (min-width: 992px) {
     .insider-section .insider-text-inner {
         margin-top: 18em !important;
     }
+    .insider-section .grid-layout {
+        min-height: auto !important;
+        height: auto !important;
+    }
     .insider-section {
-        padding-bottom: 8em !important;
+        padding-bottom: 12em !important;
     }
 }
 
