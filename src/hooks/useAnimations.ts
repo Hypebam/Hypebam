@@ -161,48 +161,14 @@ export const useAnimations = () => {
         };
 
         // ────────────────────────────────────────────────
-        // 4. VIDEO PLAY/PAUSE WITH SOUND TOGGLE
-        //    Explicit data-video-id ↔ data-video-button-id pairing.
-        //    On unmute, re-call video.play() inside the click event
-        //    so the user gesture unblocks audio.
+        // 4. VIDEO SOUND — owned entirely by app.js Ao().
+        //    app.js attaches its own click handler to every
+        //    [data-video-button] (toggles video.muted + play() on unmute) and
+        //    a ScrollTrigger that plays/pauses on view. We must NOT add a
+        //    second click handler — two handlers double-toggle the mute and
+        //    the video stays muted. (InsiderSection's IntersectionObserver
+        //    still lazy-loads the data-src that Ao() then plays.)
         // ────────────────────────────────────────────────
-        const initVideoButtons = () => {
-            const videos = Array.from(document.querySelectorAll<HTMLVideoElement>('[data-video]'));
-            const buttonsById = new Map<string, HTMLElement>();
-            document.querySelectorAll<HTMLElement>('[data-video-button]').forEach((b) => {
-                const id = b.getAttribute('data-video-button-id') || '';
-                if (id) buttonsById.set(id, b);
-            });
-
-            const pairs: Array<{ video: HTMLVideoElement; button: HTMLElement }> = [];
-            videos.forEach((video) => {
-                const id = video.getAttribute('data-video-id') || '';
-                const button = buttonsById.get(id);
-                if (!button) return;
-                pairs.push({ video, button });
-
-                video.muted = true;
-                // Initial play attempt (muted autoplay is browser-allowed). Audio
-                // requires user-gesture-initiated play() below.
-                video.play().catch(() => { /* autoplay blocked is fine */ });
-
-                button.addEventListener('click', () => {
-                    const wasMuted = video.muted;
-                    video.muted = !wasMuted;
-                    button.classList.toggle('is-clicked', wasMuted);
-
-                    if (wasMuted) {
-                        // Mute every OTHER video so only one plays sound at a time
-                        pairs.forEach(({ video: v, button: b }) => {
-                            if (v !== video) { v.muted = true; b.classList.remove('is-clicked'); }
-                        });
-                        // CRITICAL: re-call play() inside the click handler
-                        const p = video.play();
-                        if (p && typeof p.catch === 'function') p.catch(() => { });
-                    }
-                });
-            });
-        };
 
         // ────────────────────────────────────────────────
         // 5. FOOTER CREDITS TOGGLE
@@ -357,9 +323,9 @@ export const useAnimations = () => {
             if (cancelled) return;
 
             // 5. Our own init tasks (each no-ops gracefully if its DOM is absent).
+            //    Video sound/play is owned by app.js Ao() — do NOT init here.
             initSwiper();
             initTestimonialSlider();
-            initVideoButtons();
             initFooterCredits();
 
             if (gsapReady) initGSAPAnimations();

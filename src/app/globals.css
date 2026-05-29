@@ -52,30 +52,31 @@ body,
 
 /* ========================================
    NAVBAR — MOBILE COLLAPSE
-   Original site hides social + nav links on tablet/mobile
+   Match the original: hide ONLY the nav links (Nutrition/Benefits/Reviews)
+   on tablet/mobile. The social icons (Instagram/TikTok/YouTube) STAY visible
+   — the original has no hide rule for .nav-social-media-inner.
    ======================================== */
 @media (max-width: 991px) {
-    /* Hide social media icons */
+    /* Social icons stay visible (left) — explicitly ensure not hidden */
     .navbar .nav-social-media-inner,
     #w-node-_084a53a4-1315-9fde-31ee-e99a4811c28c-4811c289 {
-        display: none !important;
+        display: flex !important;
     }
 
-    /* Hide nav links (Nutrition / Benefits / Reviews) */
+    /* Hide nav links (Nutrition / Benefits / Reviews) — matches original */
     .navbar .nav-link-inner,
     #w-node-_084a53a4-1315-9fde-31ee-e99a4811c293-4811c289 {
         display: none !important;
     }
 
-    /* Layout: just the button, right-aligned */
+    /* Layout: social icons left, Shop button right */
     .navbar .grid-layout {
         display: flex !important;
-        justify-content: flex-end !important;
+        justify-content: space-between !important;
         align-items: center !important;
     }
 
     .navbar .button {
-        margin-left: auto !important;
         scale: 1 !important;
     }
 
@@ -237,21 +238,27 @@ html.is-ready.lenis-stopped {
     z-index: 1 !important;
     pointer-events: none !important;
 }
+/* stage-bg circle: shrunk to ~85% (user request — tighter ring around the can) */
 .stage-bg-svg {
-    width: 120% !important;
-    margin-left: -10% !important;
+    width: 85% !important;
+    margin-left: 7.5% !important;   /* (100-85)/2 keeps it centered */
     height: auto !important;
     display: block !important;
 }
-.stage-visual { z-index: 2 !important; }
+/* stage-visual (the can canvas): shifted ~200px right per request.
+   translate longhand so it composes with any GSAP transform on the canvas. */
+.stage-visual {
+    z-index: 2 !important;
+    translate: 200px 0 !important;
+}
 .stage-facts  { z-index: 3 !important; pointer-events: none !important; }
 .stage-facts > * { pointer-events: auto !important; }
 .stage-deco   { z-index: 4 !important; pointer-events: none !important; }
 
 @media (max-width: 991px) {
     .stage-bg-svg {
-        width: 135% !important;
-        margin-left: -17.5% !important;
+        width: 85% !important;
+        margin-left: 7.5% !important;
     }
 }
 
@@ -694,6 +701,21 @@ h1.hero-heading {
 
 .testimonial-inner {
     width: 100% !important;
+}
+
+/* Insider video cards: lift + bring forward on hover, settle back on leave.
+   Uses translate/scale longhands (not the transform shorthand) so it composes
+   with the cards' rotate/positioning and never fights the GSAP inertia, which
+   transforms the child .testimonial-inner (a different element). Desktop only. */
+@media (hover: hover) and (pointer: fine) {
+    .testimonial-inner-wrap {
+        transition: translate 0.4s cubic-bezier(.2,.7,.2,1), scale 0.4s cubic-bezier(.2,.7,.2,1);
+    }
+    .testimonial-inner-wrap:hover {
+        z-index: 50 !important;
+        translate: 0 -14px !important;
+        scale: 1.05 !important;
+    }
 }
 
 .testimonial-inner-wrap.is-first {

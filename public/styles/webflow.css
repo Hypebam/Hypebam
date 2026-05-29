@@ -136,12 +136,7 @@ h1, h2, h3, h4, h5, h6,
    ======================================== */
 @media screen and (max-width: 991px) {
 
-    /* â”€â”€ Navbar collapse â”€â”€ */
-    .navbar .nav-social-media-inner,
-    #w-node-_084a53a4-1315-9fde-31ee-e99a4811c28c-4811c289 {
-        display: none !important;
-    }
-
+    /* â”€â”€ Navbar collapse â”€â”€ (social icons STAY visible like the original) */
     .navbar .nav-link-inner,
     #w-node-_084a53a4-1315-9fde-31ee-e99a4811c293-4811c289 {
         display: none !important;
@@ -149,7 +144,7 @@ h1, h2, h3, h4, h5, h6,
 
     .navbar .grid-layout {
         display: flex !important;
-        justify-content: flex-end !important;
+        justify-content: space-between !important;
         align-items: center !important;
     }
 

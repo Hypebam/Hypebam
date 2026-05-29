@@ -126,12 +126,7 @@ h1.hero-heading {
    ======================================== */
 @media screen and (max-width: 991px) {
 
-    /* ── Navbar collapse ── */
-    .navbar .nav-social-media-inner,
-    #w-node-_084a53a4-1315-9fde-31ee-e99a4811c28c-4811c289 {
-        display: none !important;
-    }
-
+    /* ── Navbar collapse ── (social icons STAY visible like the original) */
     .navbar .nav-link-inner,
     #w-node-_084a53a4-1315-9fde-31ee-e99a4811c293-4811c289 {
         display: none !important;
@@ -139,7 +134,7 @@ h1.hero-heading {
 
     .navbar .grid-layout {
         display: flex !important;
-        justify-content: flex-end !important;
+        justify-content: space-between !important;
         align-items: center !important;
     }
 
