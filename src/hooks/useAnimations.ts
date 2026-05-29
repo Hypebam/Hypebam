@@ -248,10 +248,23 @@ export const useAnimations = () => {
                 });
             });
 
-            // NOTE: mobile sequence cards are NOT JS-animated. The original
-            // (and app.js mo() ri() branch) pins the can canvas and lets the
-            // statement cards scroll up over it via the original webflow.css
-            // sticky + negative-margin layout. No IntersectionObserver here.
+            // Mobile sequence CARDS are NOT JS-animated (the pinned-canvas +
+            // scroll-over layout is the animation). But the mobile FINAL title
+            // ("Fuel The Rebel") has no app.js hook, so reveal it on scroll-in.
+            mm.add('(max-width: 991px)', () => {
+                const title = document.querySelector<HTMLElement>('.sequence-final-mobile .sequence-title');
+                if (!title) return;
+                const obs = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((e) => {
+                            if (e.isIntersecting) { e.target.classList.add('is-inview'); obs.unobserve(e.target); }
+                        });
+                    },
+                    { threshold: 0.3, rootMargin: '0px 0px -8% 0px' }
+                );
+                obs.observe(title);
+                return () => obs.disconnect();
+            });
 
             cleanups.push(() => mm.revert());
         };

@@ -112,7 +112,7 @@ h1.hero-heading {
 .marquee-text-svg text, .marquee-text-svg textPath {
     font-weight: 700 !important;
 }
-.marquee-text-svg text { font-size: 160px !important; }
+/* font-size governed by the SVG user-unit attribute (fontSize=160) so it scales with the viewBox */
 
 /* ── Benefit table mobile-only title ── */
 .benefit-table-title.is-mobile-only { display: none !important; }
@@ -197,8 +197,8 @@ h1.hero-heading {
     .testimonial-inner-wrap.is-fourth,
     .testimonial-inner-wrap.is-fifth {
         display: block !important;
-        width: 55vw !important;
-        max-width: 280px !important;
+        width: 82vw !important;
+        max-width: 420px !important;
         margin-top: -4em !important;
         left: auto !important;
         right: auto !important;
@@ -222,7 +222,6 @@ h1.hero-heading {
        stacking on top of each other. .statement-card sizing is left to
        webflow.css originals too. */
     .sequence-title { font-size: 1.8em !important; }
-    .marquee-text-svg text { font-size: 120px !important; }
 
     /* ── Benefits ── */
     .benefit-heading { font-size: 2.8em !important; text-align: center !important; }
@@ -256,15 +255,14 @@ h1.hero-heading {
     .testimonial-inner-wrap.is-third,
     .testimonial-inner-wrap.is-fourth,
     .testimonial-inner-wrap.is-fifth {
-        width: 50vw !important;
-        max-width: 220px !important;
+        width: 78vw !important;
+        max-width: 330px !important;
         margin-top: -3em !important;
     }
     .testimonial-inner-wrap:first-child { margin-top: 0 !important; }
 
     .sequence-title { font-size: 1.4em !important; }
     .benefit-heading { font-size: 2.2em !important; }
-    .marquee-text-svg text { font-size: 90px !important; }
 
     .footer-full-height-container { grid-template-columns: 1fr !important; }
 
@@ -301,8 +299,8 @@ h1.hero-heading {
     .testimonial-inner-wrap.is-third,
     .testimonial-inner-wrap.is-fourth,
     .testimonial-inner-wrap.is-fifth {
-        width: 55vw !important;
-        max-width: 200px !important;
+        width: 84vw !important;
+        max-width: 320px !important;
         margin-top: -2.5em !important;
     }
 

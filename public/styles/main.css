@@ -2394,7 +2394,7 @@ h1.hero-heading {
 
 /* â”€â”€ Insider text section â”€â”€ */
 .insider-text-inner {
-    margin-top: 6em !important;
+    margin-top: 11em !important;
 }
 
 /* â”€â”€ Marquee grid stacking â”€â”€ */
@@ -2873,15 +2873,15 @@ body {
         transform: scale(0.7) !important;
     }
 
-    /* â”€â”€ Insider videos â”€â”€ */
+    /* â”€â”€ Insider videos (1.5x bigger) â”€â”€ */
     .testimonial-inner-wrap,
     .testimonial-inner-wrap.is-first,
     .testimonial-inner-wrap.is-second,
     .testimonial-inner-wrap.is-third,
     .testimonial-inner-wrap.is-fourth,
     .testimonial-inner-wrap.is-fifth {
-        width: 55vw !important;
-        max-width: 200px !important;
+        width: 84vw !important;
+        max-width: 320px !important;
         margin-top: -2.5em !important;
     }
 

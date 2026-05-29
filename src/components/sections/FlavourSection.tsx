@@ -23,15 +23,23 @@ export const FlavourSection: React.FC = () => {
     const [sliding, setSliding] = useState(false);
 
     // ── GSAP scroll-triggered entrance ──
+    // Use the SAME window.gsap instance that layout.tsx loads (with ScrollTrigger
+    // + all plugins already registered). Importing a separate npm gsap created a
+    // second instance → "Invalid property scrollTrigger / Missing plugin" warning
+    // in prod + a duplicate gsap in the bundle.
     useEffect(() => {
+        let cancelled = false;
         const init = async () => {
             try {
-                const gMod = await import('gsap');
-                const sMod = await import('gsap/ScrollTrigger');
-                const gsap = gMod.default || gMod.gsap;
-                const ST = sMod.default || sMod.ScrollTrigger;
-                if (!gsap || !ST) return;
-                gsap.registerPlugin(ST);
+                // Wait for the global gsap (+ScrollTrigger) injected by layout.tsx.
+                const start = performance.now();
+                while (!(window as any).gsap || !(window as any).ScrollTrigger) {
+                    if (cancelled) return;
+                    if (performance.now() - start > 8000) return; // give up quietly
+                    await new Promise((r) => setTimeout(r, 50));
+                }
+                const gsap = (window as any).gsap;
+                if (cancelled) return;
                 gsapRef.current = gsap;
 
                 const tl = gsap.timeline({
@@ -65,6 +73,7 @@ export const FlavourSection: React.FC = () => {
             } catch (_) { /* GSAP unavailable */ }
         };
         init();
+        return () => { cancelled = true; };
     }, []);
 
     // ── Slide with GSAP animation ──

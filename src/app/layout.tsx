@@ -169,23 +169,32 @@ export default function RootLayout({
               if (window.lenis) window.lenis.start();
             }, 6000);
 
+            // Safety: only un-stick the loader if it's STILL stuck after 8s.
+            // Do NOT tear down lenis/animations here — a single unrelated runtime
+            // error (e.g. a vendored Swiper edge case) must not disable the whole
+            // scroll/animation experience.
             setTimeout(function () {
-              if (document.documentElement.classList.contains('lenis-stopped')) {
-                document.documentElement.classList.remove('lenis', 'lenis-stopped');
-                document.body.classList.remove('lenis', 'lenis-stopped');
-                if (__DEV__) console.warn('Fallback: switched to native scroll after 8s');
+              if (!document.documentElement.classList.contains('is-ready')) {
+                document.documentElement.classList.add('fonts-loaded', 'is-ready', 'has-seq-ready');
+                document.documentElement.classList.remove('lenis-stopped');
+                document.body.classList.remove('lenis-stopped');
+                if (window.lenis) try { window.lenis.start(); } catch (e) {}
+                if (__DEV__) console.warn('Fallback: forced loader hide after 8s');
               }
             }, 8000);
 
-            window.onerror = function (msg, url, lineNo, columnNo, error) {
-              console.error('Error caught, enabling scroll fallback:', msg);
-              document.documentElement.classList.add('fonts-loaded', 'is-ready', 'has-seq-ready');
-              document.documentElement.classList.remove('lenis-stopped');
-              document.body.classList.remove('lenis-stopped');
-              document.documentElement.style.overflow = '';
-              document.body.style.overflow = '';
-              return false;
-            };
+            // Last-resort: if the loader never lifts AND an error fired, just make
+            // the page usable (reveal + scrollable). Crucially this does NOT remove
+            // the lenis classes or stop lenis — keeping smooth scroll + animations
+            // alive even when some non-critical script throws.
+            window.addEventListener('error', function (ev) {
+              if (__DEV__) console.warn('Runtime error (non-fatal for animations):', ev.message);
+              if (!document.documentElement.classList.contains('is-ready')) {
+                document.documentElement.classList.add('fonts-loaded', 'is-ready', 'has-seq-ready');
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
+              }
+            });
           `}
         </Script>
       </body>

@@ -245,17 +245,20 @@ html.is-ready.lenis-stopped {
     height: auto !important;
     display: block !important;
 }
-/* stage-visual (the can canvas): shifted ~200px right per request.
-   translate longhand so it composes with any GSAP transform on the canvas. */
+/* stage-visual (the can canvas): shifted ~200px right on DESKTOP ONLY
+   (mobile stays centered). translate longhand composes with GSAP transforms. */
 .stage-visual {
     z-index: 2 !important;
-    translate: 200px 0 !important;
+}
+@media (min-width: 992px) {
+    .stage-visual { translate: 200px 0 !important; }
 }
 .stage-facts  { z-index: 3 !important; pointer-events: none !important; }
 .stage-facts > * { pointer-events: auto !important; }
 .stage-deco   { z-index: 4 !important; pointer-events: none !important; }
 
 @media (max-width: 991px) {
+    .stage-visual { translate: 0 0 !important; }
     .stage-bg-svg {
         width: 85% !important;
         margin-left: 7.5% !important;
@@ -299,22 +302,35 @@ html.is-ready.lenis-stopped {
     }
 }
 
-/* Fixed px so only SVG viewBox scaling applies */
-.marquee-text-svg text {
-    font-size: 160px !important;
+/* DESKTOP: hide the mobile-only sequence blocks. The original
+   .sequence-final-mobile has no base display:none, so without this it
+   renders on desktop alongside .sequence-final → DUPLICATE title/signatures. */
+@media (min-width: 992px) {
+    .sequence-cards-mobile,
+    .sequence-final-mobile {
+        display: none !important;
+    }
 }
 
+/* MOBILE: "Fuel The Rebel" title fades up as it scrolls into view
+   (mobile has no app.js title animation; .is-inview toggled in useAnimations). */
 @media (max-width: 991px) {
-    .marquee-text-svg text {
-        font-size: 120px !important;
+    .sequence-final-mobile .sequence-title {
+        opacity: 0;
+        translate: 0 40px;
+        transition: opacity 0.6s cubic-bezier(.2,.7,.2,1), translate 0.6s cubic-bezier(.2,.7,.2,1);
+        will-change: opacity, translate;
+    }
+    .sequence-final-mobile .sequence-title.is-inview {
+        opacity: 1;
+        translate: 0 0;
     }
 }
 
-@media (max-width: 479px) {
-    .marquee-text-svg text {
-        font-size: 90px !important;
-    }
-}
+/* Marquee text font-size is set as an SVG USER-UNIT attribute (fontSize={160}
+   on the <text> in HeroSection), so it scales with the viewBox like the band —
+   identical proportion at every width (fixes "too small on mobile"). No CSS px
+   font-size here, which would be screen-px and NOT track the viewBox. */
 
 /* Ensure marquee visible */
 .marquee {
@@ -649,8 +665,13 @@ h1.hero-heading {
     font-size: 2.8em !important;
 }
 
-.insider-text-inner {
-    margin-top: 6em !important;
+/* Higher specificity (0,2,0) so it wins over any .insider-text-inner (0,1,0)
+   rule in the vendored CSS regardless of stylesheet load order. Desktop only —
+   pushes the text block down so it no longer overlaps the videos above it. */
+@media (min-width: 992px) {
+    .insider-section .insider-text-inner {
+        margin-top: 12em !important;
+    }
 }
 
 /* Stage layout */
@@ -924,8 +945,8 @@ h1, h2, h3, h4, h5, h6,
     .testimonial-inner-wrap.is-fourth,
     .testimonial-inner-wrap.is-fifth {
         display: block !important;
-        width: 55vw !important;
-        max-width: 280px !important;
+        width: 82vw !important;
+        max-width: 420px !important;
         margin-top: -4em !important;
         left: auto !important;
         right: auto !important;
@@ -1051,8 +1072,8 @@ h1, h2, h3, h4, h5, h6,
     .testimonial-inner-wrap.is-third,
     .testimonial-inner-wrap.is-fourth,
     .testimonial-inner-wrap.is-fifth {
-        width: 50vw !important;
-        max-width: 220px !important;
+        width: 78vw !important;
+        max-width: 330px !important;
         margin-top: -3em !important;
     }
 
@@ -1128,8 +1149,8 @@ h1, h2, h3, h4, h5, h6,
     .testimonial-inner-wrap.is-third,
     .testimonial-inner-wrap.is-fourth,
     .testimonial-inner-wrap.is-fifth {
-        width: 55vw !important;
-        max-width: 200px !important;
+        width: 84vw !important;
+        max-width: 320px !important;
         margin-top: -2.5em !important;
     }
 
@@ -1165,26 +1186,59 @@ h1, h2, h3, h4, h5, h6,
     .payment-signature-days.is-mobile,
     .payment-signature-mobile { display: none !important; }
 }
+/* Mobile payment-methods — ported from the original site so the 7 circles
+   form the same scattered/overlapping cluster (not a plain column).
+   `.payment-method-item-outer { display:contents }` makes each `.payment-method-item._N`
+   the real flex child of .pament-methods, so the original align-self/margin offsets work. */
 @media (max-width: 991px) {
     .payment-signature-days.is-desktop { display: none !important; }
     .payment-signature-days.is-mobile,
     .payment-signature-mobile { display: grid !important; }
 
+    .payment-methods-inner { height: auto !important; margin-top: 0 !important; margin-bottom: 0 !important; }
     .pament-methods {
         flex-flow: column !important;
-        justify-content: flex-start !important;
+        justify-content: space-between !important;
         align-items: center !important;
         width: 100% !important;
         position: relative !important;
     }
-    .payment-method-item-outer { width: 100%; max-width: 320px; }
+    .payment-method-item-outer { display: contents !important; }
     .payment-method-item {
-        width: 100% !important;
-        max-width: 220px !important;
-        height: auto !important;
+        width: 10.75em !important;
+        height: 10.75em !important;
         aspect-ratio: 1 !important;
-        bottom: auto !important;
+        border: 1px solid rgba(0,0,0,0.06) !important;
+        position: relative !important;
     }
+    .payment-method-item._5 { z-index: 5; margin-top: -5em;      margin-left: auto;  bottom: 0; right: 18.25em; }
+    .payment-method-item._6 { z-index: 6; margin-top: -3.75em;   margin-right: auto; bottom: 0; left: 5.5em; }
+    .payment-method-item._7 { z-index: 7; margin-top: -2.9375em; margin-right: auto; bottom: 0; left: 11.25em; }
+    .payment-method-item._1 { z-index: 0;                        margin-right: auto; bottom: 0; left: 7em; }
+    .payment-method-item._2 { z-index: 1; margin-top: -5em;      bottom: 0; }
+    .payment-method-item._3 { z-index: 2; margin-top: -4.375em;  margin-left: auto;  bottom: 0; right: 7em; }
+    .payment-method-item._4 { z-index: 4; margin-top: -2.25em;   margin-left: auto;  right: 10.75em; }
+}
+
+@media (max-width: 767px) {
+    .payment-methods-inner { height: 100% !important; }
+    .payment-method-item { width: 10.7863em !important; height: 10.7863em !important; }
+    .payment-method-item._5 { align-self: flex-start; right: 15.5em; }
+    .payment-method-item._6 { align-self: flex-start; left: 2.5em; }
+    .payment-method-item._7 { align-self: center;     left: 8em; }
+    .payment-method-item._1 { align-self: flex-start; left: 4em; }
+    .payment-method-item._2 { align-self: center; }
+    .payment-method-item._3 { align-self: flex-end;   right: 4em; }
+    .payment-method-item._4 { align-self: center;     right: 8.5em; }
+}
+
+@media (max-width: 479px) {
+    .payment-method-item._5 { right: 9em; }
+    .payment-method-item._6 { left: -1.25em; }
+    .payment-method-item._7 { left: 4.25em; }
+    .payment-method-item._1 { left: -0.5em; }
+    .payment-method-item._3 { right: -1em; }
+    .payment-method-item._4 { right: 2em; }
 }
 
 /* ========================================
@@ -1252,9 +1306,9 @@ h1, h2, h3, h4, h5, h6,
 }
 .hbf-stage {
     position: relative;
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
-    min-height: clamp(320px, 55vw, 750px);
+    min-height: clamp(380px, 62vw, 860px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1284,7 +1338,7 @@ h1, h2, h3, h4, h5, h6,
     z-index: 1;
 }
 .hbf-can {
-    width: clamp(180px, 42vw, 520px);
+    width: clamp(250px, 52vw, 680px);
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 40px 80px rgba(0, 0, 0, 0.3)) drop-shadow(0 10px 30px rgba(230, 81, 0, 0.15));
@@ -1401,8 +1455,8 @@ h1, h2, h3, h4, h5, h6,
 }
 
 @media (max-width: 479px) {
-    .hbf-stage { min-height: 290px; }
-    .hbf-can { width: 70vw; max-width: 320px; }
+    .hbf-stage { min-height: 380px; }
+    .hbf-can { width: 90vw; max-width: 460px; }
     .hbf-arr { width: 40px; height: 40px; }
     .hbf::before, .hbf::after { display: none; } /* decorative rings off on tiny screens */
 }
