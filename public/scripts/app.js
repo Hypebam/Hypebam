@@ -14243,12 +14243,17 @@
                 duration: 1.5,
                 ease: "none"
             }, "step+=.75"), w.fromTo(c, {
-                drawSVG: "0% 0%"
+                drawSVG: "100% 100%"
             }, {
-                drawSVG: "0% 100%",
-                duration: 1.4,
+                keyframes: [{
+                    drawSVG: "0% 100%",
+                    duration: 1.0
+                }, {
+                    drawSVG: "0% 0%",
+                    duration: 1.0
+                }],
                 ease: "none",
-                stagger: 1.4
+                stagger: 2.35
             }, "step+=.3");
             let t = gsap.timeline({
                 paused: !0

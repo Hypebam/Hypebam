@@ -781,35 +781,6 @@ h1.hero-heading {
     object-position: center !important;
 }
 
-/* Sequence section: the three line SVGs now form ONE continuous chained stroke
-   (each segment starts where the last ended), so they must share the exact same
-   box — no per-segment rotation/scale — for the endpoints to line up. Desktop
-   only (the lines are hidden ≤991px). */
-@media (min-width: 992px) {
-    .sequence-lines .sequence-line-svg.is-first,
-    .sequence-lines .sequence-line-svg.is-second,
-    .sequence-lines .sequence-line-svg.is-third {
-        width: 100% !important;
-        rotate: 0deg !important;
-        left: 0 !important;
-        right: 0 !important;
-    }
-}
-
-/* Testimonial backdrop: the can (4.webp) and the flame-stage (6.webp) are a
-   matched scene (identical 1400x1180 frame). The big heading was bisecting the
-   can, so push the WHOLE scene down a little and scale it up just enough to keep
-   the top edge full-bleed: the can drops below the heading while the flames keep
-   filling the heading band. Both layers get the SAME transform so the can stays
-   aligned on its podium. Desktop only. */
-@media (min-width: 992px) {
-    .testimonial-section .testimonial-top-img,
-    .testimonial-section .bg-img {
-        scale: 1.32 !important;
-        transform-origin: center top !important;
-    }
-}
-
 .testimonial-inner-wrap.is-first {
     top: 3em !important;
     rotate: -8deg !important;
