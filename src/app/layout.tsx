@@ -55,7 +55,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${badBrush.variable} ${goga.variable} ${caveat.variable}`}>
+    <html
+      lang="en"
+      className={`${badBrush.variable} ${goga.variable} ${caveat.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         {/* ── All assets are served locally (no CDN). External CDN <link>s and
              preconnects were removed: Firefox/Safari/Edge privacy & tracking
@@ -144,7 +148,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className="body">
+      <body className="body" suppressHydrationWarning>
         {children}
         {/* Smart runtime prefetcher — watches scroll and pre-fetches assets just before needed */}
         <ResourcePreloader />
