@@ -2491,9 +2491,12 @@ body {
 }
 
 @media (hover: hover) and (pointer: fine) {
+    /* Hover = bring the card FORWARD (focus) only — NO scaling. The lift/z-index
+       come from the globals.css rule which uses translate/z-index longhands that
+       compose with each card's base transform (e.g. is-third's scale(1.08)).
+       The old `transform: scale(1.05)…` here clobbered that and grew the card. */
     .testimonial-inner-wrap:hover {
         z-index: 10 !important;
-        transform: scale(1.05) translateY(-0.5em) !important;
     }
 }
 

@@ -774,7 +774,11 @@ h1.hero-heading {
     .testimonial-inner-wrap {
         transition: translate 0.4s cubic-bezier(.2,.7,.2,1);
     }
-    .testimonial-inner-wrap:hover {
+    /* Extra `.insider-wrapper` ancestor → specificity (0,3,0) beats the base
+       per-card `z-index` rules in responsive.css (0,2,0), so the hovered card
+       actually rises to the FRONT (focus). translate lift composes with each
+       card's base transform; NO scale (card must not grow). */
+    .insider-wrapper .testimonial-inner-wrap:hover {
         z-index: 50 !important;
         translate: 0 -14px !important;
     }
@@ -789,10 +793,11 @@ h1.hero-heading {
     object-position: center !important;
 }
 
-/* The flames image (the .img base layer) was object-fit:cover and got cropped.
-   Show the whole flame graphic so it fits, like the cans above it. */
+/* The flames image (the .img base layer) is the background — it must FILL the
+   wrapper (no white letterbox top/bottom). cover fills; an edge crop of a flame
+   texture is fine. (The cans .top-img above stays contain so all cans show.) */
 .benefit-section .img-wrapper .img {
-    object-fit: contain !important;
+    object-fit: cover !important;
     object-position: center !important;
 }
 
