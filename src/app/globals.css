@@ -781,6 +781,67 @@ h1.hero-heading {
     object-position: center !important;
 }
 
+/* ============================================================
+   BOTTOM "SUNSET DEEPEN" ZONE — Flavour -> Payment -> Footer
+   One continuous warm gradient (amber/yellow at the top, deep red
+   at the footer) + the hero's texture overlay, replacing the plain
+   cream. White cards/chips stay as contrast islands; text is dark up
+   top and light at the footer. page.tsx wraps the three sections in
+   .warm-zone. ============================================================ */
+.warm-zone {
+    position: relative;
+    isolation: isolate;             /* contain the multiply blend */
+    background-color: #FFD000;      /* fallback */
+    background-image: linear-gradient(180deg,
+        #FFD000 0%,
+        #F9A100 22%,
+        #F55000 50%,
+        #F03A08 75%,
+        #E8180C 100%);
+}
+.warm-zone::before {                /* hero texture overlay */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("/img/texture.png") center top / cover no-repeat;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+}
+.warm-zone > * {                    /* sections sit above the texture */
+    position: relative;
+    z-index: 1;
+}
+/* let the gradient show through the sections (drop their cream/white bg) */
+.warm-zone .hbf,
+.warm-zone .payment-section,
+.warm-zone .footer {
+    background: transparent !important;
+}
+
+/* Flavour (top) sits on light amber — its dark headings + orange accent stay
+   readable, so leave them. Payment is mid-ramp (deep orange, darkened by the
+   texture), so its heading + highlight go cream for contrast, and its
+   handwritten signature SVGs are inverted to read on the dark bg. */
+.warm-zone .payment-section .insider-heading,
+.warm-zone .payment-section .light-green-span {
+    color: #FFF8EF !important;
+}
+.warm-zone .payment-section .payment-signature-img,
+.warm-zone .payment-section .payment-signature-days-img {
+    filter: brightness(0) invert(1);
+}
+
+/* The footer sits on the deep-red bottom of the ramp — switch its
+   on-gradient text to cream for contrast. (The white info/credits chips
+   keep their own dark text; the footer-product flame panel is untouched.) */
+.warm-zone .footer .footer-heading,
+.warm-zone .footer .footer-heading .heading-line,
+.warm-zone .footer .shipping-link-text,
+.warm-zone .footer .footer-bottom-text {
+    color: #FFF8EF !important;
+}
+
 .testimonial-inner-wrap.is-first {
     top: 3em !important;
     rotate: -8deg !important;

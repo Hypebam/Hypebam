@@ -14247,13 +14247,13 @@
             }, {
                 keyframes: [{
                     drawSVG: "0% 100%",
-                    duration: 1.0
+                    duration: 2.8
                 }, {
                     drawSVG: "0% 0%",
-                    duration: 1.0
+                    duration: 0.7
                 }],
                 ease: "none",
-                stagger: 2.35
+                stagger: 3.2
             }, "step+=.3");
             let t = gsap.timeline({
                 paused: !0

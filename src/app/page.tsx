@@ -37,11 +37,16 @@ export default function HomePage() {
 
                 <TestimonialsSection />
 
-                <FlavourSection />
+                {/* Bottom "sunset deepen" zone — one continuous warm gradient +
+                    hero texture spans Flavour → Payment → Footer (see .warm-zone
+                    in globals.css). */}
+                <div className="warm-zone">
+                    <FlavourSection />
 
-                <PaymentSection />
+                    <PaymentSection />
 
-                <Footer />
+                    <Footer />
+                </div>
             </div>
         </>
     );
