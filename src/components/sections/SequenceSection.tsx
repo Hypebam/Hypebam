@@ -142,20 +142,21 @@ export const SequenceSection: React.FC = () => {
 
                     <div className="sequence-lines">
                         {/* Lightning "story": three bolts share ONE coordinate space and are
-                            CHAINED — bolt 1 strikes right->left and ends at (1500,400); bolt 2
-                            starts exactly there and ends at (1030,460); bolt 3 starts there and
-                            runs to the far left. app.js draws them one-at-a-time, each travelling
-                            from its start into its end (= the next bolt's start), so it reads as a
-                            single lightning propagating across the screen. CSS (globals) forces all
-                            three into the same box (no per-bolt rotation) so the endpoints meet. */}
+                            CHAINED, and they ALTERNATE direction so the strike bounces back and
+                            forth — bolt 1 strikes right->left ending at (700,340); bolt 2 starts
+                            exactly there and goes left->right ending at (1700,500); bolt 3 starts
+                            there and goes right->left to the far left. app.js draws them one at a
+                            time, each travelling from its start into its end (= the next bolt's
+                            start). CSS (globals) forces all three into the same box (no per-bolt
+                            rotation) so the endpoints meet. */}
                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 700" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-first">
-                            <path d="M1950 140 L1790 300 L1870 330 L1610 440 L1690 470 L1500 400" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" fill="none"></path>
+                            <path d="M1900 180 L1700 320 L1780 260 L1380 400 L1080 300 L700 340" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" fill="none"></path>
                         </svg>
                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 700" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-second">
-                            <path d="M1500 400 L1340 250 L1270 360 L1110 290 L1180 420 L1030 460" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" fill="none"></path>
+                            <path d="M700 340 L900 480 L820 400 L1180 520 L1480 420 L1700 500" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" fill="none"></path>
                         </svg>
                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 700" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-third">
-                            <path d="M1030 460 L880 310 L820 430 L600 330 L470 470 L300 380 L120 440" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" fill="none"></path>
+                            <path d="M1700 500 L1500 360 L1560 440 L1180 320 L880 420 L520 300 L200 380" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" fill="none"></path>
                         </svg>
                         <div data-sequence-signature="" className="sequence-inner-signature">
                             <img src="/img/cdn/68b9fcc383366c0bb0fe9ca6_sequence-more-for-coffee-lovers.svg" loading="lazy" width="300" height="132" alt="sequence-more-for-coffee-lovers" className="sequence-inner-signature-img" />

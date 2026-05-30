@@ -14,7 +14,7 @@ await page.evaluate(() => {
 });
 const jump = async (y) => { await page.evaluate((yy) => { if (window.lenis?.scrollTo) window.lenis.scrollTo(yy, { immediate: true }); else window.scrollTo(0, yy); window.ScrollTrigger?.update?.(); }, y); await page.waitForTimeout(450); };
 const sTop = await page.evaluate(() => { const e = document.querySelector('.sequence-section'); return Math.round(e.getBoundingClientRect().top + window.scrollY); });
-for (const o of [400, 800, 2200, 2800, 4200, 4800]) {
+for (const o of [300, 800, 1900, 2800, 3900, 4800]) {
   await jump(sTop + o);
   await page.screenshot({ path: join(TEMP, `ln_${o}.png`) });
 }
