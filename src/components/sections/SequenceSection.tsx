@@ -141,14 +141,19 @@ export const SequenceSection: React.FC = () => {
                     </div>
 
                     <div className="sequence-lines">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 691" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-first">
-                            <path d="M205.05 580.27 L405.14 634.84 L389.98 569.66 L706.78 634.84 L74.69 110.38 L677.98 174.04 L432.42 201.33 L1267.62 468.11 L955.37 319.56 L1825.43 -10.5" stroke="currentColor" strokeWidth="18" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" fill="none"></path>
+                        {/* One continuous hand-drawn line, split into three chained
+                            segments that share the SAME viewBox so each segment STARTS
+                            exactly where the previous one ENDED. app.js draws them in
+                            order (no erase), so it reads as a single pen-stroke snaking
+                            across the section as you scroll. */}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 700" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-first">
+                            <path d="M120,560 C360,540 460,180 720,300 C940,400 980,600 1180,420" stroke="currentColor" strokeWidth="18" strokeLinecap="round" strokeLinejoin="round" fill="none"></path>
                         </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 682" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-second">
-                            <path d="M1713.26 -51.26 L1247.92 286.76 L1480.59 217.03 L1232.76 382.25 L1651.12 605.07 L976.59 650.55 L1134.23 588.4 L280.84 51.81 L417.26 192.78 L91.37 83.64" stroke="currentColor" strokeWidth="18" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" fill="none"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 700" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-second">
+                            <path d="M1180,420 C1320,300 1480,180 1640,320 C1760,425 1820,250 1900,160" stroke="currentColor" strokeWidth="18" strokeLinecap="round" strokeLinejoin="round" fill="none"></path>
                         </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 750" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-third">
-                            <path d="M2650.41 661.58l-434.27-85.16 43.2 42.58-584.34-210.83 138.69-31.83h-250.11l-532.04 213.73-497.94 50.77 154.61-187.19-216 109.14L924.69 85.3l-497.94 50.02 163.71 75.03c-385.77 13.64-771.54 27.28-1157.31 40.93l109.14-45.47-241.01-95.49 90.95 11.37-129.6-210.11" stroke="currentColor" strokeWidth="18" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" fill="none"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 700" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-third">
+                            <path d="M1900,160 C1780,420 1400,560 1020,470 C620,375 360,520 140,470" stroke="currentColor" strokeWidth="18" strokeLinecap="round" strokeLinejoin="round" fill="none"></path>
                         </svg>
                         <div data-sequence-signature="" className="sequence-inner-signature">
                             <img src="/img/cdn/68b9fcc383366c0bb0fe9ca6_sequence-more-for-coffee-lovers.svg" loading="lazy" width="300" height="132" alt="sequence-more-for-coffee-lovers" className="sequence-inner-signature-img" />

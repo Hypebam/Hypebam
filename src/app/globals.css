@@ -757,18 +757,56 @@ h1.hero-heading {
     width: 100% !important;
 }
 
-/* Insider video cards: lift + bring forward on hover, settle back on leave.
-   Uses translate/scale longhands (not the transform shorthand) so it composes
-   with the cards' rotate/positioning and never fights the GSAP inertia, which
-   transforms the child .testimonial-inner (a different element). Desktop only. */
+/* Insider video cards: bring forward on hover (z-index only) + a gentle lift so
+   it reads as "coming to the top". NO scale — the card must not grow, just rise
+   to the front. Uses translate longhand so it composes with the cards'
+   rotate/positioning and never fights the GSAP inertia, which transforms the
+   child .testimonial-inner (a different element). Desktop only. */
 @media (hover: hover) and (pointer: fine) {
     .testimonial-inner-wrap {
-        transition: translate 0.4s cubic-bezier(.2,.7,.2,1), scale 0.4s cubic-bezier(.2,.7,.2,1);
+        transition: translate 0.4s cubic-bezier(.2,.7,.2,1);
     }
     .testimonial-inner-wrap:hover {
         z-index: 50 !important;
         translate: 0 -14px !important;
-        scale: 1.05 !important;
+    }
+}
+
+/* Benefit img-wrapper: the top image is the cluster of flavour cans. This is a
+   marketing visual, so every can must stay visible — show the whole image
+   (zoom out) instead of cover-cropping it. The flames image behind keeps
+   filling the frame. */
+.benefit-section .img-wrapper .top-img {
+    object-fit: contain !important;
+    object-position: center !important;
+}
+
+/* Sequence section: the three line SVGs now form ONE continuous chained stroke
+   (each segment starts where the last ended), so they must share the exact same
+   box — no per-segment rotation/scale — for the endpoints to line up. Desktop
+   only (the lines are hidden ≤991px). */
+@media (min-width: 992px) {
+    .sequence-lines .sequence-line-svg.is-first,
+    .sequence-lines .sequence-line-svg.is-second,
+    .sequence-lines .sequence-line-svg.is-third {
+        width: 100% !important;
+        rotate: 0deg !important;
+        left: 0 !important;
+        right: 0 !important;
+    }
+}
+
+/* Testimonial backdrop: the can (4.webp) and the flame-stage (6.webp) are a
+   matched scene (identical 1400x1180 frame). The big heading was bisecting the
+   can, so push the WHOLE scene down a little and scale it up just enough to keep
+   the top edge full-bleed: the can drops below the heading while the flames keep
+   filling the heading band. Both layers get the SAME transform so the can stays
+   aligned on its podium. Desktop only. */
+@media (min-width: 992px) {
+    .testimonial-section .testimonial-top-img,
+    .testimonial-section .bg-img {
+        scale: 1.32 !important;
+        transform-origin: center top !important;
     }
 }
 
