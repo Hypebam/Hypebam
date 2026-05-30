@@ -277,8 +277,8 @@ html.is-ready.lenis-stopped {
 /* Keep the lightning sized to FIT the screen (it was overflowing). Small,
    gentle scaling across desktop sizes. (Lines are display:none <=991px.) */
 .sequence-line-svg.is-first  { width: 120% !important; rotate: -40deg; }
-.sequence-line-svg.is-second { width: 120% !important; rotate:  70deg; }
-.sequence-line-svg.is-third  { width: 120% !important; rotate: -20deg; }
+.sequence-line-svg.is-second { width: 120% !important; rotate: -70deg; }
+.sequence-line-svg.is-third  { width: 120% !important; rotate: 180deg; }
 
 @media (min-width: 1600px) {
     .sequence-line-svg.is-first,
@@ -789,6 +789,13 @@ h1.hero-heading {
     object-position: center !important;
 }
 
+/* The flames image (the .img base layer) was object-fit:cover and got cropped.
+   Show the whole flame graphic so it fits, like the cans above it. */
+.benefit-section .img-wrapper .img {
+    object-fit: contain !important;
+    object-position: center !important;
+}
+
 /* ============================================================
    BOTTOM "SUNSET DEEPEN" ZONE — Flavour -> Payment -> Footer
    One continuous warm gradient (amber/yellow at the top, deep red
@@ -825,6 +832,16 @@ h1.hero-heading {
 .warm-zone .payment-section,
 .warm-zone .footer {
     background: transparent !important;
+}
+
+/* Close the big empty gap between the Flavour can and the Payment heading:
+   the flavour section had a large bottom padding and the payment section a very
+   large top padding. Trim both. */
+.warm-zone .hbf {
+    padding-bottom: clamp(24px, 3vw, 56px) !important;
+}
+.warm-zone .payment-section {
+    padding-top: 2.5em !important;
 }
 
 /* Flavour (top) sits on light amber — its dark headings + orange accent stay

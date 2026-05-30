@@ -20,7 +20,6 @@ export const PaymentSection: React.FC = () => {
                     <div id="w-node-_041f45d4-47b7-9fbf-98ee-78b1c2254fcb-0ac01850" className="payment-wrapper">
                         <div id="w-node-_358aeb55-90b6-f7e1-a5ad-3d95f312e343-0ac01850" className="payment-signature-days is-desktop">
                             <img src="/img/cdn/68b2211dbd022ef87bf8047a_payment_3-5-days-delivery.svg" loading="lazy" width="269" height="150" alt="payment_3-5-days-delivery" className="payment-signature-days-img" />
-                            <img src="/img/cdn/68b2211dbd022ef87bf8047a_payment_3-5-days-delivery.svg" loading="lazy" width="269" height="150" alt="payment_3-5-days-delivery" className="payment-signature-days-img is-wiggle" />
                         </div>
                         <h2 id="w-node-_5aa7990f-3909-960f-ff04-09bf6fbaf58f-0ac01850" data-typography-target="payment-heading" className="insider-heading">Find us and<br /><span className="light-green-span">let's bam!</span></h2>
                         <div id="w-node-_3b9ad9e4-4de9-0d6f-0561-c6944df56da5-0ac01850" className="payment-methods-inner">
@@ -34,18 +33,15 @@ export const PaymentSection: React.FC = () => {
                                 ))}
                                 <div className="payment-signature-days is-mobile">
                                     <img src="/img/cdn/68b2211dbd022ef87bf8047a_payment_3-5-days-delivery.svg" loading="lazy" width="269" height="150" alt="payment_3-5-days-delivery" className="payment-signature-days-img" />
-                                    <img src="/img/cdn/68b2211dbd022ef87bf8047a_payment_3-5-days-delivery.svg" loading="lazy" width="269" height="150" alt="payment_3-5-days-delivery" className="payment-signature-days-img is-wiggle" />
                                 </div>
                                 <div className="payment-signature-mobile">
                                     <img src="/img/cdn/68c321a0bcd661b9a1c1040e_free-shipping-mobile.svg" loading="lazy" width="300" height="150" alt="free-shipping-mobile" className="payment-signature-img is-mobile" />
-                                    <img src="/img/cdn/68c321a0bcd661b9a1c1040e_free-shipping-mobile.svg" loading="lazy" width="300" height="150" alt="free-shipping-mobile" className="payment-signature-img is-wiggle is-mobile" />
                                 </div>
                             </div>
                         </div>
                         <div id="w-node-a4554c61-f2f6-fed6-6652-44ed900999ad-0ac01850" className="payment-signature">
                             <img src="/img/cdn/689c6da07704668cebe17120_Group_150.svg" loading="lazy" alt="Free shipping" className="mobile" />
                             <img src="/img/cdn/68b2256a5ce0c9ca5c1aa015_payment_free-shipping.svg" loading="lazy" width="300" height="96" alt="payment_free-shipping" className="payment-signature-img" />
-                            <img src="/img/cdn/68b2256a5ce0c9ca5c1aa015_payment_free-shipping.svg" loading="lazy" width="300" height="96" alt="payment_free-shipping" className="payment-signature-img is-wiggle" />
                         </div>
                     </div>
                 </div>

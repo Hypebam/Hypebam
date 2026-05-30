@@ -21,10 +21,6 @@ export const TestimonialsSection: React.FC = () => {
             <div className="testimonial-container">
                 <div className="grid-layout">
                     <div id="w-node-_188a35c2-2913-dd29-6c54-5bf8cbbe64f3-0ac01850" className="big-title-wrapper">
-                        <div className="testimonial-signature">
-                            <img src="/img/cdn/68b2e8120f5b95bfbd87aebf_testimonial-signature.svg" loading="lazy" width="300" height="27" alt="testimonial-signature" className="testimonial-signature-img" />
-                            <img src="/img/cdn/68b2e8120f5b95bfbd87aebf_testimonial-signature.svg" loading="lazy" width="300" height="27" alt="testimonial-signature" className="testimonial-signature-img is-wiggle" />
-                        </div>
                         <h2 className="testimonial-big-heading">Sri Lankanized<br />Hydration</h2>
                     </div>
                     <div id="w-node-d56024cf-9b70-fc24-7ba0-e2b3ea8d1769-0ac01850" className="testimonial-slider">
