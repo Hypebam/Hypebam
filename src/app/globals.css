@@ -274,9 +274,23 @@ html.is-ready.lenis-stopped {
    and rotated so the lightning crosses the section from a
    different angle, then drawn-in one at a time on scroll.
    ======================================== */
-.sequence-line-svg.is-first  { width: 250% !important; rotate: -40deg; }
-.sequence-line-svg.is-second { width: 250% !important; rotate:  70deg; }
-.sequence-line-svg.is-third  { width: 250% !important; rotate: -20deg; }
+/* Width scales with the viewport so the lightning stays balanced across screen
+   sizes: more contained on compact desktops, more dramatic on wide screens.
+   (Lines are display:none <=991px, so these target the desktop range.) */
+.sequence-line-svg.is-first  { width: 200% !important; rotate: -40deg; }
+.sequence-line-svg.is-second { width: 200% !important; rotate:  70deg; }
+.sequence-line-svg.is-third  { width: 200% !important; rotate: -20deg; }
+
+@media (min-width: 1280px) {
+    .sequence-line-svg.is-first,
+    .sequence-line-svg.is-second,
+    .sequence-line-svg.is-third { width: 250% !important; }
+}
+@media (min-width: 1600px) {
+    .sequence-line-svg.is-first,
+    .sequence-line-svg.is-second,
+    .sequence-line-svg.is-third { width: 300% !important; }
+}
 
 /* Make the lightning crisp & glowing — orange on the dark sequence bg.
    Use higher specificity than .sequence-lines { color:white !important } in main.css */
