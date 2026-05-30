@@ -141,14 +141,21 @@ export const SequenceSection: React.FC = () => {
                     </div>
 
                     <div className="sequence-lines">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 691" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-first">
-                            <path d="M205.05 580.27 L405.14 634.84 L389.98 569.66 L706.78 634.84 L74.69 110.38 L677.98 174.04 L432.42 201.33 L1267.62 468.11 L955.37 319.56 L1825.43 -10.5" stroke="currentColor" strokeWidth="18" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" fill="none"></path>
+                        {/* Lightning "story": three bolts share ONE coordinate space and are
+                            CHAINED — bolt 1 strikes right->left and ends at (1500,400); bolt 2
+                            starts exactly there and ends at (1030,460); bolt 3 starts there and
+                            runs to the far left. app.js draws them one-at-a-time, each travelling
+                            from its start into its end (= the next bolt's start), so it reads as a
+                            single lightning propagating across the screen. CSS (globals) forces all
+                            three into the same box (no per-bolt rotation) so the endpoints meet. */}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 700" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-first">
+                            <path d="M1950 140 L1790 300 L1870 330 L1610 440 L1690 470 L1500 400" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" fill="none"></path>
                         </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 682" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-second">
-                            <path d="M1713.26 -51.26 L1247.92 286.76 L1480.59 217.03 L1232.76 382.25 L1651.12 605.07 L976.59 650.55 L1134.23 588.4 L280.84 51.81 L417.26 192.78 L91.37 83.64" stroke="currentColor" strokeWidth="18" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" fill="none"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 700" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-second">
+                            <path d="M1500 400 L1340 250 L1270 360 L1110 290 L1180 420 L1030 460" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" fill="none"></path>
                         </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 750" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-third">
-                            <path d="M2650.41 661.58l-434.27-85.16 43.2 42.58-584.34-210.83 138.69-31.83h-250.11l-532.04 213.73-497.94 50.77 154.61-187.19-216 109.14L924.69 85.3l-497.94 50.02 163.71 75.03c-385.77 13.64-771.54 27.28-1157.31 40.93l109.14-45.47-241.01-95.49 90.95 11.37-129.6-210.11" stroke="currentColor" strokeWidth="18" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" fill="none"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 700" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-third">
+                            <path d="M1030 460 L880 310 L820 430 L600 330 L470 470 L300 380 L120 440" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" fill="none"></path>
                         </svg>
                         <div data-sequence-signature="" className="sequence-inner-signature">
                             <img src="/img/cdn/68b9fcc383366c0bb0fe9ca6_sequence-more-for-coffee-lovers.svg" loading="lazy" width="300" height="132" alt="sequence-more-for-coffee-lovers" className="sequence-inner-signature-img" />
