@@ -14242,19 +14242,28 @@
                 },
                 duration: 1.5,
                 ease: "none"
-            }, "step+=.75"), w.fromTo(c, {
+            }, "step+=.75"), gsap.fromTo(c, {
                 drawSVG: "100% 100%"
             }, {
                 keyframes: [{
                     drawSVG: "0% 100%",
-                    duration: .5
+                    duration: 4
+                }, {
+                    drawSVG: "0% 100%",
+                    duration: 0.6
                 }, {
                     drawSVG: "0% 0%",
-                    duration: .5
+                    duration: 4
                 }],
                 ease: "none",
-                stagger: 1.35
-            }, "step+=.3");
+                stagger: 2.5,
+                scrollTrigger: {
+                    trigger: e,
+                    start: "top 60%",
+                    end: "bottom bottom",
+                    scrub: !0
+                }
+            });
             let t = gsap.timeline({
                 paused: !0
             }).from(S.words, {
