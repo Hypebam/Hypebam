@@ -15,8 +15,8 @@ export const TestimonialsSection: React.FC = () => {
     return (
         <div id="reviews" className="testimonial-section">
             <div data-testimonial-parallax="" className="bg-img-wrapper">
-                <img className="testimonial-top-img" src="/img/cdn/689541efc32332b4d96332e4_5aa593a5c181883619e1ec2e48b9a77009ae6ddd.webp" width="2048" alt="Hype Bam Energy Drink" data-testimonial-parallax-item="" loading="lazy" />
-                <img className="bg-img" src="/img/cdn/689541d1c4bb0b452cb46e3e_b525d1f05540193d88caa60b825b8887a650d649.webp" width="2048" alt="Hype Bam Energy Drink" data-testimonial-parallax-item="" loading="lazy" />
+                <img className="testimonial-top-img" src="/img/1/4.webp" width="1400" alt="Hype Bam Original can" data-testimonial-parallax-item="" loading="lazy" />
+                <img className="bg-img" src="/img/1/6.webp" width="1400" alt="Hype Bam flame stage" data-testimonial-parallax-item="" loading="lazy" />
             </div>
             <div className="testimonial-container">
                 <div className="grid-layout">

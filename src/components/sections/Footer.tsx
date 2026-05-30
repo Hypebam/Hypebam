@@ -10,8 +10,8 @@ export const Footer: React.FC = () => {
             <div id="w-node-_01191fa0-2abf-23ff-44da-acbdf6476df4-0ac01850" className="footer-full-height-container w-layout-grid">
                 <div id="w-node-f35c7284-aa91-03b1-62fc-d15dd1353c80-0ac01850" className="footer-product">
                     <div className="absolute-background">
-                        <img src="/img/cdn/68b2fe215f8a5cce19bfe408_footer_product-bg-top.webp" loading="lazy" width="700" height="700" alt="footer_product-bg-top" srcSet="/img/cdn/68b2fe215f8a5cce19bfe408_footer_product-bg-top-p-500.webp 500w, /img/cdn/68b2fe215f8a5cce19bfe408_footer_product-bg-top-p-800.webp 800w, /img/cdn/68b2fe215f8a5cce19bfe408_footer_product-bg-top-p-1080.webp 1080w, /img/cdn/68b2fe215f8a5cce19bfe408_footer_product-bg-top.webp 1400w" sizes="(max-width: 767px) 100vw, 700px" className="footer-img top" />
-                        <img src="/img/cdn/68b2fe215f8a5cce19bfe3f1_footer_product-bg.webp" loading="lazy" width="700" height="700" alt="footer_product-bg" srcSet="/img/cdn/68b2fe215f8a5cce19bfe3f1_footer_product-bg-p-500.webp 500w, /img/cdn/68b2fe215f8a5cce19bfe3f1_footer_product-bg-p-800.webp 800w, /img/cdn/68b2fe215f8a5cce19bfe3f1_footer_product-bg-p-1080.webp 1080w, /img/cdn/68b2fe215f8a5cce19bfe3f1_footer_product-bg.webp 1400w" sizes="(max-width: 767px) 100vw, 700px" className="footer-img" />
+                        <img src="/img/2/2.webp" loading="lazy" width="700" height="700" alt="Hype Bam flavour cans" className="footer-img top" />
+                        <img src="/img/2/3.webp" loading="lazy" width="700" height="700" alt="Hype Bam flames" className="footer-img" />
                     </div>
                     <div className="footer-product-text-inner">
                         <h3 className="footer-product-heading">Fuel<br />The<br />Rebel!</h3>
