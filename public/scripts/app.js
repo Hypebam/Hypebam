@@ -14243,7 +14243,7 @@
                 duration: 1.5,
                 ease: "none"
             }, "step+=.75"), gsap.fromTo(c, {
-                drawSVG: "0% 0%"
+                drawSVG: "100% 100%"
             }, {
                 keyframes: [{
                     drawSVG: "0% 100%",
@@ -14252,7 +14252,7 @@
                     drawSVG: "0% 100%",
                     duration: 0.3
                 }, {
-                    drawSVG: "100% 100%",
+                    drawSVG: "0% 0%",
                     duration: 4
                 }],
                 ease: "none",
