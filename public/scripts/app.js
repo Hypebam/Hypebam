@@ -14250,13 +14250,13 @@
                     duration: 4
                 }, {
                     drawSVG: "0% 100%",
-                    duration: 0.6
+                    duration: 0.3
                 }, {
                     drawSVG: "0% 0%",
                     duration: 4
                 }],
                 ease: "none",
-                stagger: 2.5,
+                stagger: 8.3,
                 scrollTrigger: {
                     trigger: e,
                     start: "top 60%",
