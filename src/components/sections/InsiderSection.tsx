@@ -82,8 +82,12 @@ export const InsiderSection: React.FC = () => {
         return () => observer.disconnect();
     }, []);
 
+    // data-inertia removed from .insider-section: app.js attached a
+    // cursor-velocity "throw" to each card on mouseenter (lunge + rotate) that
+    // read as the card "getting bigger/jumping" on hover. Hover is now CSS-only
+    // (lift + come forward, no size/position change).
     return (
-        <div data-inertia="" className="insider-section">
+        <div className="insider-section">
             <div className="insider-container">
                 <div className="grid-layout">
                     <h2 id="w-node-_3e09cbcc-bb63-d8d5-fc92-5249d862c0ff-0ac01850" className="insider-heading">

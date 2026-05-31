@@ -278,7 +278,7 @@ html.is-ready.lenis-stopped {
    .sequence-lines transform below. (display:none <=991px.) */
 .sequence-line-svg.is-first  { width: 88% !important; rotate: -40deg; }
 .sequence-line-svg.is-second { width: 88% !important; rotate: -70deg; }
-.sequence-line-svg.is-third  { width: 88% !important; rotate: 180deg; }
+.sequence-line-svg.is-third  { width: 88% !important; rotate: -90deg; }
 
 /* Nudge the whole lightning group upward (moves all 3 lines together; nothing
    else sets a transform on .sequence-lines). */
@@ -297,14 +297,10 @@ html.is-ready.lenis-stopped {
         padding-bottom: 0 !important;
     }
 }
-/* Hero fact circles: the circle (8.75em) never shrank on mobile while its text
-   did, so it looked oversized. Size the circle to match the smaller text. */
-@media (max-width: 767px) {
-    .stage-fact { width: 6em !important; height: 6em !important; }
-}
-@media (max-width: 479px) {
-    .stage-fact { width: 5em !important; height: 5em !important; }
-}
+/* Hero fact circles: keep the ORIGINAL more-nutrition size (8.75em ~= 140px) and
+   the webflow staggered `inset` placement (is-first upper-right, is-second
+   mid-center, is-third lower-left, below the can). No mobile size override — the
+   earlier shrink (5em/6em) made them too small and mismatched the original. */
 
 /* Make the lightning crisp & glowing — orange on the dark sequence bg.
    Use higher specificity than .sequence-lines { color:white !important } in main.css */
