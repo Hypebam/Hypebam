@@ -274,17 +274,12 @@ html.is-ready.lenis-stopped {
    and rotated so the lightning crosses the section from a
    different angle, then drawn-in one at a time on scroll.
    ======================================== */
-/* Keep the lightning sized to FIT the screen (it was overflowing). Small,
-   gentle scaling across desktop sizes. (Lines are display:none <=991px.) */
-.sequence-line-svg.is-first  { width: 120% !important; rotate: -40deg; }
-.sequence-line-svg.is-second { width: 120% !important; rotate: -70deg; }
-.sequence-line-svg.is-third  { width: 120% !important; rotate: 180deg; }
-
-@media (min-width: 1600px) {
-    .sequence-line-svg.is-first,
-    .sequence-line-svg.is-second,
-    .sequence-line-svg.is-third { width: 140% !important; }
-}
+/* Keep the lightning sized to FIT the screen — at >100% the rotated bounding
+   box (incl. miter spikes) overflowed and got clipped. 88% keeps the whole line
+   inside the viewport across desktop sizes. (Lines are display:none <=991px.) */
+.sequence-line-svg.is-first  { width: 88% !important; rotate: -40deg; }
+.sequence-line-svg.is-second { width: 88% !important; rotate: -70deg; }
+.sequence-line-svg.is-third  { width: 88% !important; rotate: 180deg; }
 
 /* Make the lightning crisp & glowing — orange on the dark sequence bg.
    Use higher specificity than .sequence-lines { color:white !important } in main.css */
