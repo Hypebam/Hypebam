@@ -263,6 +263,25 @@ export const useAnimations = () => {
             cleanups.push(() => mm.revert());
         };
 
+        // Robust mobile reveal for the finale title ("Fuel The Rebel"), attached
+        // IMMEDIATELY on mount — independent of the async GSAP pipeline below,
+        // which on slow devices can attach its observer late and leave the title
+        // stuck at its base opacity:0. Idempotent with the gsap-pipeline observer.
+        try {
+            if (typeof window !== 'undefined' && window.matchMedia('(max-width: 991px)').matches) {
+                const mTitle = document.querySelector('.sequence-final-mobile .sequence-title');
+                if (mTitle && !mTitle.classList.contains('is-inview')) {
+                    const mObs = new IntersectionObserver((entries) => {
+                        entries.forEach((e) => {
+                            if (e.isIntersecting) { e.target.classList.add('is-inview'); mObs.unobserve(e.target); }
+                        });
+                    }, { threshold: 0.15 });
+                    mObs.observe(mTitle);
+                    cleanups.push(() => mObs.disconnect());
+                }
+            }
+        } catch { /* non-fatal */ }
+
         // ────────────────────────────────────────────────
         // Init pipeline — promises, not arbitrary timers
         //

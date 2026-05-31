@@ -284,6 +284,28 @@ html.is-ready.lenis-stopped {
    else sets a transform on .sequence-lines). */
 .sequence-lines { transform: translateY(-60px) !important; }
 
+/* ===== Mobile polish (iter-35) ===== */
+@media (max-width: 991px) {
+    /* Hero .stage-right had the desktop padding-top:15.625em cascading down,
+       pushing the text way below the can. Trim it for phones/tablets. */
+    .stage-right {
+        padding-top: 2em !important;
+        padding-bottom: 1em !important;
+    }
+    /* Drop the testimonial section's bottom padding (was 3em in main.css). */
+    .testimonial-section {
+        padding-bottom: 0 !important;
+    }
+}
+/* Hero fact circles: the circle (8.75em) never shrank on mobile while its text
+   did, so it looked oversized. Size the circle to match the smaller text. */
+@media (max-width: 767px) {
+    .stage-fact { width: 6em !important; height: 6em !important; }
+}
+@media (max-width: 479px) {
+    .stage-fact { width: 5em !important; height: 5em !important; }
+}
+
 /* Make the lightning crisp & glowing — orange on the dark sequence bg.
    Use higher specificity than .sequence-lines { color:white !important } in main.css */
 .sequence-lines .sequence-line-svg path {
