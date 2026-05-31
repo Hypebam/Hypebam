@@ -278,7 +278,7 @@ html.is-ready.lenis-stopped {
    .sequence-lines transform below. (display:none <=991px.) */
 .sequence-line-svg.is-first  { width: 88% !important; rotate: -40deg; }
 .sequence-line-svg.is-second { width: 88% !important; rotate: -70deg; }
-.sequence-line-svg.is-third  { width: 88% !important; rotate: 180deg; }
+.sequence-line-svg.is-third  { width: 88% !important; rotate: -90deg; }
 
 /* Nudge the whole lightning group upward (moves all 3 lines together; nothing
    else sets a transform on .sequence-lines). */
