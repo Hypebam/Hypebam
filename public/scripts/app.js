@@ -14259,7 +14259,7 @@
                 stagger: 8.3,
                 scrollTrigger: {
                     trigger: e,
-                    start: "top 60%",
+                    start: "top 45%",
                     end: "bottom bottom",
                     scrub: !0
                 }
