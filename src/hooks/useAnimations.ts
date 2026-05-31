@@ -242,8 +242,20 @@ export const useAnimations = () => {
                 });
             });
 
-            // (Mobile finale title "Fuel The Rebel" is now STATIC — matches the
-            // original site, which has no reveal animation there. No JS needed.)
+            // Mobile finale title ("Fuel The Rebel") fade/slide-in — animated with
+            // GSAP + ScrollTrigger (the SAME proven-reliable pattern as the benefit
+            // items above), NOT a CSS class/transition (which failed to play in the
+            // pinned mobile scroll context). GSAP sets the from-state, so if it ever
+            // doesn't run the title just stays visible (never stuck invisible).
+            const mobileTitle = document.querySelector('.sequence-final-mobile .sequence-title');
+            if (mobileTitle) {
+                gsap.fromTo(mobileTitle,
+                    { opacity: 0, y: 40 },
+                    {
+                        opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+                        scrollTrigger: { trigger: mobileTitle, start: 'top 85%' },
+                    });
+            }
 
             cleanups.push(() => mm.revert());
         };
