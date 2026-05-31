@@ -276,9 +276,9 @@ html.is-ready.lenis-stopped {
    ======================================== */
 /* Contained lines (fit the screen), sharp miter, shifted up a bit via the
    .sequence-lines transform below. (display:none <=991px.) */
-.sequence-line-svg.is-first  { width: 88% !important; rotate: -40deg; }
-.sequence-line-svg.is-second { width: 88% !important; rotate: -70deg; }
-.sequence-line-svg.is-third  { width: 88% !important; rotate: -90deg; }
+.sequence-line-svg.is-first  { width: 130% !important; rotate: 0deg; }
+.sequence-line-svg.is-second { width: 130% !important; rotate: -30deg; }
+.sequence-line-svg.is-third  { width: 100% !important; rotate: 110deg; }
 
 /* Nudge the whole lightning group upward (moves all 3 lines together; nothing
    else sets a transform on .sequence-lines). */
