@@ -248,16 +248,16 @@ export const useAnimations = () => {
             mm.add('(max-width: 991px)', () => {
                 const title = document.querySelector<HTMLElement>('.sequence-final-mobile .sequence-title');
                 if (!title) return;
-                const obs = new IntersectionObserver(
-                    (entries) => {
-                        entries.forEach((e) => {
-                            if (e.isIntersecting) { e.target.classList.add('is-inview'); obs.unobserve(e.target); }
-                        });
-                    },
-                    { threshold: 0.3, rootMargin: '0px 0px -8% 0px' }
-                );
-                obs.observe(title);
-                return () => obs.disconnect();
+                // Use ScrollTrigger (wired into Lenis like the rest of the section)
+                // rather than IntersectionObserver — IO fires unreliably under
+                // Lenis's transform-based smooth scroll on real devices.
+                const st = ScrollTrigger.create({
+                    trigger: title,
+                    start: 'top 88%',
+                    once: true,
+                    onEnter: () => title.classList.add('is-inview'),
+                });
+                return () => st && st.kill();
             });
 
             cleanups.push(() => mm.revert());
@@ -278,6 +278,33 @@ export const useAnimations = () => {
                     }, { threshold: 0.15 });
                     mObs.observe(mTitle);
                     cleanups.push(() => mObs.disconnect());
+                }
+            }
+        } catch { /* non-fatal */ }
+
+        // Final safety net so the mobile title is NEVER stuck invisible: a plain
+        // scroll-position check that reveals it ONLY when actually in view (never
+        // premature). Covers the case where ScrollTrigger + IntersectionObserver
+        // both fail to fire (e.g. Lenis off / reduced motion → native scroll).
+        try {
+            if (typeof window !== 'undefined' && window.matchMedia('(max-width: 991px)').matches) {
+                const sTitle = document.querySelector('.sequence-final-mobile .sequence-title');
+                if (sTitle) {
+                    let raf = 0;
+                    const onScroll = () => {
+                        if (raf) return;
+                        raf = requestAnimationFrame(() => {
+                            raf = 0;
+                            if (sTitle.classList.contains('is-inview')) { window.removeEventListener('scroll', onScroll); return; }
+                            const r = sTitle.getBoundingClientRect();
+                            if (r.top < window.innerHeight * 0.9 && r.bottom > 0) {
+                                sTitle.classList.add('is-inview');
+                                window.removeEventListener('scroll', onScroll);
+                            }
+                        });
+                    };
+                    window.addEventListener('scroll', onScroll, { passive: true });
+                    cleanups.push(() => window.removeEventListener('scroll', onScroll));
                 }
             }
         } catch { /* non-fatal */ }
