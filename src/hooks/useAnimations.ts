@@ -242,72 +242,13 @@ export const useAnimations = () => {
                 });
             });
 
-            // Mobile sequence CARDS are NOT JS-animated (the pinned-canvas +
-            // scroll-over layout is the animation). But the mobile FINAL title
-            // ("Fuel The Rebel") has no app.js hook, so reveal it on scroll-in.
-            mm.add('(max-width: 991px)', () => {
-                const title = document.querySelector<HTMLElement>('.sequence-final-mobile .sequence-title');
-                if (!title) return;
-                // Use ScrollTrigger (wired into Lenis like the rest of the section)
-                // rather than IntersectionObserver — IO fires unreliably under
-                // Lenis's transform-based smooth scroll on real devices.
-                const st = ScrollTrigger.create({
-                    trigger: title,
-                    start: 'top 88%',
-                    once: true,
-                    onEnter: () => title.classList.add('is-inview'),
-                });
-                return () => st && st.kill();
-            });
+            // (Mobile finale title "Fuel The Rebel" is now STATIC — matches the
+            // original site, which has no reveal animation there. No JS needed.)
 
             cleanups.push(() => mm.revert());
         };
 
-        // Robust mobile reveal for the finale title ("Fuel The Rebel"), attached
-        // IMMEDIATELY on mount — independent of the async GSAP pipeline below,
-        // which on slow devices can attach its observer late and leave the title
-        // stuck at its base opacity:0. Idempotent with the gsap-pipeline observer.
-        try {
-            if (typeof window !== 'undefined' && window.matchMedia('(max-width: 991px)').matches) {
-                const mTitle = document.querySelector('.sequence-final-mobile .sequence-title');
-                if (mTitle && !mTitle.classList.contains('is-inview')) {
-                    const mObs = new IntersectionObserver((entries) => {
-                        entries.forEach((e) => {
-                            if (e.isIntersecting) { e.target.classList.add('is-inview'); mObs.unobserve(e.target); }
-                        });
-                    }, { threshold: 0.15 });
-                    mObs.observe(mTitle);
-                    cleanups.push(() => mObs.disconnect());
-                }
-            }
-        } catch { /* non-fatal */ }
-
-        // Final safety net so the mobile title is NEVER stuck invisible: a plain
-        // scroll-position check that reveals it ONLY when actually in view (never
-        // premature). Covers the case where ScrollTrigger + IntersectionObserver
-        // both fail to fire (e.g. Lenis off / reduced motion → native scroll).
-        try {
-            if (typeof window !== 'undefined' && window.matchMedia('(max-width: 991px)').matches) {
-                const sTitle = document.querySelector('.sequence-final-mobile .sequence-title');
-                if (sTitle) {
-                    let raf = 0;
-                    const onScroll = () => {
-                        if (raf) return;
-                        raf = requestAnimationFrame(() => {
-                            raf = 0;
-                            if (sTitle.classList.contains('is-inview')) { window.removeEventListener('scroll', onScroll); return; }
-                            const r = sTitle.getBoundingClientRect();
-                            if (r.top < window.innerHeight * 0.9 && r.bottom > 0) {
-                                sTitle.classList.add('is-inview');
-                                window.removeEventListener('scroll', onScroll);
-                            }
-                        });
-                    };
-                    window.addEventListener('scroll', onScroll, { passive: true });
-                    cleanups.push(() => window.removeEventListener('scroll', onScroll));
-                }
-            }
-        } catch { /* non-fatal */ }
+        // (No mobile finale-title reveal — it's static, matching the original.)
 
         // ────────────────────────────────────────────────
         // Init pipeline — promises, not arbitrary timers

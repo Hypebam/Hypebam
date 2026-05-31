@@ -339,20 +339,9 @@ html.is-ready.lenis-stopped {
     }
 }
 
-/* MOBILE: "Fuel The Rebel" title fades up as it scrolls into view
-   (mobile has no app.js title animation; .is-inview toggled in useAnimations). */
-@media (max-width: 991px) {
-    .sequence-final-mobile .sequence-title {
-        opacity: 0;
-        translate: 0 40px;
-        transition: opacity 0.6s cubic-bezier(.2,.7,.2,1), translate 0.6s cubic-bezier(.2,.7,.2,1);
-        will-change: opacity, translate;
-    }
-    .sequence-final-mobile .sequence-title.is-inview {
-        opacity: 1;
-        translate: 0 0;
-    }
-}
+/* MOBILE: the "Fuel The Rebel" finale title is STATIC (always visible) to match
+   the original more-nutrition site — it has no reveal/animation there. (Removed
+   the is-inview opacity/translate reveal that kept getting stuck invisible.) */
 
 /* Marquee text font-size is set as an SVG USER-UNIT attribute (fontSize={160}
    on the <text> in HeroSection), so it scales with the viewBox like the band —
