@@ -49,16 +49,6 @@ export const HeroSection: React.FC = () => {
                         </div>
                         <div className="stage-wrap">
                             <div className="stage-left">
-                                <div className="stage-deco">
-                                    <div data-load-stage-deco-text="" style={{ '--animation-delay': '.05s' } as React.CSSProperties} className="stage-deco-text-wrap">
-                                        <img src="/img/cdn/68d41a7021c95a7f4ce8cd14_4bb0c9727f3cc3cf72d4fe155fa50163_Real_Matcha__Origin_al_Taste.svg" loading="eager" fetchPriority="high" width="300" height="112" alt="Hype Bam Energy" className="stage-deco-text" />
-                                        <img src="/img/cdn/68d41a7021c95a7f4ce8cd14_4bb0c9727f3cc3cf72d4fe155fa50163_Real_Matcha__Origin_al_Taste.svg" loading="lazy" width="300" height="112" alt="Hype Bam Energy" className="stage-deco-text is-wiggle" />
-                                    </div>
-                                    <div data-load-stage-deco-arrow="" style={{ '--animation-delay': '.15s' } as React.CSSProperties} className="stage-deco-arrow-wrap">
-                                        <img src="/img/cdn/68a9a089d73e5cf84d4ded67_stage-sketch-arrow.svg" loading="eager" fetchPriority="high" width="150" height="150" alt="stage-sketch-arrow" className="stage-deco-arrow" />
-                                        <img src="/img/cdn/68a9a089d73e5cf84d4ded67_stage-sketch-arrow.svg" loading="lazy" width="150" height="150" alt="stage-sketch-arrow" className="stage-deco-arrow is-wiggle" />
-                                    </div>
-                                </div>
                                 <div data-load-stage-visual="" className="stage-visual">
                                     <canvas data-load-stage-canvas-img-path="/img/" data-load-stage-canvas="" className="stage-canvas"></canvas>
                                 </div>

@@ -118,26 +118,6 @@ export const SequenceSection: React.FC = () => {
                         <h2 data-sequence-title="" className="sequence-title">
                             Fuel The Rebel<br /><span data-sequence-title-split="" className="light-green-span">Let's Get Bam'ed</span><br />
                         </h2>
-                        <div style={{ '--animation-delay': '.05s' } as React.CSSProperties} data-sequence-final-signature="" className="sequence-final-signature">
-                            <img src="/img/cdn/68bb4a56d6965dfedaaf9bbb_sequence-vanilla-crumble.svg" loading="lazy" width="285" height="150" alt="sequence-vanilla-crumble" className="sequence-final-signature-img" />
-                            <img src="/img/cdn/68bb4a56d6965dfedaaf9bbb_sequence-vanilla-crumble.svg" loading="lazy" width="285" height="150" alt="sequence-vanilla-crumble" className="sequence-final-signature-img is-wiggle" />
-                        </div>
-                        <div data-sequence-final-signature="" className="sequence-final-signature is-first-arrow">
-                            <img src="/img/cdn/68bb4d0addb7dabb6793ee05_sequence-vanilla-crumble-arrow.svg" loading="lazy" width="300" height="92" alt="sequence-vanilla-crumble-arrow" className="sequence-final-signature-img" />
-                            <img src="/img/cdn/68bb4d0addb7dabb6793ee05_sequence-vanilla-crumble-arrow.svg" loading="lazy" width="300" height="92" alt="sequence-vanilla-crumble-arrow" className="sequence-final-signature-img is-wiggle" />
-                        </div>
-                        <div style={{ '--animation-delay': '.075s' } as React.CSSProperties} data-sequence-final-signature="" className="sequence-final-signature is-second">
-                            <img src="/img/cdn/68bb4ef605d3c803020c0a8c_sequence-strawberry-cheesecake.svg" loading="lazy" width="300" height="125" alt="sequence-strawberry-cheesecake" className="sequence-final-signature-img" />
-                            <img src="/img/cdn/68bb4ef605d3c803020c0a8c_sequence-strawberry-cheesecake.svg" loading="lazy" width="300" height="125" alt="sequence-strawberry-cheesecake" className="sequence-final-signature-img is-wiggle" />
-                        </div>
-                        <div style={{ '--animation-delay': '.025s' } as React.CSSProperties} data-sequence-final-signature="" className="sequence-final-signature is-second-arrow">
-                            <img src="/img/cdn/68bb51400be6f0687f9cb522_sequence-strawberry-cheesecake-arrow.svg" loading="lazy" width="153" height="150" alt="sequence-strawberry-cheesecake-arrow" className="sequence-final-signature-img" />
-                            <img src="/img/cdn/68bb51400be6f0687f9cb522_sequence-strawberry-cheesecake-arrow.svg" loading="lazy" width="153" height="150" alt="sequence-strawberry-cheesecake-arrow" className="sequence-final-signature-img is-wiggle" />
-                        </div>
-                        <img src="/img/cdn/68bb559a04860444181393aa_sequence-cookie.webp" loading="lazy" width="340" height="344" alt="sequence-cookie" data-sequence-cookie-first="" className="sequence-final-cookie" />
-                        <img src="/img/cdn/68bb559a04860444181393aa_sequence-cookie.webp" loading="lazy" width="340" height="344" alt="sequence-cookie" data-sequence-cookie-second="" className="sequence-final-cookie is-second" />
-                        <img src="/img/cdn/68bb559a1333de45c53ee927_sequence-strawberry.webp" loading="lazy" width="594" height="594" alt="sequence-strawberry" data-sequence-strawberry-first="" className="sequence-final-strawberry" />
-                        <img src="/img/cdn/68bb559a1333de45c53ee927_sequence-strawberry.webp" loading="lazy" width="594" height="594" alt="sequence-strawberry" data-sequence-strawberry-second="" className="sequence-final-strawberry is-second" />
                     </div>
 
                     <div className="sequence-lines">
@@ -198,22 +178,6 @@ export const SequenceSection: React.FC = () => {
                     <h2 className="sequence-title">
                         Fuel The Rebel<br /><span className="light-green-span">Let&apos;s Get Bam&apos;ed</span><br />
                     </h2>
-                    <div style={{ '--animation-delay': '.05s' } as React.CSSProperties} className="sequence-final-signature">
-                        <img src="/img/cdn/68bb4a56d6965dfedaaf9bbb_sequence-vanilla-crumble.svg" loading="lazy" width="285" height="150" alt="" className="sequence-final-signature-img" />
-                        <img src="/img/cdn/68bb4a56d6965dfedaaf9bbb_sequence-vanilla-crumble.svg" loading="lazy" width="285" height="150" alt="" className="sequence-final-signature-img is-wiggle" />
-                    </div>
-                    <div className="sequence-final-signature is-first-arrow">
-                        <img src="/img/cdn/68bb4d0addb7dabb6793ee05_sequence-vanilla-crumble-arrow.svg" loading="lazy" width="300" height="92" alt="" className="sequence-final-signature-img" />
-                        <img src="/img/cdn/68bb4d0addb7dabb6793ee05_sequence-vanilla-crumble-arrow.svg" loading="lazy" width="300" height="92" alt="" className="sequence-final-signature-img is-wiggle" />
-                    </div>
-                    <div style={{ '--animation-delay': '.075s' } as React.CSSProperties} className="sequence-final-signature is-second">
-                        <img src="/img/cdn/68bb4ef605d3c803020c0a8c_sequence-strawberry-cheesecake.svg" loading="lazy" width="300" height="125" alt="" className="sequence-final-signature-img" />
-                        <img src="/img/cdn/68bb4ef605d3c803020c0a8c_sequence-strawberry-cheesecake.svg" loading="lazy" width="300" height="125" alt="" className="sequence-final-signature-img is-wiggle" />
-                    </div>
-                    <div style={{ '--animation-delay': '.025s' } as React.CSSProperties} className="sequence-final-signature is-second-arrow">
-                        <img src="/img/cdn/68bb51400be6f0687f9cb522_sequence-strawberry-cheesecake-arrow.svg" loading="lazy" width="153" height="150" alt="" className="sequence-final-signature-img" />
-                        <img src="/img/cdn/68bb51400be6f0687f9cb522_sequence-strawberry-cheesecake-arrow.svg" loading="lazy" width="153" height="150" alt="" className="sequence-final-signature-img is-wiggle" />
-                    </div>
                     </div>
             </div>
         </div>

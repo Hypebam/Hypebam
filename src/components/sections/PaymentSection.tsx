@@ -46,11 +46,6 @@ export const PaymentSection: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <div className="footer-bridge">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1440 362" data-fill-line="" className="footer-line">
-                    <path stroke="currentColor" strokeWidth="25" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" fill="none" d="M1482.77 307.14 L1414.56 284.4 L1299.36 219.22 L1235.69 181 L1067.44 152.53 L987.11 152.53 L820.37 219.22 L702.14 284.4 L803.69 61.58 L97.34 191.94 L159.48 140.4 L-57.27 -6.63"></path>
-                </svg>
-            </div>
         </div>
     );
 };
