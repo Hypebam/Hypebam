@@ -877,6 +877,25 @@ h1.hero-heading {
     color: #FFF8EF !important;
 }
 
+/* ── Footer layout fix ───────────────────────────────────────────────
+   webflow.css forces .footer-content { min-height: 55em } (≈880px) — far
+   taller than our sparse right column — and .footer-content-wrapper
+   { height:100% } stretches and packs its content at the top, leaving a
+   large empty band below. webflow.css also pulls the whole footer up with
+   margin-top:-10em (-12.5em on mobile), so the top info cards overlap the
+   payment section above. Size the footer to its content, center the right
+   column against the square flame panel, and drop the negative pull. */
+.warm-zone .footer {
+    margin-top: 0 !important;
+}
+.warm-zone .footer .footer-content {
+    min-height: auto !important;
+    justify-content: center !important;
+}
+.warm-zone .footer .footer-content-wrapper {
+    height: auto !important;
+}
+
 .testimonial-inner-wrap.is-first {
     top: 3em !important;
     rotate: -8deg !important;
