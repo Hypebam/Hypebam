@@ -896,6 +896,34 @@ h1.hero-heading {
     height: auto !important;
 }
 
+/* Footer info cards (.footer-fact-wrapper): the two icons differ in width
+   and one has a margin nudge, so the cards read as misaligned. Normalize
+   both icons to the same size, centered, with the text centered below. */
+.warm-zone .footer .footer-info {
+    justify-content: center !important;
+    gap: 0.6em !important;
+}
+.warm-zone .footer .footer-info-img,
+.warm-zone .footer .footer-info-img.is-first,
+.warm-zone .footer .footer-info-img.is-second {
+    width: 3.75em !important;
+    height: 3.75em !important;
+    object-fit: contain !important;
+    margin: 0 !important;
+}
+.warm-zone .footer .footer-info-text {
+    text-align: center !important;
+}
+
+/* The big "Sri Lankanized Hydration" title is oversized at desktop
+   (webflow.css 11.25em). Shrink it; overlap with the slider is by design.
+   Desktop-only so the existing ≤767/≤479 mobile sizes still win. */
+@media (min-width: 768px) {
+    .testimonial-big-heading {
+        font-size: 6.5em !important;
+    }
+}
+
 .testimonial-inner-wrap.is-first {
     top: 3em !important;
     rotate: -8deg !important;

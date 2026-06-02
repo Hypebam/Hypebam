@@ -83,7 +83,7 @@ export const InsiderSection: React.FC = () => {
     }, []);
 
     return (
-        <div data-inertia="" className="insider-section">
+        <div className="insider-section">
             <div className="insider-container">
                 <div className="grid-layout">
                     <h2 id="w-node-_3e09cbcc-bb63-d8d5-fc92-5249d862c0ff-0ac01850" className="insider-heading">

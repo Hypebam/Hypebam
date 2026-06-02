@@ -34,11 +34,11 @@ export const Footer: React.FC = () => {
                 <div id="w-node-_52f3956c-463e-cf84-00da-ec073fe306cc-0ac01850" className="footer-content">
                     <div id="w-node-_103e8af5-3d0c-0c66-5f7b-cd9c707fa04f-0ac01850" className="footer-fact-wrapper">
                         <a href="#" className="footer-info is-first w-inline-block">
-                            <img src="/img/cdn/689754d9448e952a9e6c0aeb_Alle-Produkte_f1ba7a0d-4d19-4202-af26-db495d4d8559_100x100_1.svg" loading="lazy" width="57" height="70" alt="Hype Bam Icon" className="footer-info-img is-first" />
+                            <img src="/img/footer/stack.svg" loading="lazy" width="70" height="70" alt="Hype Bam can stack" className="footer-info-img is-first" />
                             <div className="footer-info-text">shop all<br />Products</div>
                         </a>
                         <a href="#" className="footer-info is-second w-inline-block">
-                            <img src="/img/cdn/689754d9d94ba5b480581df7_Group_84.svg" loading="lazy" width="58" height="49" alt="Hype Bam Icon" className="footer-info-img is-second" />
+                            <img src="/img/footer/can.svg" loading="lazy" width="70" height="70" alt="Hype Bam can" className="footer-info-img is-second" />
                             <div className="footer-info-text">samples <br />&amp; Singles</div>
                         </a>
                     </div>

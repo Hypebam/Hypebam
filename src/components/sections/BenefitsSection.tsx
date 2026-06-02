@@ -22,9 +22,6 @@ export const BenefitsSection: React.FC = () => {
                 <div className="grid-layout">
                     <div id="w-node-_6f3e86b5-5cf7-4a62-19af-d6d71a8517d6-0ac01850" className="img-wrapper">
                         <img src="/img/3/2.webp" loading="lazy" alt="Hype Bam flavour cans" className="top-img" />
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 682" fill="none" data-fill-line="" style={{ overflow: 'visible' }} className="benefit-svg">
-                            <path d="M-29.89,111.88c63.81,6.67,219.34,22.98,283.14,29.68,44.37,4.66,86.9,9.13,88.75,9.33l-76.07,10.18,950.85,420.59,101.42,49.18-44.37-59.36,469.09,35.61-466.97-356.15,152.14-59.36-80.29-6.78,274.69-94.97-114.1,18.66c85.22-32.79,170.45-65.58,255.67-98.36" stroke="currentColor" strokeWidth="18" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" fill="none"></path>
-                        </svg>
                         <img src="/img/3/3.webp" loading="lazy" alt="Hype Bam flames" className="img" />
                     </div>
                     <div
@@ -38,7 +35,7 @@ export const BenefitsSection: React.FC = () => {
                                 <div id="w-node-da33aad3-e9be-fd6f-a8b0-79237ed37994-0ac01850" className="benefit-table-title">Benefits</div>
                                 <img src="/img/hypebam-logo-final-vector-02.svg" loading="lazy" id="w-node-d5a0031d-8b6e-5d4a-5e75-e26d1c40acd5-0ac01850" alt="Hype Bam Logo" className="benefit-table-title-img is-desktop" />
                                 <div className="benefit-table-title is-mobile-only">Hype Bam</div>
-                                <div id="w-node-_78d70ec8-c380-1f74-9296-fa312e5af0f4-0ac01850" className="benefit-table-title">Typical Energy Drinks</div>
+                                <div id="w-node-_78d70ec8-c380-1f74-9296-fa312e5af0f4-0ac01850" className="benefit-table-title"><span style={{ color: '#e30118' }}>Typical</span> <span style={{ color: '#3671c6' }}>Energy</span> <span style={{ color: '#c0bfbf' }}>Drinks</span></div>
                             </div>
                             <div data-benefit-table-line="" id="w-node-dabaf014-7b8f-d5cf-7507-3b9733e65ad8-0ac01850" className="sub-line"></div>
                             <div id="w-node-_89929daf-28b9-a774-1cdd-9d54c6ee4049-0ac01850" className="benefit-item-wrapper">
