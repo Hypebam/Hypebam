@@ -411,8 +411,8 @@ body.body {
    width > 100% so the oval wraps around the text with margin. Orange (the
    inherited brand filter) to match the highlighted text color. */
 .sequence-section .sequence-text-target-icon.is-caffeine {
-    width: 118%;
-    height: 1.9em;
+    width: 132%;
+    height: 2.4em;
     left: 50%;
     top: 46%;
     transform: translate(-50%, -50%) rotate(-4deg);
