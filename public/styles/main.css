@@ -397,36 +397,24 @@ body.body {
     filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
 }
 
-/* Draw circles from text bounds to avoid drift across breakpoints */
-.sequence-section .sequence-text-target.is-caffeine::before,
-.sequence-section .sequence-text-target.is-flavours::before {
-    content: "";
-    position: absolute;
-    border: 0.085em solid currentColor;
-    border-radius: 999px;
-    pointer-events: none;
-    z-index: 2;
-}
+/* Hand-drawn marker scribbles wrap the highlighted text (brand style), to
+   match the is-sugar arrow instead of clean geometric circles. The SVGs
+   (Layer_1_7 oval, Vector_7 circle) are white-fill + orange-tinted by the base
+   rule above; setting left/right/top/bottom with auto width stretches each one
+   to wrap its text box. */
 
-.sequence-section .sequence-text-target.is-caffeine::after,
-.sequence-section .sequence-text-target.is-flavours::after,
-.sequence-section .sequence-text-target.is-sugar::before,
-.sequence-section .sequence-text-target.is-sugar::after {
-    content: none;
-}
-
-.sequence-section .sequence-text-target-icon.is-caffeine,
-.sequence-section .sequence-text-target-icon.is-flavours {
-    display: none;
-}
-
-/* Circle around "80mg of caffeine" */
-.sequence-section .sequence-text-target.is-caffeine::before {
-    left: -0.08em;
-    right: -0.08em;
-    top: -0.27em;
-    bottom: -0.04em;
-    transform: rotate(-5deg);
+/* Oval scribble around "80mg of caffeine". Explicit width/height (not offset
+   stretching — <img> is a replaced element and won't fill an offset box) +
+   centre transform so it wraps the phrase predictably across breakpoints. */
+.sequence-section .sequence-text-target-icon.is-caffeine {
+    width: 110%;
+    height: 1.9em;
+    left: 50%;
+    top: 46%;
+    transform: translate(-50%, -50%) rotate(-4deg);
+    /* White (native SVG fill) like the card text — the brand-orange tint is
+       invisible on the orange card. Matches the old currentColor circle. */
+    filter: none !important;
 }
 
 /* Arrow pointing to "5g" */
@@ -437,52 +425,30 @@ body.body {
     transform: rotate(-11deg);
 }
 
-/* Circle around the leading "5" in "5 Flavours" */
-.sequence-section .sequence-text-target.is-flavours::before {
-    left: -0.15em;
-    right: -0.12em;
-    top: -0.2em;
-    bottom: -0.08em;
-    transform: rotate(-8deg);
+/* Circle scribble around the leading "5" in "5 Flavours" */
+.sequence-section .sequence-text-target-icon.is-flavours {
+    width: 2.3em;
+    height: 2em;
+    left: 50%;
+    top: 44%;
+    transform: translate(-50%, -50%) rotate(-8deg);
+    /* White like the card text (orange tint is invisible on the orange card). */
+    filter: none !important;
 }
 
 @media screen and (max-width: 991px) {
-    .sequence-section .sequence-text-target.is-caffeine::before {
-        top: -0.25em;
-        bottom: -0.04em;
-    }
-
     .sequence-section .sequence-text-target.is-sugar .sequence-text-target-icon.is-sugar {
         width: 0.96em;
         left: 0.4em;
         top: -0.56em;
     }
-
-    .sequence-section .sequence-text-target.is-flavours::before {
-        top: -0.18em;
-        bottom: -0.07em;
-    }
 }
 
 @media screen and (max-width: 479px) {
-    .sequence-section .sequence-text-target.is-caffeine::before {
-        left: -0.06em;
-        right: -0.06em;
-        top: -0.24em;
-        bottom: -0.02em;
-    }
-
     .sequence-section .sequence-text-target.is-sugar .sequence-text-target-icon.is-sugar {
         width: 0.9em;
         left: 0.37em;
         top: -0.52em;
-    }
-
-    .sequence-section .sequence-text-target.is-flavours::before {
-        left: -0.12em;
-        right: -0.1em;
-        top: -0.16em;
-        bottom: -0.05em;
     }
 }
 
