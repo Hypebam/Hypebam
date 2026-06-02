@@ -77,7 +77,6 @@ export default function RootLayout({
 
         {/* ── Preload: Sequence section — first frame so canvas isn't blank ── */}
         <link rel="preload" href="/img/seq_0_0.webp" as="image" type="image/webp" />
-        <link rel="preload" href="/img/seq_1_0.webp" as="image" type="image/webp" />
 
         {/* ── Adaptive preload: extra hero frames 2-5 only on fast connections ── */}
         <Script id="adaptive-frame-preload" strategy="beforeInteractive">

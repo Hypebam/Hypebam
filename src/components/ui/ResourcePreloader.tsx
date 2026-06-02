@@ -24,10 +24,9 @@ const FLAVOUR_IMAGES = [
 ];
 
 // ── Sequence section canvas frames ─────────────────────────────────────────
-//    seq_0 = 200 frames (HypeBam can spin), seq_1 = 23 frames (second animation)
-//    We prefetch them in batches so the browser pipeline stays clean.
+//    seq_0 = 200 frames (HypeBam can spin). app.js's sequence canvas only ever
+//    loads seq_0_*; we prefetch them in batches so the browser pipeline stays clean.
 const SEQ_0_TOTAL = 200; // seq_0_0 … seq_0_199
-const SEQ_1_TOTAL = 23;  // seq_1_0 … seq_1_22
 const SEQ_BATCH   = 30;  // frames per IntersectionObserver trigger
 
 function buildSeqPaths(prefix: string, count: number): string[] {
@@ -79,9 +78,7 @@ export function ResourcePreloader() {
     const seqSection = document.querySelector("[data-sequence]") as HTMLElement | null;
     if (seqSection) {
       const seq0 = buildSeqPaths("seq_0", SEQ_0_TOTAL);
-      const seq1 = buildSeqPaths("seq_1", SEQ_1_TOTAL);
       let batchIndex = 0;
-      let seq1Done   = false;
 
       const prefetchNextBatch = () => {
         const start = batchIndex * SEQ_BATCH;
@@ -96,10 +93,6 @@ export function ResourcePreloader() {
         ([entry]) => {
           if (entry.isIntersecting) {
             prefetchNextBatch();
-            if (!seq1Done) {
-              prefetchImages(seq1);
-              seq1Done = true;
-            }
           }
         },
         { rootMargin: "800px", threshold: 0 }

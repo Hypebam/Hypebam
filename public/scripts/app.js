@@ -15130,6 +15130,7 @@
     }
 
     function _o() {
+        if (!document.querySelector("[data-flavour-slider]")) return;
         let t = window.matchMedia("(max-width: 991px)").matches,
             e = document.querySelector("[data-flavour-content]"),
             i = document.querySelector("[data-flavour-content-svg] path");

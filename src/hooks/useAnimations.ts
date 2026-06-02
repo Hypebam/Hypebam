@@ -307,6 +307,12 @@ export const useAnimations = () => {
                 } catch (err) {
                     console.error('[gsap] registerPlugin failed', err);
                 }
+                // Suppress "GSAP target null not found" console spam: app.js
+                // mo()/yo() animate several decorative elements we intentionally
+                // removed (sequence signatures, cookie/strawberry, stage-deco).
+                // Their gsap.set/to calls hit null/empty targets — harmless
+                // no-ops. Set before app.js loads so none of them warn.
+                try { w.gsap.config({ nullTargetWarn: false }); } catch { /* noop */ }
             }
 
             // 3. Crash-proof the hero intro: app.js yo() calls
