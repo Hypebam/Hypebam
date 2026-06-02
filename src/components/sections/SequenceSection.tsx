@@ -133,10 +133,6 @@ export const SequenceSection: React.FC = () => {
                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 750" fill="none" data-sequence-svg="" style={{ overflow: 'visible' }} className="sequence-line-svg is-third">
                             <path d="M2650.41 661.58l-434.27-85.16 43.2 42.58-584.34-210.83 138.69-31.83h-250.11l-532.04 213.73-497.94 50.77 154.61-187.19-216 109.14L924.69 85.3l-497.94 50.02 163.71 75.03c-385.77 13.64-771.54 27.28-1157.31 40.93l109.14-45.47-241.01-95.49 90.95 11.37-129.6-210.11" stroke="currentColor" strokeWidth="36" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" fill="none"></path>
                         </svg>
-                        <div data-sequence-signature="" className="sequence-inner-signature">
-                            <img src="/img/cdn/68b9fcc383366c0bb0fe9ca6_sequence-more-for-coffee-lovers.svg" loading="lazy" width="300" height="132" alt="sequence-more-for-coffee-lovers" className="sequence-inner-signature-img" />
-                            <img src="/img/cdn/68b9fcc383366c0bb0fe9ca6_sequence-more-for-coffee-lovers.svg" loading="lazy" width="300" height="132" alt="sequence-more-for-coffee-lovers" className="sequence-inner-signature-img is-wiggle" />
-                        </div>
                     </div>
                 </div>
 
