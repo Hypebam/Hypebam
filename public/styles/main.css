@@ -392,6 +392,9 @@ body.body {
     display: block;
     width: auto;
     height: auto;
+    /* Override the webflow img{max-width:100%} reset — otherwise the icon is
+       clamped to its (often tiny) containing span and can't wrap the text. */
+    max-width: none !important;
     pointer-events: none;
     z-index: 2;
     filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
@@ -403,18 +406,16 @@ body.body {
    rule above; setting left/right/top/bottom with auto width stretches each one
    to wrap its text box. */
 
-/* Oval scribble around "80mg of caffeine". Explicit width/height (not offset
-   stretching — <img> is a replaced element and won't fill an offset box) +
-   centre transform so it wraps the phrase predictably across breakpoints. */
+/* Oval scribble wrapping the WHOLE "80mg of caffeine" phrase. Explicit
+   width/height (an <img> won't stretch to an offset box) + centre transform;
+   width > 100% so the oval wraps around the text with margin. Orange (the
+   inherited brand filter) to match the highlighted text color. */
 .sequence-section .sequence-text-target-icon.is-caffeine {
-    width: 110%;
+    width: 118%;
     height: 1.9em;
     left: 50%;
     top: 46%;
     transform: translate(-50%, -50%) rotate(-4deg);
-    /* White (native SVG fill) like the card text — the brand-orange tint is
-       invisible on the orange card. Matches the old currentColor circle. */
-    filter: none !important;
 }
 
 /* Arrow pointing to "5g" */
@@ -425,15 +426,15 @@ body.body {
     transform: rotate(-11deg);
 }
 
-/* Circle scribble around the leading "5" in "5 Flavours" */
+/* Circle scribble ringing the leading "5" in "5 Flavours". Orange (inherited
+   brand filter) like the text; sized to ring the digit now that max-width is
+   off. */
 .sequence-section .sequence-text-target-icon.is-flavours {
-    width: 2.3em;
-    height: 2em;
+    width: 1.7em;
+    height: 1.7em;
     left: 50%;
-    top: 44%;
+    top: 46%;
     transform: translate(-50%, -50%) rotate(-8deg);
-    /* White like the card text (orange tint is invisible on the orange card). */
-    filter: none !important;
 }
 
 @media screen and (max-width: 991px) {
