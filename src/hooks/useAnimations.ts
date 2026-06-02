@@ -242,31 +242,12 @@ export const useAnimations = () => {
                 });
             });
 
-            // Mobile finale title ("Fuel The Rebel") fade/slide-in — driven by an
-            // IntersectionObserver, NOT ScrollTrigger. ScrollTrigger caches the
-            // trigger's start px at creation, and on real phones the layout shifts
-            // afterwards (web-font swap, address-bar lvh/dvh changes, 200 canvas
-            // frames loading), so it can fire off-screen (no visible animation) or
-            // leave the title stuck at opacity:0. IO fires exactly when the title is
-            // genuinely visible, independent of scroll mechanism/positions/Lenis.
-            const mobileTitle = document.querySelector('.sequence-final-mobile .sequence-title');
-            if (mobileTitle && 'IntersectionObserver' in window) {
-                gsap.set(mobileTitle, { opacity: 0, y: 40 });
-                let revealed = false;
-                const reveal = () => {
-                    if (revealed) return;
-                    revealed = true;
-                    gsap.to(mobileTitle, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' });
-                };
-                const io = new IntersectionObserver(
-                    (entries) => { if (entries.some((e) => e.isIntersecting)) { reveal(); io.disconnect(); } },
-                    { threshold: 0.35 }
-                );
-                io.observe(mobileTitle);
-                // Fail-safe: never leave it hidden if the observer somehow never fires.
-                const revealTimer = setTimeout(() => { if (!revealed) reveal(); }, 8000);
-                cleanups.push(() => { io.disconnect(); clearTimeout(revealTimer); });
-            }
+            // NOTE: the mobile finale title ("Fuel The Rebel") reveal is now pure
+            // CSS (animation-timeline: view() in globals.css). Every JS approach
+            // (ScrollTrigger, IntersectionObserver) verified fine here but stayed
+            // stuck for the user in `next dev` + Chrome DevTools, so we removed the
+            // JS entirely — the CSS scroll animation has no init/observer timing to
+            // fail and falls back to fully-visible where unsupported.
 
             cleanups.push(() => mm.revert());
         };

@@ -1666,3 +1666,30 @@ h1, h2, h3, h4, h5, h6,
     .hbf-arr { width: 40px; height: 40px; }
     .hbf::before, .hbf::after { display: none; } /* decorative rings off on tiny screens */
 }
+
+/* ── Mobile finale title ("Fuel The Rebel") scroll reveal ───────────────────
+   Pure CSS via a view-timeline so the fade/slide is tied directly to the
+   title's scroll-into-view progress — no JS, no ScrollTrigger, no observer,
+   nothing to mis-time or get stuck. Every JS approach verified fine in this
+   harness but stayed stuck for the user in `next dev` + Chrome DevTools.
+   Falls back to fully visible where view-timeline is unsupported. */
+@keyframes seq-title-reveal {
+    from { opacity: 0; transform: translateY(2rem); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 991px) {
+    /* Default / fallback: always visible (can never be stuck invisible). */
+    .sequence-final-mobile .sequence-title { opacity: 1; }
+
+    @supports (animation-timeline: view()) {
+        .sequence-final-mobile .sequence-title {
+            opacity: 0;
+            animation: seq-title-reveal linear both;
+            animation-timeline: view();
+            /* Scrub over a long span (from first appearing at the bottom to ~40%
+               up the screen) so the fade/slide is clearly visible, not finished
+               instantly within the element's own short entry phase. */
+            animation-range: cover 0% cover 40%;
+        }
+    }
+}
