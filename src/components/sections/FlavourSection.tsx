@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { Button } from '@/components/ui';
 
 const flavours = [
     { name: 'Original', label: 'Classic Energy', image: '/img/flavours/original.webp', color: '#E65100' },
@@ -182,10 +183,7 @@ export const FlavourSection: React.FC = () => {
             <div ref={infoRef} className="hbf-info">
                 <p className="hbf-lbl" style={{ color: cur.color }}>{cur.label}</p>
                 <h3 className={`hbf-name ${sliding ? 'slide-out' : ''}`}>{cur.name}</h3>
-                <a href="#" className="hbf-cta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-                    Buy now
-                </a>
+                <Button href="#">Buy now</Button>
                 <div className="hbf-dots">
                     {flavours.map((_, i) => (
                         <button key={i} className={`hbf-dot ${i === active ? 'on' : ''}`}

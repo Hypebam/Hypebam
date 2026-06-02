@@ -2447,9 +2447,10 @@ body {
     width: 100% !important;
 }
 
-/* Desktop only: scale up video cards */
+/* Desktop only: scale up video cards (on the WRAPPER, not the GSAP-animated
+   .testimonial-inner — a scale on the inner compounds on hover). */
 @media (min-width: 992px) {
-    .testimonial-inner {
+    .testimonial-inner-wrap {
         scale: 1.3;
     }
 }

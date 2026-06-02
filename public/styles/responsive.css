@@ -74,7 +74,10 @@ h1.hero-heading {
     .stage-cta .button {
         scale: 1.25 !important;
     }
-    .testimonial-inner {
+    /* Base desktop scale-up lives on the WRAPPER, not .testimonial-inner —
+       the latter is the GSAP inertia target, and a CSS scale on it gets folded
+       into GSAP's transform matrix and compounds on hover (card "grows"). */
+    .testimonial-inner-wrap {
         scale: 1.3 !important;
     }
 }
