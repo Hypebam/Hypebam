@@ -412,7 +412,7 @@ body.body {
    inherited brand filter) to match the highlighted text color. */
 .sequence-section .sequence-text-target-icon.is-caffeine {
     width: 132%;
-    height: 2.4em;
+    height: 2.85em;
     left: 50%;
     top: 46%;
     transform: translate(-50%, -50%) rotate(-4deg);
