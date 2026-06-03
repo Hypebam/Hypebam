@@ -1693,3 +1693,35 @@ h1, h2, h3, h4, h5, h6,
         }
     }
 }
+
+/* ── Unified buttons — every .button across the site looks the same ──────────
+   Button-text styling used to be per-context (data-typography-target …), so the
+   Flavour <Button> had no rule and fell back to webflow defaults (condensed
+   font, mixed-case) and stretched full-width in its plain block container.
+   This base catches EVERY button (incl. any future one); the per-context rules
+   still win for per-button font-size. */
+.button .button-text {
+    font-family: var(--font-secondary), sans-serif !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    line-height: 1 !important;
+}
+.button .button-bg {
+    /* Balanced vertical padding so the all-caps text is optically centred,
+       not pushed up by webflow's default 5px-top / 9px-bottom. */
+    padding: 0.62em 0.95em 0.5em !important;
+}
+/* Flavour "Buy now": was full-width + wrong font — make it a normal centred
+   pill matching the hero/insider buttons. */
+.hbf-info .button {
+    width: fit-content !important;
+    margin-inline: auto !important;
+}
+.hbf-info .button .button-text { font-size: 1.65em !important; }
+.hbf-info .button .button-bg { padding: 0.62em 0.86em 0.5em !important; }
+/* Dark-brown pill like the hero "Buy now" — the default orange blends into the
+   orange warm-zone behind the flavour section. */
+.hbf-info .button .button-bg,
+.hbf-info .button .button-cycle-bg {
+    background-color: #3D1800 !important;
+}
