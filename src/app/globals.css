@@ -271,8 +271,8 @@ html.is-ready.lenis-stopped {
    ======================================== */
 /* Contained lines (fit the screen), sharp miter, shifted up a bit via the
    .sequence-lines transform below. (display:none <=991px.) */
-.sequence-line-svg.is-first  { width: 130% !important; rotate: 0deg; }
-.sequence-line-svg.is-second { width: 130% !important; rotate: -30deg; }
+.sequence-line-svg.is-first  { width: 130% !important; rotate: 90deg; }
+.sequence-line-svg.is-second { width: 130% !important; rotate: 0deg; }
 .sequence-line-svg.is-third  { width: 100% !important; rotate: 110deg; }
 
 /* Nudge the whole lightning group upward (moves all 3 lines together; nothing
@@ -297,11 +297,29 @@ html.is-ready.lenis-stopped {
    mid-center, is-third lower-left, below the can). No mobile size override — the
    inner text already scales down, matching the original. */
 
-/* Make the lightning crisp & glowing — orange on the dark sequence bg.
-   Use higher specificity than .sequence-lines { color:white !important } in main.css */
-.sequence-lines .sequence-line-svg path {
-    color: #FFB05A !important;
-    filter: drop-shadow(0 0 8px rgba(255, 176, 90, 0.4));
+/* Hidden rig SVGs — present only so app.js's sequence init finds
+   [data-sequence-svg] path (else the canvas/can breaks). Never seen. */
+.sequence-lines .sequence-line-rig {
+    position: absolute !important;
+    width: 100% !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Lightning bolts are now <img> of your filled SVG art. Recolor the near-black
+   source to bright brand orange + an electric glow. --bolt-bright (animated by
+   initSequenceLightning) multiplies brightness + glow size on each strike so the
+   flashes read like real lightning. The recolor is a standard monochrome→colour
+   filter chain (brightness(0) flattens to black, then the hue chain tints it). */
+.sequence-lines .sequence-line-svg {
+    --bolt-bright: 1;
+    filter:
+        brightness(0) saturate(100%)
+        invert(78%) sepia(46%) saturate(1200%) hue-rotate(329deg) contrast(101%)
+        brightness(calc(1.02 * var(--bolt-bright)))
+        drop-shadow(0 0 calc(9px * var(--bolt-bright)) rgba(255, 160, 50, 0.6))
+        drop-shadow(0 0 calc(22px * var(--bolt-bright)) rgba(255, 90, 0, 0.35)) !important;
+    will-change: opacity, filter;
 }
 
 /* ========================================
@@ -725,7 +743,10 @@ h1.hero-heading {
 }
 
 .insider-section {
-    margin-top: 6em !important;
+    /* Top spacing removed per request — section starts flush under the marquee.
+       padding-top:0 also kills the ≤991px webflow padding-top:7.5em. */
+    margin-top: 0 !important;
+    padding-top: 0 !important;
     position: relative;
     z-index: 2;
 }

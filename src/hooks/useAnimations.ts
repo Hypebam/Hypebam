@@ -62,14 +62,26 @@ export const useAnimations = () => {
             mouseY = e.clientY;
         };
 
+        const GLOW = (x: number, y: number) =>
+            `radial-gradient(600px circle at ${x}px ${y}px, rgba(230,81,0,0.06) 0%, rgba(230,81,0,0.02) 40%, transparent 70%)`;
+
         const animate = () => {
             currentX += (mouseX - currentX) * 0.08;
             currentY += (mouseY - currentY) * 0.08;
-            const xPct = (currentX / window.innerWidth) * 100;
-            const yPct = (currentY / window.innerHeight) * 100;
             const overlay = document.getElementById('mouse-glow-overlay');
             if (overlay) {
-                overlay.style.background = `radial-gradient(600px circle at ${xPct}% ${yPct}%, rgba(230,81,0,0.06) 0%, rgba(230,81,0,0.02) 40%, transparent 70%)`;
+                overlay.style.background = GLOW(currentX, currentY);
+            }
+            // Scoped marquee glow: the fixed overlay above is occluded by the
+            // marquee's opaque cream triangle (inside the marquee's own stacking
+            // context), so the marquee never received the page-wide hover tint.
+            // Paint the SAME glow into a marquee-local layer, positioned relative
+            // to the marquee so the cursor lines up. (Only this layer is tinted —
+            // the videos below are untouched.)
+            const mq = document.getElementById('marquee-glow');
+            if (mq && mq.parentElement) {
+                const r = mq.parentElement.getBoundingClientRect();
+                mq.style.background = GLOW(currentX - r.left, currentY - r.top);
             }
             animationId = requestAnimationFrame(animate);
         };
@@ -79,6 +91,21 @@ export const useAnimations = () => {
             overlay.id = 'mouse-glow-overlay';
             overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;background:transparent';
             document.body.appendChild(overlay);
+        }
+
+        // Inject the marquee-scoped glow layer. It sits above the cream overlay
+        // (z-index:-1) but below the marquee text (z-index:2), and is clipped to
+        // the SAME diagonal polygon as .marquee-overlay so only the cream area
+        // tints — exactly matching the hover feel of the insider section below.
+        const marqueeInner = document.querySelector('.marquee-inner');
+        if (marqueeInner && !document.getElementById('marquee-glow')) {
+            const mqGlow = document.createElement('div');
+            mqGlow.id = 'marquee-glow';
+            mqGlow.style.cssText =
+                'position:absolute;inset:0;pointer-events:none;z-index:0;' +
+                'clip-path:polygon(66% 10%,100% 53%,100% 100%,0 100%,0 79%);' +
+                'background:transparent';
+            marqueeInner.appendChild(mqGlow);
         }
 
         if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
@@ -252,6 +279,73 @@ export const useAnimations = () => {
             cleanups.push(() => mm.revert());
         };
 
+        // ────────────────────────────────────────────────
+        // 6b. SEQUENCE LIGHTNING — scroll draw-in (one at a time) + strike flash
+        //     The bolts are <img> of the user's filled lightning art. This brings
+        //     back the ORIGINAL behaviour: as you scroll the pinned section each
+        //     bolt DRAWS ITSELF IN (a clip-path wipe, scrubbed by scroll), ONE AT
+        //     A TIME — the previous bolt fades before the next draws. When a bolt
+        //     finishes drawing it STRIKES: a violent multi-flash brightness/glow
+        //     punch (--bolt-bright) — the electric lightning effect on top.
+        //     clip-path drives the reveal; --bolt-bright drives the flash; they
+        //     animate different properties so they never fight each other.
+        // ────────────────────────────────────────────────
+        const initSequenceLightning = () => {
+            const gsap = window.gsap;
+            const ScrollTrigger = window.ScrollTrigger;
+            if (!gsap || !ScrollTrigger) return;
+
+            const section = document.querySelector('.sequence-section');
+            if (!section) return;
+            // The tall pinned runway is the scrub trigger (fallback: the section).
+            const runway = section.querySelector('.sequence-scroll-wrap') || section;
+            const bolts = Array.from(section.querySelectorAll<HTMLElement>('[data-lightning]'));
+            if (!bolts.length) return;
+
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // Hidden to start: clipped fully away + transparent.
+            gsap.set(bolts, { clipPath: 'inset(0 100% 0 0)', opacity: 0, '--bolt-bright': 1 });
+
+            // The strike flash — fires once when a bolt finishes drawing in.
+            const strike = (el: HTMLElement) =>
+                gsap.timeline()
+                    .fromTo(el, { '--bolt-bright': 3.0 }, { '--bolt-bright': 1.2, duration: 0.05, ease: 'none' })
+                    .to(el, { '--bolt-bright': 2.6, duration: 0.03, ease: 'none' })
+                    .to(el, { '--bolt-bright': 1.4, duration: 0.05, ease: 'none' })
+                    .to(el, { '--bolt-bright': 2.1, duration: 0.025, ease: 'none' })
+                    .to(el, { '--bolt-bright': 1,   duration: 0.35, ease: 'power2.out' });
+
+            const struck = bolts.map(() => false);
+            const n = bolts.length;
+            const seg = 1 / n;              // each bolt owns one slice of the scroll
+
+            const st = ScrollTrigger.create({
+                trigger: runway,
+                start: 'top top',
+                end: 'bottom bottom',
+                scrub: true,
+                onUpdate: (self: any) => {
+                    const p = self.progress;
+                    bolts.forEach((b, i) => {
+                        const local = (p - i * seg) / seg;   // 0..1 within this bolt's slice
+                        let reveal: number, op: number;
+                        if (local <= 0)        { reveal = 100; op = 0; struck[i] = false; }
+                        else if (local >= 1)   { reveal = 0;   op = 0; }       // gone — one at a time
+                        else if (local < 0.55) { reveal = 100 * (1 - local / 0.55); op = 1; } // DRAW IN
+                        else if (local < 0.80) {                                 // fully drawn → STRIKE
+                            reveal = 0; op = 1;
+                            if (!reduce && !struck[i]) { struck[i] = true; strike(b); }
+                        }
+                        else                   { reveal = 0; op = 1 - (local - 0.80) / 0.20; } // fade out
+                        gsap.set(b, { clipPath: `inset(0 ${reveal}% 0 0)`, opacity: op });
+                    });
+                },
+            });
+
+            cleanups.push(() => { gsap.killTweensOf(bolts); st.kill(); });
+        };
+
         // (No mobile finale-title reveal — it's static, matching the original.)
 
         // ────────────────────────────────────────────────
@@ -333,6 +427,7 @@ export const useAnimations = () => {
             initFooterCredits();
 
             if (gsapReady) initGSAPAnimations();
+            if (gsapReady) initSequenceLightning();
         })();
 
         // ────────────────────────────────────────────────
@@ -344,6 +439,8 @@ export const useAnimations = () => {
             if (animationId) cancelAnimationFrame(animationId);
             const overlay = document.getElementById('mouse-glow-overlay');
             if (overlay) overlay.remove();
+            const mqGlow = document.getElementById('marquee-glow');
+            if (mqGlow) mqGlow.remove();
             cleanups.forEach((c) => { try { c(); } catch { /* ignore */ } });
         };
     }, []);

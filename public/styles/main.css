@@ -642,8 +642,14 @@ body.body {
     align-items: flex-start !important;
 }
 
-/* Make the items wrap into rows */
+/* Make the items wrap into rows.
+   CRITICAL: webflow sets `.pament-methods{position:absolute}` for the original
+   overlapping-arc layout. Absolute = out of flow, so `.payment-methods-inner`
+   collapsed to height:0 and the footer slid UP underneath the cards (collision).
+   Forcing position:relative puts the wrapped card rows back in normal flow so
+   the container takes their real height and the footer sits below them. */
 .pament-methods {
+    position: relative !important;
     display: flex !important;
     flex-wrap: wrap !important;
     justify-content: center !important;
