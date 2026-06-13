@@ -271,9 +271,9 @@ html.is-ready.lenis-stopped {
    ======================================== */
 /* Contained lines (fit the screen), sharp miter, shifted up a bit via the
    .sequence-lines transform below. (display:none <=991px.) */
-.sequence-line-svg.is-first  { width: 130% !important; rotate: 90deg; }
-.sequence-line-svg.is-second { width: 130% !important; rotate: 0deg; }
-.sequence-line-svg.is-third  { width: 100% !important; rotate: 110deg; }
+.sequence-line-svg.is-first  { width: 200% !important; rotate: 90deg; }
+.sequence-line-svg.is-second { width: 200% !important; rotate: 0deg; }
+.sequence-line-svg.is-third  { width: 150% !important; rotate: 110deg; }
 
 /* Nudge the whole lightning group upward (moves all 3 lines together; nothing
    else sets a transform on .sequence-lines). */
@@ -635,13 +635,13 @@ html.is-ready.lenis-stopped {
 [data-typography-target="flavour-head-text-field"] .hbf-t1 {
     font-size: clamp(1.2em, 3vw, 2.8em) !important;
     line-height: 1.02 !important;
-    letter-spacing: 0.08em !important;
+    letter-spacing: normal !important;
 }
 
 [data-typography-target="flavour-head-text-field"] .hbf-t2 {
     font-size: clamp(1.8em, 5vw, 4.5em) !important;
     line-height: 0.92 !important;
-    letter-spacing: 0.07em !important;
+    letter-spacing: normal !important;
 }
 
 /* Container 10: Testimonial cards text field */
@@ -743,12 +743,25 @@ h1.hero-heading {
 }
 
 .insider-section {
-    /* Top spacing removed per request — section starts flush under the marquee.
-       padding-top:0 also kills the ≤991px webflow padding-top:7.5em. */
-    margin-top: 0 !important;
+    /* padding-top:0 kills the ≤991px webflow padding-top:7.5em. */
     padding-top: 0 !important;
     position: relative;
     z-index: 2;
+}
+
+/* DESKTOP insider top clearance.
+   This lives in globals.css (Next bundles it → HOT-RELOADS live) AND uses higher
+   specificity (.page-wrapper .insider-section = 0,2,0) than responsive.css's
+   `.insider-section` (0,1,0), so it WINS the cascade even if the browser is still
+   serving a cached/old responsive.css (a <link>ed static file that does NOT
+   hot-reload). 50px is just enough for the heading's first line to clear the
+   marquee's curved band at every desktop width — verified by pixel analysis —
+   while staying far tighter than the original 6em gap. Desktop-only so the
+   mobile layout (heading reordered) keeps its own margins. */
+@media (min-width: 992px) {
+    .page-wrapper .insider-section {
+        margin-top: 50px !important;
+    }
 }
 
 /* Desktop only: scale up the stage CTA + the testimonial card stack.
@@ -886,9 +899,29 @@ h1.hero-heading {
 /* Footer sits on warm orange (#FF7500) — dark espresso gives ~5.5:1
    contrast there, far better than cream's ~2.7:1 on that lighter base. */
 .warm-zone .footer .footer-heading,
-.warm-zone .footer .footer-heading .heading-line,
 .warm-zone .footer .shipping-link-text,
 .warm-zone .footer .footer-bottom-text {
+    color: #3D1800 !important;
+}
+
+/* "Hype Bam" highlight line in the footer heading — white to pop on the orange.
+   app.js's SplitText applies an INLINE `color: var(--light-green)` (orange) to
+   each .split-word as the "highlight" effect, which beats colour inherited from
+   .heading-line. Target the split children directly + !important (which beats a
+   non-important inline style) to force white. -webkit-text-fill-color too, in
+   case the glyph fill is set separately. */
+.warm-zone .footer .footer-heading .heading-line,
+.warm-zone .footer .footer-heading .heading-line * {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Shipping links: the animated underline is a .shipping-link-wrap::after that
+   paints with `currentColor`, which inherited the orange from .shipping-link —
+   so it didn't match the espresso text. Set the link's colour to match the
+   text so the underline and text are the same colour. */
+.warm-zone .footer .shipping-link,
+.warm-zone .footer .shipping-link-wrap {
     color: #3D1800 !important;
 }
 

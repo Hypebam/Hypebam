@@ -26,6 +26,11 @@ const defaultLinks: SocialLink[] = [
         href: 'https://www.youtube.com/@hypebam',
         icon: '/img/cdn/68d40d4b080c864fb3ec6e0f_youtube-svgrepo-com.svg',
         alt: 'YouTube'
+    },
+    {
+        href: 'https://www.facebook.com/hypebam',
+        icon: '/img/cdn/facebook.svg',
+        alt: 'Facebook'
     }
 ];
 

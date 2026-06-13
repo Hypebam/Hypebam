@@ -19,9 +19,6 @@ export const PaymentSection: React.FC = () => {
             <div className="payment-container">
                 <div className="grid-layout">
                     <div id="w-node-_041f45d4-47b7-9fbf-98ee-78b1c2254fcb-0ac01850" className="payment-wrapper">
-                        <div id="w-node-_358aeb55-90b6-f7e1-a5ad-3d95f312e343-0ac01850" className="payment-signature-days is-desktop">
-                            <img src="/img/cdn/68b2211dbd022ef87bf8047a_payment_3-5-days-delivery.svg" loading="lazy" width="269" height="150" alt="payment_3-5-days-delivery" className="payment-signature-days-img" />
-                        </div>
                         <h2 id="w-node-_5aa7990f-3909-960f-ff04-09bf6fbaf58f-0ac01850" data-typography-target="payment-heading" className="insider-heading">Find us and<br /><span className="light-green-span">let's bam!</span></h2>
                         <div id="w-node-_3b9ad9e4-4de9-0d6f-0561-c6944df56da5-0ac01850" className="payment-methods-inner">
                             <div data-payment="" className="pament-methods">

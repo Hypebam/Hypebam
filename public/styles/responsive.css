@@ -36,7 +36,14 @@ h1.hero-heading {
 }
 
 .insider-section {
-    margin-top: 6em !important;
+    /* Minimal top clearance so the heading's first line clears the marquee's
+       curved band (the band dips lowest at its centre, right over the centred
+       heading). The overlap is ~constant in PIXELS across desktop widths
+       (~22px @1440 → ~33px @1000), so a small fixed px margin clears every width
+       — an em margin would shrink on narrow screens, exactly where more is
+       needed. 50px clears the ~33px worst case with a comfortable buffer, far less
+       than the original 6em gap. (This rule wins — it loads after globals.) */
+    margin-top: 50px !important;
     position: relative !important;
     z-index: 2 !important;
 }

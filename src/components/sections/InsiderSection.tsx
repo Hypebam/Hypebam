@@ -87,7 +87,7 @@ export const InsiderSection: React.FC = () => {
             <div className="insider-container">
                 <div className="grid-layout">
                     <h2 id="w-node-_3e09cbcc-bb63-d8d5-fc92-5249d862c0ff-0ac01850" className="insider-heading">
-                        <br />Sri Lankanized<br /><span className="light-green-span">Taste that&apos;s out of this world</span><br />Energy to conquer the day<br />Sri-Lankanized just for you
+                        Sri Lankanized<br /><span className="light-green-span">Taste that&apos;s out of this world</span><br />Energy to conquer the day<br />Sri-Lankanized just for you
                     </h2>
                     <div id="w-node-e1fee9ee-097a-d41e-6a8c-8fb81a411381-0ac01850" className="insider-wrapper" ref={wrapperRef}>
                         <div id="w-node-_93a09ee3-b180-b755-d23e-d7d2b5f676da-0ac01850" className="testimonial-wrapper">

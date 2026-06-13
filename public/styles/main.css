@@ -573,9 +573,11 @@ body.body {
     filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
 }
 
-/* Subline underline SVG in hero */
+/* Subline underline SVG in hero — espresso (#3D1800) to match the paragraph
+   text + buttons it sits beneath (was bright orange, which clashed with the
+   amber gradient). Same brand-orange filter chain, darkened via brightness. */
 .subline-img {
-    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(27%) contrast(102%) !important;
 }
 
 /* === Retailer partner logo cards (replaces circular payment method icons) === */
@@ -1401,6 +1403,16 @@ body {
     }
 }
 
+/* 4th social icon (Facebook) — the original only defined the lift+tilt hover for
+   nth-child 1/2/3, so the added Facebook icon scaled but never lifted or tilted.
+   This continues the fan arc (each icon tilts a touch further right). */
+@media (hover: hover) and (pointer: fine) {
+    .social-media-link:is(:hover, :focus-visible):nth-child(4) .social-media-circle {
+        translate: .1875em -.3em 0;
+        rotate: 6deg
+    }
+}
+
 .social-media-link:is(:focus-visible) {
     outline: none
 }
@@ -1579,6 +1591,16 @@ to {
     .social-media-link:is(:hover, :focus-visible):nth-child(3) .social-media-circle {
         translate: .125em -.325em 0;
         rotate: 3deg
+    }
+}
+
+/* 4th social icon (Facebook) — the original only defined the lift+tilt hover for
+   nth-child 1/2/3, so the added Facebook icon scaled but never lifted or tilted.
+   This continues the fan arc (each icon tilts a touch further right). */
+@media (hover: hover) and (pointer: fine) {
+    .social-media-link:is(:hover, :focus-visible):nth-child(4) .social-media-circle {
+        translate: .1875em -.3em 0;
+        rotate: 6deg
     }
 }
 
