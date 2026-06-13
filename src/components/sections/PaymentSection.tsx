@@ -3,13 +3,14 @@
 import React from 'react';
 
 const paymentMethods = [
-    { img: '/img/cdn/689b2b15e9b7e50000f8cad0_Layer_1_5.svg', alt: 'Amex', class: 'is-amex' },
-    { img: '/img/cdn/689b2b1554cf5d3d8dbbeb01_Group_102.svg', alt: 'Mastercard', class: 'is-mastercard' },
-    { img: '/img/cdn/689b2b15a9a38cc10d995594_Group_96.svg', alt: 'PayPal', class: 'is-paypal' },
-    { img: '/img/cdn/689734d5c258f310eceeeb26_Group_97.svg', alt: 'Apple Pay', class: 'is-apple-pay' },
-    { img: '/img/cdn/689b2b15baf850f5dbcaba37_Group_106.svg', alt: 'Google Pay', class: 'is-google-pay' },
-    { img: '/img/cdn/689b2b2738c618add8d9334b_Group_104.svg', alt: 'Visa', class: 'is-visa' },
-    { img: '/img/cdn/689bad624fa04dfe23225ad3_Klarna_Payment_Badge_1.svg', alt: 'Klarna', class: '' },
+    { img: '/img/Payment/Keells.jpg', alt: 'Keells', class: 'is-keells' },
+    { img: '/img/Payment/spar.jpg', alt: 'SPAR', class: 'is-spar' },
+    { img: '/img/Payment/LaugfsSuper.jpg', alt: 'Laugfs Super', class: 'is-laugfs' },
+    { img: '/img/Payment/Softlogic.jpg', alt: 'Softlogic Glomark', class: 'is-softlogic' },
+    { img: '/img/Payment/MahajanaSuper.jpg', alt: 'Mahajana Super', class: 'is-mahajana' },
+    { img: '/img/Payment/OnlineKade.jpg', alt: 'Online Kade', class: 'is-onlinekade' },
+    { img: '/img/Payment/CelesteDaily.jpg', alt: 'Celeste Daily', class: 'is-celeste' },
+    { img: '/img/Payment/CrepeRunner.jpg', alt: 'Crepe Runner', class: 'is-creperunner' },
 ];
 
 export const PaymentSection: React.FC = () => {

@@ -87,59 +87,48 @@ body,
 }
 
 /* ========================================
-   LOADER
+   LOADER — "SUMMONED"
+   The mascot streaks down as a comet, slams
+   the center with squash-and-stretch physics,
+   quivers with charge, then breathes with fire
+   glow against a dark void. GSAP drives every
+   frame (see Loader.tsx) — CSS only sets the
+   stage and the dark→light reveal.
    ======================================== */
+
+/* ── Dark void stage — makes the icon glow like fire (energy-drink aesthetic).
+      A subtle radial keeps the center alive without competing with the icon. */
 .loader {
     position: fixed;
     inset: 0;
-    width: 100%;
-    height: 100%;
     z-index: 9999;
-    background: #FFF8EF !important;
-    display: grid;
-    place-content: center;
-    transition: opacity 0.6s ease, visibility 0.6s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(circle at 50% 46%, #2a1402 0%, #160a01 55%, #0c0500 100%);
+    transition: opacity 0.55s ease, visibility 0.55s ease;
+    overflow: hidden;
 }
 
+/* Reveal the bright amber hero beneath: dark void fades to nothing.
+   The contrast of dark loader → light page is a one-time "wow" moment. */
 html.is-ready .loader {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
 }
 
-.loader::before {
-    content: "";
-    z-index: 1;
+/* ── The mascot — the entire show. No other elements. ── */
+.ldr-icon {
+    width: 132px;
+    height: auto;
+    will-change: transform, filter, opacity;
+    user-select: none;
+    -webkit-user-select: none;
     pointer-events: none;
-    mix-blend-mode: soft-light;
-    background-image: url(/img/cdn/68b0b1e2ae528702c898a058_pattern.png);
-    background-position: 0 0;
-    background-size: 7rem 7rem;
-    position: absolute;
-    inset: 0%;
-    opacity: 0.1;
-}
-
-.loader::after {
-    content: "";
-    height: 2em;
-    width: 2em;
-    border: 3px solid #E65100;
-    border-bottom-color: transparent;
-    border-radius: 50%;
-    display: inline-block;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
-    transition: opacity 0.25s ease;
-}
-
-html.has-seq-ready .loader::after {
-    opacity: 0;
-}
-
-@keyframes rotation {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    /* Base resting shadow; GSAP swaps to fire-glow drop-shadows in the loop. */
+    filter: drop-shadow(0 6px 22px rgba(40, 12, 0, 0.7));
 }
 
 /* ========================================
@@ -199,15 +188,21 @@ html.is-ready.lenis-stopped {
 }
 
 /* ========================================
-   HERO HEADING — keep the "Energy Drink" span white even after GSAP
-   SplitText wraps each word/char. Selector covers the original span
-   and any descendant SplitText created.
+   HERO HEADING — "Energy Drink" span
+   On the new lighter amber gradient, pure white has ~2:1 contrast.
+   Keep white but anchor it with a warm espresso shadow so it reads
+   at every gradient stop — echoes the can's white-on-paint-stroke
+   design language. Selector covers the original span and any GSAP
+   SplitText descendants.
    ======================================== */
 [data-white-text],
 [data-white-text] *,
 [data-white-text] .split-word,
 [data-white-text] .split-char {
     color: #ffffff !important;
+    text-shadow:
+        0 1px 3px rgba(61, 24, 0, 0.55),
+        0 3px 12px rgba(61, 24, 0, 0.32) !important;
 }
 
 /* ========================================
@@ -423,7 +418,7 @@ html.is-ready.lenis-stopped {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    padding: 0.24em 0.5em !important;
+    padding: 0.30em 0.5em 0.18em !important;
     font-size: 1.05em !important;
     line-height: 1 !important;
     border-radius: 999px !important;
@@ -435,13 +430,12 @@ html.is-ready.lenis-stopped {
 }
 
 [data-typography-target="navbar-text-fields"] .button .button-bg {
-    padding: 0.5em 0.86em !important;
+    padding: 0.60em 0.86em 0.40em !important;
 }
 
 [data-typography-target="navbar-text-fields"] .button .button-text {
     font-size: 1.65em !important;
     line-height: 1 !important;
-    translate: 0 -0.01em 0 !important;
 }
 
 [data-typography-target="navbar-text-fields"] .button .button-cycle.is-second {
@@ -454,7 +448,7 @@ html.is-ready.lenis-stopped {
 }
 
 [data-typography-target="hero-buy-button"] .button .button-bg {
-    padding: 0.5em 0.86em !important;
+    padding: 0.68em 0.86em 0.44em !important;
 }
 
 [data-typography-target="hero-buy-button"] .button .button-text {
@@ -463,7 +457,6 @@ html.is-ready.lenis-stopped {
     text-transform: uppercase !important;
     font-size: 1.65em !important;
     line-height: 1 !important;
-    translate: 0 -0.01em 0 !important;
 }
 
 [data-typography-target="hero-buy-button"] .button .button-cycle.is-second {
@@ -503,14 +496,13 @@ html.is-ready.lenis-stopped {
 
 [data-typography-target="insider-text-field"] .insider-cta .button .button-bg,
 .insider-text-inner .insider-cta .button .button-bg {
-    padding: 0.34em 0.86em !important;
+    padding: 0.48em 0.86em 0.32em !important;
 }
 
 [data-typography-target="insider-text-field"] .insider-cta .button .button-text,
 .insider-text-inner .insider-cta .button .button-text {
     font-size: 1.58em !important;
     line-height: 1 !important;
-    translate: 0 0.03em 0 !important;
 }
 
 [data-typography-target="insider-text-field"] .insider-cta .button .button-cycle.is-second,
@@ -818,20 +810,22 @@ h1.hero-heading {
 .warm-zone {
     position: relative;
     isolation: isolate;             /* contain the multiply blend */
-    background-color: #FFD000;      /* fallback */
+    background-color: #F5A020;      /* rich amber fallback */
     background-image: linear-gradient(180deg,
-        #FFD000 0%,
-        #F9A100 22%,
-        #F55000 50%,
-        #F03A08 75%,
-        #E8180C 100%);
+        #FFD060 0%,     /* warm gold — connects from hero base, clearly orange-gold */
+        #FFBC40 15%,    /* bright amber — Flavour section */
+        #F5A820 35%,    /* golden amber — can label mid tone */
+        #EE9010 55%,    /* deep amber-orange — Payment section */
+        #E87808 78%,    /* rich orange — Payment/Footer boundary */
+        #E06800 100%);  /* deep vivid orange — Footer base, mirrors can label bottom */
 }
-.warm-zone::before {                /* hero texture overlay */
+.warm-zone::before {                /* halftone texture overlay at 50% opacity */
     content: "";
     position: absolute;
     inset: 0;
     background: url("/img/texture.png") center top / cover no-repeat;
     mix-blend-mode: multiply;
+    opacity: 0.5;
     pointer-events: none;
     z-index: 0;
 }
@@ -856,27 +850,25 @@ h1.hero-heading {
     padding-top: 2.5em !important;
 }
 
-/* Flavour (top) sits on light amber — its dark headings + orange accent stay
-   readable, so leave them. Payment is mid-ramp (deep orange, darkened by the
-   texture), so its heading + highlight go cream for contrast, and its
-   handwritten signature SVGs are inverted to read on the dark bg. */
+/* Payment sits on deep amber (#FFA020) — dark espresso gives ~4:1 contrast,
+   cream only ~1.9:1. Use dark text throughout; signature SVGs filtered to
+   dark espresso to match. */
 .warm-zone .payment-section .insider-heading,
 .warm-zone .payment-section .light-green-span {
-    color: #FFF8EF !important;
+    color: #3D1800 !important;
 }
 .warm-zone .payment-section .payment-signature-img,
 .warm-zone .payment-section .payment-signature-days-img {
-    filter: brightness(0) invert(1);
+    filter: brightness(0) saturate(100%) invert(10%) sepia(60%) saturate(800%) hue-rotate(10deg);
 }
 
-/* The footer sits on the deep-red bottom of the ramp — switch its
-   on-gradient text to cream for contrast. (The white info/credits chips
-   keep their own dark text; the footer-product flame panel is untouched.) */
+/* Footer sits on warm orange (#FF7500) — dark espresso gives ~5.5:1
+   contrast there, far better than cream's ~2.7:1 on that lighter base. */
 .warm-zone .footer .footer-heading,
 .warm-zone .footer .footer-heading .heading-line,
 .warm-zone .footer .shipping-link-text,
 .warm-zone .footer .footer-bottom-text {
-    color: #FFF8EF !important;
+    color: #3D1800 !important;
 }
 
 /* ── Footer layout fix ───────────────────────────────────────────────
@@ -928,6 +920,7 @@ h1.hero-heading {
     font-family: var(--font-secondary), sans-serif !important;
     text-transform: uppercase !important;
     font-weight: 700 !important;
+    line-height: 1 !important;
 }
 
 /* The big "Sri Lankanized Hydration" title is oversized at desktop
@@ -1707,9 +1700,22 @@ h1, h2, h3, h4, h5, h6,
     line-height: 1 !important;
 }
 .button .button-bg {
-    /* Balanced vertical padding so the all-caps text is optically centred,
-       not pushed up by webflow's default 5px-top / 9px-bottom. */
-    padding: 0.62em 0.95em 0.5em !important;
+    /*
+     * Optical centering for Goga Test uppercase text.
+     *
+     * Equal padding (0.56em each) produces unequal VISUAL space because the
+     * font's em box has ~2.6px of empty space above the cap letters but
+     * ~6.4px of unused descender zone below the baseline. That 3.8px gap
+     * makes the text look close to the top of the pill with extra space below.
+     *
+     * Fix: increase top padding by half the gap (1.9px = 0.12em at 16px root)
+     * and decrease bottom by the same amount. The visible result is equal
+     * optical space above and below the capital letters.
+     *
+     *   Visual above caps:  0.68em padding + ~2.6px font = ~13.5px  ✓
+     *   Visual below caps:  0.44em padding + ~6.4px font = ~13.4px  ✓
+     */
+    padding: 0.68em 0.95em 0.44em !important;
 }
 /* Flavour "Buy now": was full-width + wrong font — make it a normal centred
    pill matching the hero/insider buttons. */
@@ -1718,7 +1724,7 @@ h1, h2, h3, h4, h5, h6,
     margin-inline: auto !important;
 }
 .hbf-info .button .button-text { font-size: 1.65em !important; }
-.hbf-info .button .button-bg { padding: 0.62em 0.86em 0.5em !important; }
+.hbf-info .button .button-bg { padding: 0.68em 0.86em 0.44em !important; }
 /* Dark-brown pill like the hero "Buy now" — the default orange blends into the
    orange warm-zone behind the flavour section. */
 .hbf-info .button .button-bg,

@@ -1,5 +1,4 @@
 import React from 'react';
-import { ArrowIcon } from '@/components/icons';
 
 interface ButtonProps {
     href: string;
@@ -9,6 +8,16 @@ interface ButtonProps {
     target?: string;
     rel?: string;
 }
+
+const BrandIcon = () => (
+    <img
+        src="/img/original-flavor-icon.png"
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        className="button-arrow"
+    />
+);
 
 export const Button: React.FC<ButtonProps> = ({
     href,
@@ -30,14 +39,14 @@ export const Button: React.FC<ButtonProps> = ({
             className={`button ${buttonClass} w-inline-block ${className}`}
         >
             <div className="button-cycle is-first">
-                <ArrowIcon />
+                <BrandIcon />
                 <div className={`button-cycle-bg ${bgClass}`}></div>
             </div>
             <div className={`button-bg ${bgClass}`}>
                 <div className={`button-text ${textClass}`}>{children}</div>
             </div>
             <div className="button-cycle is-second">
-                <ArrowIcon />
+                <BrandIcon />
                 <div className={`button-cycle-bg ${bgClass}`}></div>
             </div>
         </a>

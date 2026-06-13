@@ -57,7 +57,7 @@ body {
     --dark-green: #E65100 !important;
     --light-green: #FF8C00 !important;
     --bg-pale: #FFF8EF !important;
-    --bg-light: #FF8C00 !important;
+    --bg-light: #F59020 !important; /* rich amber — matches hero gradient midpoint */
     --white: white !important;
 }
 
@@ -74,7 +74,9 @@ body {
 }
 
 [data-typography-target="navbar-text-fields"] .nav-text {
-    padding: 0.24em 0.5em !important;
+    /* Optical centering: Goga font has ~8% empty above caps, ~20% below baseline.
+       Equal 0.24em padding looks top-light. +0.06em top, -0.06em bottom corrects it. */
+    padding: 0.30em 0.5em 0.18em !important;
     font-size: 1.05em !important;
     line-height: 1 !important;
 }
@@ -225,14 +227,15 @@ body.body {
 /* === Stage / Hero â€” Brand gradient background === */
 /* Colour stops sampled from brand image: red â†’ orange â†’ gold */
 .stage {
-    background-color: #E8180C !important; /* fallback for browsers that don't support gradients */
+    background-color: #F07820 !important; /* rich brand orange fallback */
     background-image: linear-gradient(
         180deg,
-        #E8180C 0%,       /* vivid red â€” top */
-        #F03A08 28%,      /* orange-red */
-        #F55000 55%,      /* deep orange */
-        #F98000 78%,      /* amber orange */
-        #FFD000 100%      /* golden yellow â€” bottom */
+        #E86800 0%,       /* deep vivid orange — matches can label bottom edge */
+        #F07C12 22%,      /* rich orange — can label mid */
+        #F59022 48%,      /* warm amber — can label upper-mid */
+        #FFAA30 70%,      /* golden amber — can label top */
+        #FFBF48 88%,      /* bright amber-gold — always reads as orange */
+        #FFD060 100%      /* warm gold base — still clearly golden-orange, not cream */
     ) !important;
 }
 
@@ -575,6 +578,126 @@ body.body {
     filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
 }
 
+/* === Retailer partner logo cards (replaces circular payment method icons) === */
+
+/* Rounded rectangle card — replaces the 50% circle */
+.payment-method-item {
+    border-radius: 1.125em !important;
+    width: 13.5em !important;
+    height: 8.5em !important;
+    padding: 1.25em 1.5em !important;
+    box-sizing: border-box !important;
+}
+
+/* Reset the staggered wave/arc offset on all items so they flow naturally */
+.payment-method-item._1,
+.payment-method-item._2,
+.payment-method-item._3,
+.payment-method-item._4,
+.payment-method-item._5,
+.payment-method-item._6,
+.payment-method-item._7,
+.payment-method-item._8 {
+    bottom: auto !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    z-index: auto !important;
+}
+
+/* Logo image: scale to fill card while preserving aspect ratio */
+.payment-method-img {
+    object-fit: contain !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+}
+
+/* SPAR is an ultra-wide banner (~5:1) — reduce padding so it reads clearly */
+.payment-method-item:has(.is-spar) {
+    padding: 1.75em 1.5em !important;
+}
+
+/* Portrait-ish logos (OnlineKade, CelesteDaily) benefit from extra side padding
+   so the tall logo doesn't hug the card edge */
+.payment-method-item:has(.is-onlinekade),
+.payment-method-item:has(.is-celeste) {
+    padding: 1em 2.25em !important;
+}
+
+/* Mahajana has a tall Sinhala tagline below — give it a touch more vertical room */
+.payment-method-item:has(.is-mahajana) {
+    padding: 0.75em 1.25em !important;
+}
+
+/* Remove the fixed height + negative margin from the arc container */
+.payment-methods-inner {
+    height: auto !important;
+    margin-top: 1em !important;
+    margin-bottom: 2em !important;
+    align-items: flex-start !important;
+}
+
+/* Make the items wrap into rows */
+.pament-methods {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 1.25em !important;
+    width: 100% !important;
+    padding: 0 1em !important;
+    box-sizing: border-box !important;
+}
+
+.payment-method-item-outer {
+    width: auto !important;
+}
+
+/* Tablet (≤991px): also reset the absolute-positioned wave overrides */
+@media screen and (max-width: 991px) {
+    .payment-method-item._1,
+    .payment-method-item._2,
+    .payment-method-item._3,
+    .payment-method-item._4,
+    .payment-method-item._5,
+    .payment-method-item._6,
+    .payment-method-item._7,
+    .payment-method-item._8 {
+        bottom: auto !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        margin-top: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        z-index: auto !important;
+    }
+
+    .payment-method-item {
+        width: 11em !important;
+        height: 7.5em !important;
+        padding: 1em 1.25em !important;
+    }
+}
+
+/* Mobile (≤479px): 2-per-row, slightly smaller cards */
+@media screen and (max-width: 479px) {
+    .payment-method-item {
+        width: 9.5em !important;
+        height: 6.5em !important;
+        padding: 0.875em 1em !important;
+    }
+
+    .pament-methods {
+        gap: 0.875em !important;
+    }
+}
+
 /* Rating stars (green star SVGs) */
 .rating-star {
     filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
@@ -600,12 +723,26 @@ body.body {
     filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
 }
 
-/* Nav button arrows */
+/* Brand mascot icon in button circles — size the portrait image to fit */
+img.button-arrow {
+    width: auto !important;
+    height: 1.45em !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+
+/* Default: white silhouette so the icon reads clearly on the orange circle */
 .button-arrow {
+    filter: brightness(0) saturate(100%) invert(100%) !important;
+}
+
+/* White / light variant circles are cream — switch to brand orange so icon is visible */
+.button.is-white .button-arrow,
+.button.is-light .button-arrow {
     filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%) !important;
 }
 
-/* Insider CTA button arrow â€” force white for contrast */
+/* Insider CTA — colored circle, keep white icon */
 .insider-cta .button-arrow {
     filter: brightness(0) saturate(100%) invert(100%) !important;
 }
@@ -722,7 +859,7 @@ html.lenis body {
     pointer-events: none !important;
 }
 
-/* Hero background texture (full stage area) */
+/* Hero background texture at 50% opacity (halftone dots, multiply blend) */
 .stage::before {
     content: "";
     position: absolute;
@@ -731,7 +868,7 @@ html.lenis body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center top;
-    opacity: 1;
+    opacity: 0.5;
     mix-blend-mode: multiply;
     pointer-events: none;
     z-index: 0;
@@ -2977,4 +3114,74 @@ h1, h2, h3, h4, h5, h6,
 /* â”€â”€ Benefit mobile-only title â”€â”€ */
 .benefit-table-title.is-mobile-only {
     display: none;
+}
+
+
+/* === Footer product panel - lighter, brand-aligned flame background ===
+   The flame texture (3.webp) is the dark red-orange base layer of the footer
+   product card. Brightening + desaturating + hue shift brings it into the
+   warm amber-gold family matching the hero gradient and can label palette. */
+.footer-img:not(.top) {
+    filter: brightness(1.28) saturate(0.72) hue-rotate(8deg) !important;
+}
+
+/* Warm golden sunrise overlay on the footer product card. */
+.footer-product .absolute-background::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+        160deg,
+        rgba(255, 220, 110, 0.28) 0%,
+        rgba(255, 185, 55, 0.14) 55%,
+        transparent 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+
+/* ============================================================
+   FOOTER BRAND REFRESH
+   Previous overlay was invisible (z-index: 0 = behind images).
+   This section corrects that and warms the whole footer.
+   ============================================================ */
+
+/* 1. Warm amber background for the entire footer section
+      (footer-content, footer-bottom, the right-side/lower areas
+      that were still plain cream and felt disconnected from the brand) */
+.footer {
+    background-color: #FFF0D0 !important;
+}
+
+/* 2. Footer bottom bar — inherit the amber instead of forced white */
+.footer-bottom {
+    background-color: transparent !important;
+}
+
+/* 3. Corrected overlay on the footer product panel.
+      z-index: 10 puts it ABOVE both .footer-img elements (which are
+      position:relative with no z-index — stacking order = DOM order,
+      but a z-indexed sibling pseudo-element beats them).
+      soft-light blend mode: brightens dark areas noticeably while
+      preserving the vibrant can label colours. */
+.footer-product .absolute-background::after {
+    background: rgba(255, 200, 80, 0.55) !important;
+    mix-blend-mode: soft-light !important;
+    z-index: 10 !important;
+}
+
+/* 4. Also brighten the dark can-grid image directly so the
+      black background reads as warm charcoal instead of flat black.
+      Keeping saturate slightly down so it doesn't fight the overlay. */
+.footer-img.top {
+    filter: brightness(1.5) saturate(0.88) contrast(0.9) !important;
+}
+
+/* 5. The flame image is now visible again (no longer fully hidden
+      under the brightened + overlay-washed can grid), so reset it
+      to a clean warm amber tone. */
+.footer-img:not(.top) {
+    filter: brightness(1.35) saturate(0.78) hue-rotate(10deg) !important;
 }
