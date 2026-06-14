@@ -136,7 +136,10 @@ export const FlavourSection: React.FC = () => {
         const proxy = { p: posRef.current };
         snapTween.current = gsap.to(proxy, {
             p: target, duration: 1.0, ease: 'elastic.out(0.5, 0.62)',
-            onUpdate: () => layout(proxy.p),
+            // keep posRef on the LIVE visual position every frame so an interrupting
+            // click restarts the next tween from where the cans actually are — no
+            // jump back to the last completed slot.
+            onUpdate: () => { posRef.current = proxy.p; layout(proxy.p); },
             onComplete: () => { posRef.current = wrapIdx(target); goalRef.current = wrapIdx(target); layout(posRef.current); },
         });
         applyActive(wrapIdx(target));
@@ -172,7 +175,7 @@ export const FlavourSection: React.FC = () => {
 
             const computeUnit = () => {
                 const w = stageRef.current?.offsetWidth || 1000;
-                unitRef.current = clamp(w * 0.18, 120, 240);
+                unitRef.current = clamp(w * 0.205, 130, 270);
             };
             computeUnit();
             const onResize = () => { computeUnit(); layout(posRef.current); };

@@ -541,8 +541,8 @@ html.is-ready.lenis-stopped {
     position: absolute;
     display: flex;
     align-items: center;
-    gap: clamp(8px, 0.7vw, 12px);
-    padding: clamp(6px, 0.5vw, 9px) clamp(15px, 1.15vw, 21px) clamp(6px, 0.5vw, 9px) clamp(6px, 0.5vw, 9px);
+    gap: clamp(9px, 0.85vw, 14px);
+    padding: clamp(7px, 0.6vw, 11px) clamp(18px, 1.5vw, 26px) clamp(7px, 0.6vw, 11px) clamp(7px, 0.6vw, 11px);
     border-radius: 999px;
     background: rgba(255, 248, 239, 0.94);
     border: 1px solid rgba(61, 24, 0, 0.07);
@@ -558,8 +558,8 @@ html.is-ready.lenis-stopped {
 
 .hero-fact-icon-wrap {
     flex: none;
-    width: clamp(38px, 3.4vw, 58px);
-    height: clamp(38px, 3.4vw, 58px);
+    width: clamp(48px, 4.6vw, 68px);
+    height: clamp(48px, 4.6vw, 68px);
     border-radius: 50%;
     overflow: hidden;
     box-shadow:
@@ -586,43 +586,45 @@ html.is-ready.lenis-stopped {
 .hero-fact-value {
     font-family: var(--font-secondary), sans-serif;
     font-weight: 800;
-    font-size: clamp(15px, 1.55vw, 25px);
+    font-size: clamp(20px, 2.2vw, 33px);
     letter-spacing: -0.02em;
     line-height: 1;
     color: #3D1800;
 }
 
 .hero-fact-label {
-    margin-top: clamp(2px, 0.2vw, 4px);
+    margin-top: clamp(3px, 0.28vw, 5px);
     font-family: var(--font-secondary), sans-serif;
     font-weight: 600;
-    font-size: clamp(9px, 0.85vw, 13px);
+    font-size: clamp(11px, 1.05vw, 15px);
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: rgba(61, 24, 0, 0.55);
 }
 
-/* positions — frame the can (desktop). InertiaPlugin adds a separate
-   transform for the float, so top/left and the float never fight. */
-.hero-fact.is-first  { top: 3%;  left: 1%;  z-index: 4; }
-.hero-fact.is-second { top: 28%; left: 3%;  z-index: 3; }
-.hero-fact.is-third  { top: 52%; left: 6%;  z-index: 5; }
-.hero-fact.is-fourth { top: 75%; left: 30%; z-index: 4; }
+/* positions — the three top pills are RIGHT-anchored so their inner edges
+   dock against the can's left silhouette in a graceful concave curve (the can
+   leans, so each pill steps a little further left as it descends); the fourth
+   anchors the bottom under the can. InertiaPlugin adds its own float transform,
+   so these offsets and the float never fight. */
+.hero-fact.is-first  { top: 8%;  right: 60%; z-index: 4; }
+.hero-fact.is-second { top: 28%; right: 70%; z-index: 3; }
+.hero-fact.is-third  { top: 52%; right: 75%; z-index: 5; }
+.hero-fact.is-fourth { top: 75%; left: 5%;  z-index: 4; }
 
-/* tablet — the can stays large & centred, so the desktop left-cascade still
-   frames it; only trim the pill chrome a touch. */
-@media (max-width: 991px) {
-    .hero-fact { gap: 8px; padding: 5px 13px 5px 5px; }
-}
-
-/* phones — the can shrinks & centres, so a tight left-cascade collides.
-   Switch to a 4-corner frame around the can instead. */
+/* phones — the can shrinks & centres, so the right-anchored curve collides.
+   Switch to a 4-corner frame around the can and cap the pill size so the
+   prominent desktop scale doesn't overflow the narrow column. */
 @media (max-width: 479px) {
-    .hero-fact { gap: 6px; padding: 4px 10px 4px 4px; }
-    .hero-fact.is-first  { top: 1%;  left: 0%;  }
-    .hero-fact.is-second { top: 4%;  left: 56%; }
-    .hero-fact.is-third  { top: 74%; left: 0%;  }
-    .hero-fact.is-fourth { top: 78%; left: 52%; }
+    .hero-fact { gap: 7px; padding: 5px 13px 5px 5px; }
+    .hero-fact-icon-wrap { width: 42px; height: 42px; }
+    .hero-fact-value { font-size: 17px; }
+    .hero-fact-label { font-size: 10.5px; }
+    /* reset the desktop right-anchor so left positioning isn't stretched */
+    .hero-fact.is-first  { top: 1%;  left: 0%;  right: auto; }
+    .hero-fact.is-second { top: 4%;  left: 56%; right: auto; }
+    .hero-fact.is-third  { top: 74%; left: 0%;  right: auto; }
+    .hero-fact.is-fourth { top: 78%; left: 52%; right: auto; }
 }
 
 /* Container 8: Benefits text field */
@@ -1505,7 +1507,7 @@ h1, h2, h3, h4, h5, h6,
     overflow: hidden;
     text-align: center;
     /* extra bottom padding gives the fade a clear empty zone below the controls */
-    padding: clamp(72px, 9vw, 150px) 0 clamp(150px, 15vw, 230px);
+    padding: clamp(48px, 5vw, 92px) 0 clamp(130px, 13vw, 200px);
     /* Cream studio glow behind the can over a cream→amber wash. The wash stays
        solid amber until ~150px from the bottom, then FADES TO TRANSPARENT —
        revealing the warm-zone amber→orange gradient underneath so the section
@@ -1586,9 +1588,9 @@ h1, h2, h3, h4, h5, h6,
 .hbf-stage {
     position: relative;
     z-index: 2;
-    max-width: 1120px;
-    height: clamp(420px, 56vw, 700px);
-    margin: clamp(10px, 2vw, 28px) auto 0;
+    max-width: 1200px;
+    height: clamp(440px, 58vw, 760px);
+    margin: clamp(6px, 1.4vw, 20px) auto 0;
     perspective: 1600px;
     transform-style: preserve-3d;
     touch-action: pan-y;
@@ -1608,7 +1610,7 @@ h1, h2, h3, h4, h5, h6,
     transform-style: preserve-3d;
 }
 .hbf-can-fx {
-    width: clamp(230px, 30vw, 410px);
+    width: clamp(260px, 35vw, 480px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1730,8 +1732,8 @@ h1, h2, h3, h4, h5, h6,
     .hbf-arr { width: 48px; height: 48px; }
 }
 @media (max-width: 767px) {
-    .hbf-stage { height: clamp(380px, 80vw, 560px); }
-    .hbf-can-fx { width: clamp(215px, 52vw, 340px); }
+    .hbf-stage { height: clamp(400px, 86vw, 600px); }
+    .hbf-can-fx { width: clamp(235px, 60vw, 380px); }
     .hbf-ghost { font-size: clamp(80px, 30vw, 200px); }
 }
 @media (max-width: 479px) {
