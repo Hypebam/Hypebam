@@ -52,34 +52,25 @@ export const HeroSection: React.FC = () => {
                                 <div data-load-stage-visual="" className="stage-visual">
                                     <canvas data-load-stage-canvas-img-path="/img/" data-load-stage-canvas="" className="stage-canvas"></canvas>
                                 </div>
-                                <div data-typography-target="stage-fact-circles" className="stage-facts">
-                                    <div data-inertia-item="" className="stage-fact-outer">
-                                        <div data-load-stage-fact="" data-inertia-item-child="" className="stage-fact is-first">
-                                            <div className="stage-fact-wrap">
-                                                <div className="stage-fact-number">80</div>
-                                                <div className="stage-fact-unit">mg</div>
+                                <div className="stage-facts">
+                                    {[
+                                        { img: '/img/hero/4.jpg', value: '80mg',      label: 'of Caffeine',    cls: 'is-first'  },
+                                        { img: '/img/hero/3.jpg', value: '200mg',     label: 'of Electrolytes', cls: 'is-second' },
+                                        { img: '/img/hero/1.jpg', value: 'Only 5g',   label: 'of Sugar',        cls: 'is-third'  },
+                                        { img: '/img/hero/2.jpg', value: 'Hydrating', label: '+ nootropics',    cls: 'is-fourth' },
+                                    ].map((f) => (
+                                        <div key={f.cls} data-inertia-item="" className="stage-fact-outer">
+                                            <div data-load-stage-fact="" data-inertia-item-child="" className={`hero-fact ${f.cls}`}>
+                                                <span className="hero-fact-icon-wrap">
+                                                    <img className="hero-fact-icon" src={f.img} alt="" loading="eager" draggable={false} />
+                                                </span>
+                                                <span className="hero-fact-copy">
+                                                    <span className="hero-fact-value">{f.value}</span>
+                                                    <span className="hero-fact-label">{f.label}</span>
+                                                </span>
                                             </div>
-                                            <div className="stage-fact-text">Caffeine</div>
                                         </div>
-                                    </div>
-                                    <div data-inertia-item="" className="stage-fact-outer">
-                                        <div data-load-stage-fact="" data-inertia-item-child="" className="stage-fact is-second">
-                                            <div className="stage-fact-wrap">
-                                                <div className="stage-fact-number">5</div>
-                                                <div className="stage-fact-unit">g</div>
-                                            </div>
-                                            <div className="stage-fact-text">of Sugar</div>
-                                        </div>
-                                    </div>
-                                    <div data-inertia-item="" className="stage-fact-outer">
-                                        <div data-load-stage-fact="" data-inertia-item-child="" className="stage-fact is-third">
-                                            <div className="stage-fact-wrap">
-                                                <div className="stage-fact-number">200</div>
-                                                <div className="stage-fact-unit">mg</div>
-                                            </div>
-                                            <div className="stage-fact-text">of Electrolytes</div>
-                                        </div>
-                                    </div>
+                                    ))}
                                 </div>
                                 <div className="stage-bg">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 731 818" fill="none" data-load-stage-svg="" className="stage-bg-svg">

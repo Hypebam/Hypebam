@@ -526,68 +526,103 @@ html.is-ready.lenis-stopped {
     top: 0 !important;
 }
 
-/* Container 7: Stage fact circles */
-[data-typography-target="stage-fact-circles"] .stage-fact,
-[data-typography-target="stage-fact-circles"] .stage-fact * {
-    font-family: var(--font-secondary), sans-serif !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
+/* ===================================================================
+   HERO STAT PILLS  ·  premium floating fact chips
+   Replaces the old cream fact circles. Each pill carries a brand badge
+   icon (img/hero/*.jpg, circle-clipped) + a value/label, floats around
+   the can (InertiaPlugin via app.js · data-inertia-item-child) and
+   reveals on the hero intro (app.js · data-load-stage-fact).
+   Collision-free `.hero-fact*` names so none of the legacy
+   `.stage-fact*` rules (webflow/main/responsive) bleed in.
+   =================================================================== */
+.stage-facts { z-index: 4 !important; }
+
+.hero-fact {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 0.7vw, 12px);
+    padding: clamp(6px, 0.5vw, 9px) clamp(15px, 1.15vw, 21px) clamp(6px, 0.5vw, 9px) clamp(6px, 0.5vw, 9px);
+    border-radius: 999px;
+    background: rgba(255, 248, 239, 0.94);
+    border: 1px solid rgba(61, 24, 0, 0.07);
+    box-shadow:
+        0 14px 34px rgba(110, 45, 0, 0.22),
+        0 2px 6px rgba(110, 45, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    white-space: nowrap;
+    will-change: transform;
 }
 
-[data-typography-target="stage-fact-circles"] .stage-fact .stage-fact-number {
-    font-size: 2.95em !important;
-    line-height: 0.8 !important;
-    letter-spacing: -0.018em !important;
+.hero-fact-icon-wrap {
+    flex: none;
+    width: clamp(38px, 3.4vw, 58px);
+    height: clamp(38px, 3.4vw, 58px);
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow:
+        0 4px 11px rgba(110, 45, 0, 0.20),
+        inset 0 0 0 1px rgba(0, 0, 0, 0.06);
 }
 
-[data-typography-target="stage-fact-circles"] .stage-fact .stage-fact-unit {
-    font-size: 1.5em !important;
-    line-height: 0.8 !important;
-    letter-spacing: -0.01em !important;
+.hero-fact-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* the badge is a yellow circle on a white jpg square — scale up so the
+       circle fills the clip and the white corners are cropped out */
+    transform: scale(1.17);
 }
 
-[data-typography-target="stage-fact-circles"] .stage-fact .stage-fact-text {
-    font-size: 1em !important;
-    line-height: 0.92 !important;
-    text-align: center !important;
-    max-width: 9.5ch !important;
-    margin-top: 0.08em !important;
+.hero-fact-copy {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
 }
 
-[data-typography-target="stage-fact-circles"] .stage-fact .stage-fact-wrap {
-    align-items: baseline !important;
-    column-gap: 0.04em !important;
+.hero-fact-value {
+    font-family: var(--font-secondary), sans-serif;
+    font-weight: 800;
+    font-size: clamp(15px, 1.55vw, 25px);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: #3D1800;
 }
 
-[data-typography-target="stage-fact-circles"] .stage-fact.is-third .stage-fact-text {
-    font-size: 0.9em !important;
-    line-height: 0.92 !important;
-    max-width: 11ch !important;
+.hero-fact-label {
+    margin-top: clamp(2px, 0.2vw, 4px);
+    font-family: var(--font-secondary), sans-serif;
+    font-weight: 600;
+    font-size: clamp(9px, 0.85vw, 13px);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(61, 24, 0, 0.55);
 }
 
-/* Responsive fact circle font sizing */
+/* positions — frame the can (desktop). InertiaPlugin adds a separate
+   transform for the float, so top/left and the float never fight. */
+.hero-fact.is-first  { top: 3%;  left: 1%;  z-index: 4; }
+.hero-fact.is-second { top: 28%; left: 3%;  z-index: 3; }
+.hero-fact.is-third  { top: 52%; left: 6%;  z-index: 5; }
+.hero-fact.is-fourth { top: 75%; left: 30%; z-index: 4; }
+
+/* tablet — the can stays large & centred, so the desktop left-cascade still
+   frames it; only trim the pill chrome a touch. */
 @media (max-width: 991px) {
-    [data-typography-target="stage-fact-circles"] .stage-fact .stage-fact-number {
-        font-size: 2.2em !important;
-    }
-    [data-typography-target="stage-fact-circles"] .stage-fact .stage-fact-unit {
-        font-size: 1.1em !important;
-    }
-    [data-typography-target="stage-fact-circles"] .stage-fact .stage-fact-text {
-        font-size: 0.75em !important;
-    }
+    .hero-fact { gap: 8px; padding: 5px 13px 5px 5px; }
 }
 
+/* phones — the can shrinks & centres, so a tight left-cascade collides.
+   Switch to a 4-corner frame around the can instead. */
 @media (max-width: 479px) {
-    [data-typography-target="stage-fact-circles"] .stage-fact .stage-fact-number {
-        font-size: 1.8em !important;
-    }
-    [data-typography-target="stage-fact-circles"] .stage-fact .stage-fact-unit {
-        font-size: 0.9em !important;
-    }
-    [data-typography-target="stage-fact-circles"] .stage-fact .stage-fact-text {
-        font-size: 0.65em !important;
-    }
+    .hero-fact { gap: 6px; padding: 4px 10px 4px 4px; }
+    .hero-fact.is-first  { top: 1%;  left: 0%;  }
+    .hero-fact.is-second { top: 4%;  left: 56%; }
+    .hero-fact.is-third  { top: 74%; left: 0%;  }
+    .hero-fact.is-fourth { top: 78%; left: 52%; }
 }
 
 /* Container 8: Benefits text field */
