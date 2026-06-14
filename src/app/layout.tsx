@@ -15,17 +15,15 @@ const badBrush = localFont({
 });
 
 const goga = localFont({
+  // Only the weights actually used across the CSS are loaded (300–800).
+  // Hairline(100)/Thin(200)/Light(350)/Black(900) were unused and removed.
   src: [
-    { path: "../../public/fonts/goga/GogaTest-Hairline-BF6646d5d845dae.otf",   weight: "100" },
-    { path: "../../public/fonts/goga/GogaTest-Thin-BF6646d5d8040a9.otf",       weight: "200" },
     { path: "../../public/fonts/goga/GogaTest-Extralight-BF6646d5d82fb83.otf", weight: "300" },
-    { path: "../../public/fonts/goga/GogaTest-Light-BF6646d5d84c8a2.otf",      weight: "350" },
     { path: "../../public/fonts/goga/GogaTest-Regular-BF6646d5d84f69b.otf",    weight: "400" },
     { path: "../../public/fonts/goga/GogaTest-Medium-BF6646d5d84754e.otf",     weight: "500" },
     { path: "../../public/fonts/goga/GogaTest-Semibold-BF6646d5d8544cf.otf",   weight: "600" },
     { path: "../../public/fonts/goga/GogaTest-Bold-BF6646d5d83c978.otf",       weight: "700" },
     { path: "../../public/fonts/goga/GogaTest-Extrabold-BF6646d5d7d0a2b.otf", weight: "800" },
-    { path: "../../public/fonts/goga/GogaTest-Black-BF6646d5d78e551.otf",      weight: "900" },
   ],
   variable: "--font-goga",
   display: "swap",
@@ -102,22 +100,31 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* ── Preload: First flavour can (active by default) ── */}
-        <link rel="preload" href="/img/flavours/original.webp" as="image" type="image/webp" />
+        {/* ── Preload: First flavour can (centre of the carousel by default) ── */}
+        <link rel="preload" href="/img/flavours/can-1.webp" as="image" type="image/webp" />
 
-        {/* ── Prefetch: Hero SVG decorations (above fold) ── */}
-        <link
-          rel="prefetch"
-          href="/img/cdn/68a9a089d73e5cf84d4ded67_stage-sketch-arrow.svg"
-          as="image"
-        />
+        {/* ── Prefetch: Hero subline underline SVG (above fold) ── */}
         <link
           rel="prefetch"
           href="/img/cdn/688655fd2fed5f707c038914_Layer_1_3.svg"
           as="image"
         />
 
-        {/* ── Real GSAP 3.14 + ALL plugins, served locally ──
+        {/* ── PRELOAD the critical JS up-front (high priority, in parallel with the
+             loader) so the animation engine + Webflow bundle are already in cache
+             the instant they're needed — no real-time fetch stall on first paint.
+             These are small (gzip ~a few KB each) so they're mobile-data friendly,
+             and we don't touch image quality. The matching <Script>/loader below
+             then execute from cache. ── */}
+        <link rel="preload" href="/vendor/gsap/gsap.min.js" as="script" />
+        <link rel="preload" href="/vendor/gsap/ScrollTrigger.min.js" as="script" />
+        <link rel="preload" href="/vendor/gsap/CustomEase.min.js" as="script" />
+        <link rel="preload" href="/vendor/gsap/DrawSVGPlugin.min.js" as="script" />
+        <link rel="preload" href="/vendor/gsap/InertiaPlugin.min.js" as="script" />
+        <link rel="preload" href="/vendor/gsap/SplitText.min.js" as="script" />
+        <link rel="preload" href="/scripts/app.js" as="script" />
+
+        {/* ── Real GSAP 3.14 + the plugins app.js actually uses, served locally ──
             As of GSAP 3.13 (May 2025) every plugin is 100% free — no Club
             membership. We serve the genuine UMD builds from /vendor/gsap so
             app.js gets real SplitText / DrawSVG / Inertia / CustomEase /
@@ -127,8 +134,6 @@ export default function RootLayout({
         <Script src="/vendor/gsap/gsap.min.js" strategy="afterInteractive" />
         <Script src="/vendor/gsap/ScrollTrigger.min.js" strategy="afterInteractive" />
         <Script src="/vendor/gsap/CustomEase.min.js" strategy="afterInteractive" />
-        <Script src="/vendor/gsap/CustomWiggle.min.js" strategy="afterInteractive" />
-        <Script src="/vendor/gsap/CustomBounce.min.js" strategy="afterInteractive" />
         <Script src="/vendor/gsap/DrawSVGPlugin.min.js" strategy="afterInteractive" />
         <Script src="/vendor/gsap/InertiaPlugin.min.js" strategy="afterInteractive" />
         <Script src="/vendor/gsap/SplitText.min.js" strategy="afterInteractive" />

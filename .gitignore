@@ -17,6 +17,9 @@ dist-ssr
 out
 next-env.d.ts
 
+# TypeScript incremental build cache (regenerated on build)
+*.tsbuildinfo
+
 # Large original video files (use compressed versions in /compressed/ instead)
 # Story 01-05 originals are 20-96MB — excluded to keep repo size manageable
 public/img/video/*.mp4

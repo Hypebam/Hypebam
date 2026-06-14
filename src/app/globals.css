@@ -30,9 +30,7 @@ h1, h2, h3, h4, h5, h6 {
 .testimonial-big-heading,
 .testimonial-item-heading,
 .sequence-title,
-.footer-heading,
-.hbf-t1,
-.hbf-t2 {
+.footer-heading {
     text-transform: uppercase;
 }
 
@@ -624,26 +622,6 @@ html.is-ready.lenis-stopped {
     }
 }
 
-/* Container 9: Flavour head text field */
-[data-typography-target="flavour-head-text-field"],
-[data-typography-target="flavour-head-text-field"] * {
-    font-family: var(--font-secondary), sans-serif !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-}
-
-[data-typography-target="flavour-head-text-field"] .hbf-t1 {
-    font-size: clamp(1.2em, 3vw, 2.8em) !important;
-    line-height: 1.02 !important;
-    letter-spacing: normal !important;
-}
-
-[data-typography-target="flavour-head-text-field"] .hbf-t2 {
-    font-size: clamp(1.8em, 5vw, 4.5em) !important;
-    line-height: 0.92 !important;
-    letter-spacing: normal !important;
-}
-
 /* Container 10: Testimonial cards text field */
 [data-typography-target="testimonial-cards-text-field"],
 [data-typography-target="testimonial-cards-text-field"] * {
@@ -853,13 +831,13 @@ h1.hero-heading {
         #E87808 78%,    /* rich orange — Payment/Footer boundary */
         #E06800 100%);  /* deep vivid orange — Footer base, mirrors can label bottom */
 }
-.warm-zone::before {                /* halftone texture overlay at 50% opacity */
+.warm-zone::before {                /* halftone texture — subtle, matched to the flavour section */
     content: "";
     position: absolute;
     inset: 0;
     background: url("/img/texture.png") center top / cover no-repeat;
     mix-blend-mode: multiply;
-    opacity: 0.5;
+    opacity: 0.16;
     pointer-events: none;
     z-index: 0;
 }
@@ -867,19 +845,13 @@ h1.hero-heading {
     position: relative;
     z-index: 1;
 }
-/* let the gradient show through the sections (drop their cream/white bg) */
-.warm-zone .hbf,
+/* Payment + Footer let the warm gradient show through; the Flavour section is
+   its own dark cinematic stage (own background) so it is intentionally NOT here. */
 .warm-zone .payment-section,
 .warm-zone .footer {
     background: transparent !important;
 }
 
-/* Close the big empty gap between the Flavour can and the Payment heading:
-   the flavour section had a large bottom padding and the payment section a very
-   large top padding. Trim both. */
-.warm-zone .hbf {
-    padding-bottom: clamp(24px, 3vw, 56px) !important;
-}
 .warm-zone .payment-section {
     padding-top: 2.5em !important;
 }
@@ -1055,9 +1027,7 @@ h1, h2, h3, h4, h5, h6,
 .testimonial-big-heading,
 .testimonial-item-heading,
 .sequence-title,
-.footer-heading,
-.hbf-t1,
-.hbf-t2 {
+.footer-heading {
     letter-spacing: 0.15em !important;
     line-height: 1.2 !important;
 }
@@ -1489,229 +1459,249 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /* ========================================
-   FLAVOUR SECTION (.hbf*)
-   Extracted from FlavourSection.tsx <style> tag so responsive
-   overrides cascade properly. Mobile clamps tightened so the
-   can + headings stay readable down to 320px.
+   FLAVOUR SECTION — "Pick Your Hype"
+   Warm, on-brand 3D coverflow (see FlavourSection.tsx). A cream→amber studio
+   backdrop carries a flavour-coloured bloom + a huge ghosted flavour word
+   behind the centred can; neighbours peek at the sides in 3D. GSAP owns the
+   coverflow, the bloom/colour morph, the parallax and the SplitText name reveal.
    ======================================== */
 .hbf {
-    background: #FFF8EF;
-    padding: clamp(56px, 9vw, 160px) 0 clamp(64px, 10vw, 200px);
-    overflow: hidden;
     position: relative;
+    overflow: hidden;
     text-align: center;
+    /* extra bottom padding gives the fade a clear empty zone below the controls */
+    padding: clamp(72px, 9vw, 150px) 0 clamp(150px, 15vw, 230px);
+    /* Cream studio glow behind the can over a cream→amber wash. The wash stays
+       solid amber until ~150px from the bottom, then FADES TO TRANSPARENT —
+       revealing the warm-zone amber→orange gradient underneath so the section
+       melts seamlessly into the payment section (no hard seam), while the info
+       above stays on the readable lighter backdrop. */
+    background:
+        radial-gradient(58% 44% at 50% 35%, rgba(255, 248, 233, 0.92) 0%, rgba(255, 248, 233, 0) 70%),
+        linear-gradient(180deg,
+            #FFF1DE 0%,
+            #FFE6BE 28%,
+            #FFD089 calc(100% - 150px),
+            rgba(255, 200, 110, 0) 100%);
+    isolation: isolate;
+    color: #3D1800;
 }
-.hbf::before {
-    content: '';
+.hbf-texture {
     position: absolute;
-    top: 40%;
-    left: 50%;
-    width: min(900px, 70vw);
-    height: min(900px, 70vw);
-    border: 3px solid rgba(230, 81, 0, 0.05);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
+    inset: 0;
+    z-index: 0;
     pointer-events: none;
+    background: url('/img/texture.png') center / cover no-repeat;
+    mix-blend-mode: multiply;
+    opacity: 0.16;
 }
-.hbf::after {
-    content: '';
+.hbf-ghost {
     position: absolute;
-    top: 38%;
+    top: 46%;
     left: 50%;
-    width: min(1200px, 90vw);
-    height: min(1200px, 90vw);
-    border: 2px solid rgba(230, 81, 0, 0.03);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
+    z-index: 0;
     pointer-events: none;
-}
-@keyframes hbf-float {
-    0%, 100% { transform: translateY(0); }
-    50%     { transform: translateY(-12px); }
-}
-.hbf-head    { padding: 0 20px; margin-bottom: clamp(20px, 4vw, 50px); position: relative; z-index: 2; }
-.hbf-t1 {
     font-family: var(--font-primary), 'Impact', sans-serif;
-    font-size: clamp(20px, 4.2vw, 50px);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: #3a2a1a;
-    line-height: 1.1;
-    margin: 0 0 4px;
-}
-.hbf-t2 {
-    font-family: var(--font-primary), 'Impact', sans-serif;
-    font-size: clamp(32px, 8vw, 90px);
+    font-size: clamp(90px, 22vw, 340px);
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: #E65100;
-    line-height: 0.95;
-    margin: 0;
-    opacity: 0.9;
+    line-height: 1;
+    white-space: nowrap;
+    color: #3D1800;
+    opacity: 0.07;
+    letter-spacing: -0.02em;
+    transform: translate(-50%, -50%);
 }
-.hbf-stage {
-    position: relative;
-    max-width: 1000px;
-    margin: 0 auto;
-    min-height: clamp(380px, 62vw, 860px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.hbf-glow {
+.hbf-bloom {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: clamp(220px, 40vw, 600px);
-    height: clamp(220px, 40vw, 600px);
+    width: min(70vw, 720px);
+    aspect-ratio: 1;
     border-radius: 50%;
-    transform: translate(-50%, -50%);
-    filter: blur(80px);
-    opacity: 0.2;
-    transition: background 0.8s ease;
-    pointer-events: none;
+    background: #FFAE1F;
+    filter: blur(85px);
+    opacity: 0.5;
     z-index: 0;
+    pointer-events: none;
+    will-change: transform, background-color;
+    mix-blend-mode: multiply;
 }
+.hbf-head { position: relative; z-index: 3; padding: 0 20px; margin-bottom: clamp(8px, 2vw, 22px); }
+.hbf-kicker {
+    font-family: var(--font-secondary), sans-serif;
+    font-size: clamp(12px, 1.5vw, 16px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.32em !important;
+    line-height: 1.4 !important;
+    color: rgba(61, 24, 0, 0.55);
+    margin: 0 0 10px;
+}
+.hbf-title {
+    font-family: var(--font-primary), 'Impact', sans-serif;
+    font-size: clamp(34px, 8vw, 92px);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em !important;
+    line-height: 0.95 !important;
+    color: #3D1800;
+    margin: 0;
+}
+.hbf-stage {
+    position: relative;
+    z-index: 2;
+    max-width: 1120px;
+    height: clamp(420px, 56vw, 700px);
+    margin: clamp(10px, 2vw, 28px) auto 0;
+    perspective: 1600px;
+    transform-style: preserve-3d;
+    touch-action: pan-y;
+    cursor: grab;
+    visibility: hidden;
+}
+.hbf-stage:active { cursor: grabbing; }
 .hbf-can-wrap {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0;
     pointer-events: none;
-    animation: hbf-float 4s ease-in-out infinite;
-    z-index: 1;
-}
-.hbf-can {
-    width: clamp(250px, 52vw, 680px);
-    height: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 40px 80px rgba(0, 0, 0, 0.3)) drop-shadow(0 10px 30px rgba(230, 81, 0, 0.15));
-    pointer-events: auto;
     will-change: transform, opacity;
+    transform-style: preserve-3d;
 }
-.hbf-can.hidden { opacity: 0; pointer-events: none; }
-.hbf-arrows {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    transform: translateY(-50%);
-    display: flex;
-    justify-content: space-between;
-    padding: 0 clamp(8px, 3vw, 40px);
-    pointer-events: none;
-    z-index: 10;
-    max-width: 900px;
-    margin: 0 auto;
-}
-.hbf-arr {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(255, 255, 255, 0.92);
-    color: #3a2a1a;
-    cursor: pointer;
+.hbf-can-fx {
+    width: clamp(230px, 30vw, 410px);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    pointer-events: auto;
+    will-change: transform;
 }
+.hbf-can {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    pointer-events: auto;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-mask-image: linear-gradient(to bottom, #000 75%, transparent 87%);
+    mask-image: linear-gradient(to bottom, #000 75%, transparent 87%);
+    filter: drop-shadow(0 26px 30px rgba(120, 52, 0, 0.32));
+}
+.hbf-arr {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    z-index: 150;
+    color: #3D1800;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(61, 24, 0, 0.12);
+    box-shadow: 0 6px 22px rgba(120, 52, 0, 0.16);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.hbf-arr.is-prev { left: clamp(6px, 3vw, 50px); }
+.hbf-arr.is-next { right: clamp(6px, 3vw, 50px); }
 @media (hover: hover) {
     .hbf-arr:hover {
-        background: #E65100;
-        color: white;
-        transform: scale(1.15);
-        box-shadow: 0 6px 28px rgba(230, 81, 0, 0.3);
+        background: #fff;
+        transform: translateY(-50%) scale(1.1);
+        box-shadow: 0 10px 28px rgba(120, 52, 0, 0.24);
     }
 }
-.hbf-arr:active { transform: scale(0.92); }
-.hbf-info { margin-top: clamp(16px, 2vw, 32px); position: relative; z-index: 2; }
-.hbf-lbl {
+.hbf-arr:active { transform: translateY(-50%) scale(0.94); }
+.hbf-info { position: relative; z-index: 3; margin-top: clamp(14px, 2vw, 28px); perspective: 700px; }
+.hbf-tagline {
     font-family: var(--font-sub), sans-serif;
-    font-size: clamp(11px, 1.4vw, 15px);
-    color: #E65100;
+    font-size: clamp(13px, 1.6vw, 18px);
     text-transform: uppercase;
-    letter-spacing: 0.2em;
-    margin: 0 0 6px;
+    letter-spacing: 0.22em;
     font-weight: 600;
-    transition: all 0.3s ease;
+    color: #DC5400;
+    margin: 0 0 4px;
+    opacity: 0.9;
 }
 .hbf-name {
     font-family: var(--font-primary), 'Impact', sans-serif;
-    font-size: clamp(30px, 6vw, 72px);
+    font-size: clamp(36px, 7.5vw, 90px);
     font-weight: 800;
-    color: #3a2a1a;
     text-transform: uppercase;
-    line-height: 1;
-    margin: 0 0 20px;
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    letter-spacing: 0.01em !important;
+    line-height: 1 !important;
+    color: #DC5400;
+    margin: 0 0 14px;
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
 }
-.hbf-name.slide-out { opacity: 0; transform: translateY(12px); }
-.hbf-cta {
+.hbf-controls {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 14px 32px;
-    background: #3a2a1a;
-    color: white;
-    border-radius: 50px;
-    font-family: var(--font-secondary), sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    gap: 18px;
+    margin: 0 0 22px;
+}
+.hbf-arr.is-flat {
+    position: static;
+    transform: none;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 1px solid rgba(61, 24, 0, 0.2);
+    box-shadow: none;
+    z-index: auto;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
 }
 @media (hover: hover) {
-    .hbf-cta:hover {
-        background: #E65100;
-        transform: translateY(-3px) scale(1.04);
-        box-shadow: 0 10px 32px rgba(230, 81, 0, 0.3);
-    }
+    .hbf-arr.is-flat:hover { background: rgba(61, 24, 0, 0.06); transform: none; box-shadow: none; }
 }
-.hbf-dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+.hbf-arr.is-flat:active { transform: scale(0.92); }
+.hbf-counter {
+    font-family: var(--font-secondary), sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-size: clamp(15px, 1.8vw, 19px);
+    display: inline-flex;
+    overflow: hidden;
+    color: #3D1800;
+}
+.hbf-counter-cur { display: inline-block; }
+.hbf-counter-tot { opacity: 0.4; }
+.hbf-dots { display: flex; justify-content: center; gap: 10px; margin-top: 22px; }
 .hbf-dot {
-    width: 10px;
-    height: 10px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
     border: none;
-    background: rgba(230, 81, 0, 0.15);
-    cursor: pointer;
-    transition: all 0.3s ease;
     padding: 0;
+    cursor: pointer;
+    background: rgba(61, 24, 0, 0.18);
+    transition: transform 0.3s, background-color 0.3s;
 }
-.hbf-dot.on {
-    background: #E65100;
-    transform: scale(1.5);
+.hbf-dot.on { transform: scale(1.6); }
+@media (hover: hover) {
+    .hbf-dot:hover { background: rgba(61, 24, 0, 0.4); }
 }
-
 @media (max-width: 991px) {
-    .hbf { padding: 56px 0 64px; }
-    .hbf-arrows { padding: 0 8px; }
-    .hbf-arr { width: 44px; height: 44px; } /* ≥44px tap target */
-    .hbf-cta { padding: 12px 26px; font-size: 14px; }
-    .hbf-dot { width: 12px; height: 12px; } /* easier tap target on phones */
+    .hbf-arr { width: 48px; height: 48px; }
 }
-
 @media (max-width: 767px) {
-    /* Bigger can on phones/tablets */
-    .hbf-stage { min-height: 460px; }
-    .hbf-can { width: 92vw; max-width: 600px; }
+    .hbf-stage { height: clamp(380px, 80vw, 560px); }
+    .hbf-can-fx { width: clamp(215px, 52vw, 340px); }
+    .hbf-ghost { font-size: clamp(80px, 30vw, 200px); }
 }
-
 @media (max-width: 479px) {
-    .hbf-stage { min-height: 520px; }
-    .hbf-can { width: 98vw; max-width: 560px; }
-    .hbf-arr { width: 40px; height: 40px; }
-    .hbf::before, .hbf::after { display: none; } /* decorative rings off on tiny screens */
+    .hbf-arr { width: 42px; height: 42px; }
+    .hbf-bloom { filter: blur(60px); }
 }
 
 /* ── Mobile finale title ("Fuel The Rebel") scroll reveal ───────────────────
@@ -1779,8 +1769,8 @@ h1, h2, h3, h4, h5, h6,
 }
 .hbf-info .button .button-text { font-size: 1.65em !important; }
 .hbf-info .button .button-bg { padding: 0.68em 0.86em 0.44em !important; }
-/* Dark-brown pill like the hero "Buy now" — the default orange blends into the
-   orange warm-zone behind the flavour section. */
+/* Espresso pill on the warm cream stage (matches the hero/footer buy-now on
+   light) — the default orange would melt into the amber backdrop. */
 .hbf-info .button .button-bg,
 .hbf-info .button .button-cycle-bg {
     background-color: #3D1800 !important;

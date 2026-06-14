@@ -14,13 +14,13 @@ import { useEffect } from "react";
  *                         so the browser fetches only duration/dimensions, not the full file
  */
 
-// ── Flavour images (local webps, ~125–202 KB each) ──────────────────────────
+// ── Flavour can images (local webps, ~190 KB each) ──────────────────────────
 const FLAVOUR_IMAGES = [
-  "/img/flavours/original.webp",
-  "/img/flavours/lemon-lime.webp",
-  "/img/flavours/pineapple-passion.webp",
-  "/img/flavours/apple-berry.webp",
-  "/img/flavours/mango-peach.webp",
+  "/img/flavours/can-1.webp",
+  "/img/flavours/can-2.webp",
+  "/img/flavours/can-3.webp",
+  "/img/flavours/can-4.webp",
+  "/img/flavours/can-5.webp",
 ];
 
 // ── Sequence section canvas frames ─────────────────────────────────────────
@@ -41,15 +41,6 @@ function prefetchImages(paths: string[]): void {
     link.href = src;
     document.head.appendChild(link);
   });
-}
-
-function preloadImage(src: string): void {
-  const link = document.createElement("link");
-  link.rel  = "preload";
-  link.as   = "image";
-  link.href = src;
-  link.setAttribute("fetchpriority", "low");
-  document.head.appendChild(link);
 }
 
 export function ResourcePreloader() {
@@ -135,28 +126,6 @@ export function ResourcePreloader() {
         { rootMargin: "400px" }
       );
       obs.observe(insiderSection);
-      observers.push(obs);
-    }
-
-    // ── 4. Testimonial background images: preload when reviews section 500px out ──
-    const reviewsSection = document.querySelector("#reviews") as HTMLElement | null;
-    if (reviewsSection) {
-      let done = false;
-      const reviewImages = [
-        "/img/cdn/689541efc32332b4d96332e4_5aa593a5c181883619e1ec2e48b9a77009ae6ddd.webp",
-        "/img/cdn/689541d1c4bb0b452cb46e3e_b525d1f05540193d88caa60b825b8887a650d649.webp",
-      ];
-      const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting && !done) {
-            done = true;
-            prefetchImages(reviewImages);
-            obs.disconnect();
-          }
-        },
-        { rootMargin: "500px" }
-      );
-      obs.observe(reviewsSection);
       observers.push(obs);
     }
 

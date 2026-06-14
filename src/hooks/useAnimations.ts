@@ -4,12 +4,9 @@ import { useEffect } from 'react';
 
 declare global {
     interface Window {
-        Swiper: any;
         gsap: any;
         ScrollTrigger: any;
         CustomEase: any;
-        CustomWiggle: any;
-        CustomBounce: any;
         DrawSVGPlugin: any;
         InertiaPlugin: any;
         SplitText: any;
@@ -114,47 +111,7 @@ export const useAnimations = () => {
         }
 
         // ────────────────────────────────────────────────
-        // 2. SWIPER (flavour slider) — needs Swiper global
-        // ────────────────────────────────────────────────
-        const initSwiper = async () => {
-            const flavourSliderEl = document.querySelector('[data-flavour-slider]');
-            const contentSliderEl = document.querySelector('[data-flavour-content-slider]');
-            if (!flavourSliderEl || !contentSliderEl) return;
-
-            // Swiper is served locally (public/vendor/swiper) if present — never from
-            // a CDN. CDN loads here were blocked by Firefox/Safari/Edge privacy modes
-            // and broke cross-browser. Our custom FlavourSection doesn't use Swiper,
-            // so this stays a no-op unless a [data-flavour-slider] element exists AND
-            // a local Swiper global is available.
-            if (!window.Swiper) return;
-
-            const contentSwiper = new window.Swiper('[data-flavour-content-slider]', {
-                slidesPerView: 1,
-                allowTouchMove: false,
-                effect: 'fade',
-                fadeEffect: { crossFade: true },
-                speed: 600,
-            });
-
-            const mainSwiper = new window.Swiper('[data-flavour-slider]', {
-                slidesPerView: 1,
-                centeredSlides: true,
-                speed: 800,
-                loop: false,
-                grabCursor: true,
-                breakpoints: { 992: { slidesPerView: 1.5 } },
-                thumbs: { swiper: contentSwiper },
-            });
-
-            const leftBtn = document.querySelector('[data-flavour-slider-left-button]');
-            const rightBtn = document.querySelector('[data-flavour-slider-right-button]');
-            leftBtn?.addEventListener('click', () => { mainSwiper.slidePrev(); contentSwiper.slidePrev(); });
-            rightBtn?.addEventListener('click', () => { mainSwiper.slideNext(); contentSwiper.slideNext(); });
-            mainSwiper.on('slideChange', () => { contentSwiper.slideTo(mainSwiper.activeIndex); });
-        };
-
-        // ────────────────────────────────────────────────
-        // 3. TESTIMONIAL SLIDER (custom horizontal scroll)
+        // 2. TESTIMONIAL SLIDER (custom horizontal scroll)
         // ────────────────────────────────────────────────
         const initTestimonialSlider = () => {
             const slider = document.querySelector('[data-slider]') as HTMLElement;
@@ -182,7 +139,7 @@ export const useAnimations = () => {
         };
 
         // ────────────────────────────────────────────────
-        // 4. VIDEO SOUND — owned entirely by app.js Ao().
+        // 3. VIDEO SOUND — owned entirely by app.js Ao().
         //    app.js attaches its own click handler to every
         //    [data-video-button] (toggles video.muted + play() on unmute) and
         //    a ScrollTrigger that plays/pauses on view. We must NOT add a
@@ -192,7 +149,7 @@ export const useAnimations = () => {
         // ────────────────────────────────────────────────
 
         // ────────────────────────────────────────────────
-        // 5. FOOTER CREDITS TOGGLE
+        // 4. FOOTER CREDITS TOGGLE
         // ────────────────────────────────────────────────
         const initFooterCredits = () => {
             const toggle = document.querySelector('.footer-credits-toggle');
@@ -218,7 +175,7 @@ export const useAnimations = () => {
         };
 
         // ────────────────────────────────────────────────
-        // 6. CUSTOM GSAP ANIMATIONS (benefits, payment, mobile cards, parallax)
+        // 5. CUSTOM GSAP ANIMATIONS (benefits, payment, mobile cards, parallax)
         //    Uses gsap.matchMedia so contexts auto-revert on resize.
         // ────────────────────────────────────────────────
         const initGSAPAnimations = () => {
@@ -280,7 +237,7 @@ export const useAnimations = () => {
         };
 
         // ────────────────────────────────────────────────
-        // 6b. SEQUENCE LIGHTNING — scroll draw-in (one at a time) + strike flash
+        // 5b. SEQUENCE LIGHTNING — scroll draw-in (one at a time) + strike flash
         //     The bolts are <img> of the user's filled lightning art. This brings
         //     back the ORIGINAL behaviour: as you scroll the pinned section each
         //     bolt DRAWS ITSELF IN (a clip-path wipe, scrubbed by scroll), ONE AT
@@ -387,8 +344,6 @@ export const useAnimations = () => {
                         w.DrawSVGPlugin,
                         w.InertiaPlugin,
                         w.SplitText,
-                        ...(w.CustomWiggle ? [w.CustomWiggle] : []),
-                        ...(w.CustomBounce ? [w.CustomBounce] : []),
                     );
                 } catch (err) {
                     console.error('[gsap] registerPlugin failed', err);
@@ -422,7 +377,6 @@ export const useAnimations = () => {
 
             // 5. Our own init tasks (each no-ops gracefully if its DOM is absent).
             //    Video sound/play is owned by app.js Ao() — do NOT init here.
-            initSwiper();
             initTestimonialSlider();
             initFooterCredits();
 

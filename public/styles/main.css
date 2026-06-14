@@ -867,7 +867,7 @@ html.lenis body {
     pointer-events: none !important;
 }
 
-/* Hero background texture at 50% opacity (halftone dots, multiply blend) */
+/* Hero background texture — subtle, matched to the flavour section (opacity 0.16) */
 .stage::before {
     content: "";
     position: absolute;
@@ -876,7 +876,7 @@ html.lenis body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center top;
-    opacity: 0.5;
+    opacity: 0.16;
     mix-blend-mode: multiply;
     pointer-events: none;
     z-index: 0;
@@ -1456,14 +1456,6 @@ body {
     box-shadow: 0 0 0 3px var(--dark-green)
 }
 
-to {
-
-/* End of animation keyframes and media queries fix */
-@media (orientation: portrait) {
-        width: 100%;
-        height: auto
-    }
-}
 
 @media (orientation: landscape) {
     .stage-container {
@@ -1471,181 +1463,6 @@ to {
     }
 }
 
-@media (hover: hover) and (pointer: fine) {
-
-    .button:is(:hover, :focus-visible) .button-bg,
-    .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-bg {
-        translate: -2.5em -.325em 0;
-        rotate: -4deg;
-        scale: .945 .915;
-        transform: scale(1.0582010582, 1.0928961749);
-        transition: translate .8s .1s var(--elastic-ease-out), rotate .8s .1s var(--elastic-ease-out), scale .15s .1s var(--default-ease), transform .35s .25s var(--bouncy-ease), box-shadow .35s var(--smooth-ease)
-    }
-}
-
-@media (hover: hover) and (pointer: fine) {
-
-    .button:is(:hover, :focus-visible) .button-cycle.is-first .button-cycle-bg,
-    .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-cycle.is-first .button-cycle-bg {
-        scale: 0;
-        opacity: 0;
-        transition: scale .35s var(--default-ease), opacity .15s .15s ease-out
-    }
-}
-
-@media (hover: hover) and (pointer: fine) {
-
-    .button:is(:hover, :focus-visible) .button-cycle.is-first .button-arrow,
-    .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-cycle.is-first .button-arrow {
-        translate: -.75em .75em 0;
-        filter: blur(.5rem);
-        opacity: 0;
-        scale: .625;
-        transition: translate .75s .1s var(--elastic-ease-out), scale .25s .1s var(--default-ease), opacity .1s .15s ease-out, filter .1s .15s ease-out
-    }
-}
-
-@media (hover: hover) and (pointer: fine) {
-
-    .button:is(:hover, :focus-visible) .button-cycle.is-second .button-cycle-bg,
-    .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-cycle.is-second .button-cycle-bg {
-        scale: 1;
-        opacity: 1;
-        transition: scale .75s .1s var(--elastic-ease-out), opacity .15s ease-out
-    }
-}
-
-@media (hover: hover) and (pointer: fine) {
-
-    .button:is(:hover, :focus-visible) .button-cycle.is-second .button-arrow,
-    .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-cycle.is-second .button-arrow {
-        translate: 0 0 0;
-        filter: blur(0);
-        opacity: 1;
-        scale: 1;
-        transition: translate .3s .2s var(--bouncy-ease), scale .3s .15s var(--default-ease), opacity .15s .2s ease-out, filter .15s .2s ease-out
-    }
-}
-
-.button:is(:focus-visible) {
-    outline: none
-}
-
-.button:is(:focus-visible) .button-bg {
-    box-shadow: 0 0 0 3px var(--white)
-}
-
-.button:is(:focus-visible) .button-bg.white-bg {
-    box-shadow: 0 0 0 3px var(--dark-green)
-}
-
-.button-bg {
-    transition: translate .8s var(--elastic-ease-out), rotate .8s var(--elastic-ease-out), scale .35s var(--default-ease), transform .35s var(--default-ease), box-shadow .35s var(--smooth-ease)
-}
-
-.button-cycle-bg {
-    transition: scale .75s var(--elastic-ease-out), opacity .15s ease-out
-}
-
-.button-cycle.is-second .button-cycle-bg {
-    scale: 0;
-    opacity: 0;
-    transition: scale .75s var(--elastic-ease-out), opacity .15s .1s ease-out
-}
-
-.button-cycle.is-first .button-arrow {
-    transition: translate .3s .15s var(--bouncy-ease), scale .3s .1s var(--default-ease), opacity .15s .15s ease-out, filter .15s .15s ease-out
-}
-
-.button-cycle.is-second .button-arrow {
-    transition: translate .75s var(--elastic-ease-out), scale .3s var(--default-ease), opacity .15s .05s ease-out, filter .15s .05s ease-out;
-    translate: -.75em .75em 0;
-    filter: blur(.5rem);
-    opacity: 0;
-    scale: .625
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .social-media-link:is(:hover, :focus-visible) .social-media-circle {
-        scale: .945 .915;
-        transform: scale(1.0582010582, 1.0928961749);
-        transition: translate .725s .1s var(--elastic-ease-out), rotate .725s .1s var(--elastic-ease-out), scale .15s .1s var(--default-ease), transform .35s .25s var(--bouncy-ease), box-shadow .35s var(--smooth-ease)
-    }
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .social-media-link:is(:hover, :focus-visible):nth-child(1) .social-media-circle {
-        translate: -.125em -.325em 0;
-        rotate: -4deg
-    }
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .social-media-link:is(:hover, :focus-visible):nth-child(2) .social-media-circle {
-        translate: -.0675em -.4em 0;
-        rotate: -1deg
-    }
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .social-media-link:is(:hover, :focus-visible):nth-child(3) .social-media-circle {
-        translate: .125em -.325em 0;
-        rotate: 3deg
-    }
-}
-
-/* 4th social icon (Facebook) — the original only defined the lift+tilt hover for
-   nth-child 1/2/3, so the added Facebook icon scaled but never lifted or tilted.
-   This continues the fan arc (each icon tilts a touch further right). */
-@media (hover: hover) and (pointer: fine) {
-    .social-media-link:is(:hover, :focus-visible):nth-child(4) .social-media-circle {
-        translate: .1875em -.3em 0;
-        rotate: 6deg
-    }
-}
-
-.social-media-link:is(:focus-visible) {
-    outline: none
-}
-
-.social-media-link:is(:focus-visible) .social-media-circle {
-    box-shadow: 0 0 0 3px var(--dark-green)
-}
-
-.social-media-circle {
-    transition: translate .725s var(--elastic-ease-out), rotate .725s var(--elastic-ease-out), scale .35s var(--default-ease), transform .35s var(--default-ease), box-shadow .35s var(--smooth-ease)
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .nav-link:is(:hover, :focus-visible) .nav-text {
-        scale: .945 .915;
-        transform: scale(1.0582010582, 1.0928961749);
-        transition: translate .725s .1s var(--elastic-ease-out), rotate .725s .1s var(--elastic-ease-out), scale .15s .1s var(--default-ease), transform .35s .25s var(--bouncy-ease), box-shadow .35s var(--smooth-ease)
-    }
-}
-
-.nav-link:is(:hover, :focus-visible):nth-child(1) .nav-text {
-    translate: -.125em -.325em 0;
-    rotate: -4deg
-}
-
-.nav-link:is(:hover, :focus-visible):nth-child(2) .nav-text {
-    translate: -.0675em -.4em 0;
-    rotate: -1deg
-}
-
-.nav-link:is(:hover, :focus-visible):nth-child(3) .nav-text {
-    translate: .125em -.325em 0;
-    rotate: 3deg
-}
-
-.nav-link:is(:focus-visible) {
-    outline: none
-}
-
-.nav-link:is(:focus-visible) .nav-text {
-    box-shadow: 0 0 0 3px var(--dark-green)
-}
 
 .nav-text {
     transition: translate .725s var(--elastic-ease-out), rotate .725s var(--elastic-ease-out), scale .35s var(--default-ease), transform .35s var(--default-ease), box-shadow .35s var(--smooth-ease)

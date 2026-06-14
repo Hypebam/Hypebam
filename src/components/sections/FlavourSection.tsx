@@ -3,191 +3,310 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Button } from '@/components/ui';
 
-const flavours = [
-    { name: 'Original', label: 'Classic Energy', image: '/img/flavours/original.webp', color: '#E65100' },
-    { name: 'Lemon Lime', label: 'Citrus Blast', image: '/img/flavours/lemon-lime.webp', color: '#7CB342' },
-    { name: 'Pineapple Passion', label: 'Tropical Rush', image: '/img/flavours/pineapple-passion.webp', color: '#E91E63' },
-    { name: 'Apple Berry', label: 'Fruity Fusion', image: '/img/flavours/apple-berry.webp', color: '#D32F2F' },
-    { name: 'Mango Peach', label: 'Island Vibes', image: '/img/flavours/mango-peach.webp', color: '#FF8F00' },
+interface Flavour {
+    name: string;
+    tagline: string;
+    image: string;
+    color: string; // deep, vivid accent — reads on warm cream (name / dots / arrows)
+    glow: string;  // brighter bloom that haloes the can
+}
+
+// Warm → cool spectrum so the bloom flows as you spin.
+const FLAVOURS: Flavour[] = [
+    { name: 'Original',          tagline: 'The one that started it all', image: '/img/flavours/can-1.webp', color: '#DC5400', glow: '#FFAE1F' },
+    { name: 'Mango Peach',       tagline: 'Sun-ripened island rush',     image: '/img/flavours/can-2.webp', color: '#EE4118', glow: '#FF7A45' },
+    { name: 'Apple Berry',       tagline: 'Crisp orchard mischief',      image: '/img/flavours/can-4.webp', color: '#D71F26', glow: '#FF5240' },
+    { name: 'Pineapple Passion', tagline: 'Tropical, untamed, bold',     image: '/img/flavours/can-5.webp', color: '#D61E83', glow: '#FF5FAE' },
+    { name: 'Lemon Lime',        tagline: 'Sharp, zesty, electric',      image: '/img/flavours/can-3.webp', color: '#5F9E00', glow: '#B0DC1E' },
 ];
+const N = FLAVOURS.length;
+const wrapIdx = (i: number) => ((i % N) + N) % N;
+const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+const pad2 = (n: number) => String(n + 1).padStart(2, '0');
 
 export const FlavourSection: React.FC = () => {
     const sectionRef = useRef<HTMLElement>(null);
-    const titleRef = useRef<HTMLHeadingElement>(null);
-    const subRef = useRef<HTMLHeadingElement>(null);
-    const productRef = useRef<HTMLDivElement>(null);
-    const infoRef = useRef<HTMLDivElement>(null);
-    const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
-    const gsapRef = useRef<any>(null);
+    const stageRef   = useRef<HTMLDivElement>(null);
+    const bloomRef   = useRef<HTMLDivElement>(null);
+    const ghostRef   = useRef<HTMLDivElement>(null);
+    const nameRef    = useRef<HTMLHeadingElement>(null);
+    const taglineRef = useRef<HTMLParagraphElement>(null);
+    const indexRef   = useRef<HTMLSpanElement>(null);
+    const wrapRefs   = useRef<(HTMLDivElement | null)[]>([]);
+
+    const gsapRef   = useRef<any>(null);
+    const splitRef  = useRef<any>(null);     // current SplitText instance on the name
+    const posRef    = useRef(0);             // VISUAL carousel position (what layout draws)
+    const goalRef   = useRef(0);             // LOGICAL target — updates instantly on each command
+    const unitRef   = useRef(170);           // px of horizontal spread per step
+    const snapTween = useRef<any>(null);
+    const drag      = useRef({ on: false, startX: 0, startPos: 0, lastX: 0, lastT: 0, vel: 0, moved: false });
 
     const [active, setActive] = useState(0);
-    const [sliding, setSliding] = useState(false);
+    const activeRef = useRef(0);              // mirrors `active` for the redundant-change guard
+    const cur = FLAVOURS[active];
 
-    // ── Idle "floating energy" animation on the active can ──
-    // Gentle vertical bob + subtle sway via the shared window.gsap. Only touches
-    // y/rotation; the slide transition (below) owns x/scale/opacity/rotate, and
-    // we stop+reset the float before each slide so the two never fight.
-    const floatTweensRef = useRef<any[]>([]);
-    const stopFloat = useCallback(() => {
-        floatTweensRef.current.forEach((t) => t && t.kill());
-        floatTweensRef.current = [];
-    }, []);
-    const startFloat = useCallback((img: HTMLImageElement | null) => {
+    const offsetOf = (i: number, p: number) => {
+        let o = i - p;
+        while (o >  N / 2) o -= N;
+        while (o < -N / 2) o += N;
+        return o;
+    };
+
+    // Coverflow transform for one can at continuous offset o, with a gentle arc
+    // (side cans dip slightly so the centre "lifts" forward).
+    const place = useCallback((el: HTMLDivElement, o: number) => {
         const gsap = gsapRef.current;
-        if (!gsap || !img) return;
-        floatTweensRef.current.forEach((t) => t && t.kill());
-        gsap.set(img, { y: 0, rotation: 0 });
-        floatTweensRef.current = [
-            gsap.to(img, { y: -16, duration: 2.2, ease: 'sine.inOut', yoyo: true, repeat: -1 }),
-            gsap.to(img, { rotation: 2, duration: 3.1, ease: 'sine.inOut', yoyo: true, repeat: -1 }),
-        ];
+        if (!gsap) return;
+        const a = Math.abs(o);
+        gsap.set(el, {
+            x: o * unitRef.current,
+            y: a * 26,                                   // arc: neighbours sit a touch lower
+            z: -a * 300,
+            rotationY: clamp(-o * 40, -52, 52),
+            scale: Math.max(0.42, 1 - a * 0.26),
+            opacity: Math.max(0.12, 1 - a * 0.5),
+            zIndex: Math.round(100 - a * 12),
+            transformPerspective: 1600,
+            transformOrigin: 'center center',
+        });
     }, []);
 
-    // ── GSAP scroll-triggered entrance ──
-    // Use the SAME window.gsap instance that layout.tsx loads (with ScrollTrigger
-    // + all plugins already registered). Importing a separate npm gsap created a
-    // second instance → "Invalid property scrollTrigger / Missing plugin" warning
-    // in prod + a duplicate gsap in the bundle.
+    // parallax — bloom + ghost word drift opposite the carousel for depth
+    const layout = useCallback((p: number) => {
+        wrapRefs.current.forEach((el, i) => { if (el) place(el, offsetOf(i, p)); });
+        const gsap = gsapRef.current;
+        if (!gsap) return;
+        if (bloomRef.current) gsap.set(bloomRef.current, { xPercent: -50, yPercent: -50, x: -p * 6 });
+        if (ghostRef.current) gsap.set(ghostRef.current, { x: -p * 22 });
+    }, [place]);
+
+    // Morph bloom + cross-fade the ghost word + reveal name (SplitText) on change.
+    const applyActive = useCallback((idx: number) => {
+        if (idx === activeRef.current) return;    // no change → don't re-trigger the reveal
+        activeRef.current = idx;
+        setActive(idx);
+        const gsap = gsapRef.current;
+        const f = FLAVOURS[idx];
+        if (!gsap) return;
+        if (bloomRef.current) gsap.to(bloomRef.current, { backgroundColor: f.glow, duration: 0.7, ease: 'power2.out' });
+        if (nameRef.current)    gsap.to(nameRef.current,    { color: f.color, duration: 0.5, ease: 'power2.out' });
+        if (taglineRef.current) gsap.to(taglineRef.current, { color: f.color, duration: 0.5, ease: 'power2.out' });
+
+        requestAnimationFrame(() => {
+            // ghost word swap
+            if (ghostRef.current) {
+                gsap.fromTo(ghostRef.current, { opacity: 0, scale: 1.12 }, { opacity: 0.07, scale: 1, duration: 0.7, ease: 'power2.out' });
+            }
+            // index counter flip
+            if (indexRef.current) {
+                gsap.fromTo(indexRef.current, { yPercent: -60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.45, ease: 'power3.out' });
+            }
+            // name — SplitText per-char reveal (the real "wow").
+            // The text is set IMPERATIVELY (not via React) because SplitText mutates
+            // the DOM into char spans; if React also owned the text the two would
+            // fight and the name would go stale.
+            if (nameRef.current) {
+                splitRef.current?.revert?.();
+                nameRef.current.textContent = f.name;
+                const SplitText = (window as any).SplitText;
+                if (SplitText) {
+                    const split = SplitText.create(nameRef.current, { type: 'chars' });
+                    splitRef.current = split;
+                    gsap.from(split.chars, {
+                        yPercent: 130, opacity: 0, rotationX: -90, transformOrigin: '50% 100% -20',
+                        stagger: 0.028, duration: 0.6, ease: 'back.out(1.7)',
+                    });
+                } else {
+                    gsap.fromTo(nameRef.current, { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.5, ease: 'power3.out' });
+                }
+            }
+            if (taglineRef.current) {
+                gsap.fromTo(taglineRef.current, { y: 16, opacity: 0 }, { y: 0, opacity: 0.9, duration: 0.5, ease: 'power2.out', delay: 0.05 });
+            }
+        });
+    }, []);
+
+    const animateTo = useCallback((targetPos: number) => {
+        const gsap = gsapRef.current;
+        const target = Math.round(targetPos);
+        goalRef.current = target;                 // commit the logical target IMMEDIATELY
+        snapTween.current?.kill();
+        if (!gsap) { posRef.current = wrapIdx(target); applyActive(wrapIdx(target)); return; }
+        const proxy = { p: posRef.current };
+        snapTween.current = gsap.to(proxy, {
+            p: target, duration: 1.0, ease: 'elastic.out(0.5, 0.62)',
+            onUpdate: () => layout(proxy.p),
+            onComplete: () => { posRef.current = wrapIdx(target); goalRef.current = wrapIdx(target); layout(posRef.current); },
+        });
+        applyActive(wrapIdx(target));
+    }, [layout, applyActive]);
+
+    // stepDir / goToIndex compute from the LOGICAL goal (updates instantly) — never
+    // the visual posRef, which lags behind during the ~1s snap. This is what makes
+    // a second click while the first is still animating actually advance.
+    const goToIndex = useCallback((idx: number) => {
+        const base = Math.round(goalRef.current);
+        let diff = idx - wrapIdx(base);
+        if (diff >  N / 2) diff -= N;
+        if (diff < -N / 2) diff += N;
+        animateTo(base + diff);
+    }, [animateTo]);
+
+    const stepDir = useCallback((dir: number) => animateTo(Math.round(goalRef.current) + dir), [animateTo]);
+
     useEffect(() => {
         let cancelled = false;
+        const cleanup: Array<() => void> = [];
+
         const init = async () => {
-            try {
-                // Wait for the global gsap (+ScrollTrigger) injected by layout.tsx.
-                const start = performance.now();
-                while (!(window as any).gsap || !(window as any).ScrollTrigger) {
-                    if (cancelled) return;
-                    if (performance.now() - start > 8000) return; // give up quietly
-                    await new Promise((r) => setTimeout(r, 50));
-                }
-                const gsap = (window as any).gsap;
+            const t0 = performance.now();
+            while (!(window as any).gsap || !(window as any).ScrollTrigger) {
                 if (cancelled) return;
-                gsapRef.current = gsap;
+                if (performance.now() - t0 > 8000) return;
+                await new Promise((r) => setTimeout(r, 50));
+            }
+            if (cancelled) return;
+            const gsap = (window as any).gsap;
+            gsapRef.current = gsap;
 
-                const tl = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: 'top 80%',
-                        toggleActions: 'play none none reverse',
-                    },
+            const computeUnit = () => {
+                const w = stageRef.current?.offsetWidth || 1000;
+                unitRef.current = clamp(w * 0.18, 120, 240);
+            };
+            computeUnit();
+            const onResize = () => { computeUnit(); layout(posRef.current); };
+            window.addEventListener('resize', onResize);
+            cleanup.push(() => window.removeEventListener('resize', onResize));
+
+            layout(0);
+            if (bloomRef.current) gsap.set(bloomRef.current, { backgroundColor: FLAVOURS[0].glow });
+            if (nameRef.current)  gsap.set(nameRef.current,  { color: FLAVOURS[0].color });
+            if (ghostRef.current) gsap.set(ghostRef.current, { opacity: 0.07 });
+
+            const fx = wrapRefs.current.map((el) => el?.querySelector('.hbf-can-fx')).filter(Boolean) as HTMLElement[];
+            const tl = gsap.timeline({ scrollTrigger: { trigger: sectionRef.current, start: 'top 72%' } });
+            tl.set(stageRef.current, { autoAlpha: 1 });
+            tl.from(bloomRef.current, { scale: 0.4, opacity: 0, duration: 1.1, ease: 'power2.out' }, 0);
+            tl.from(wrapRefs.current.filter(Boolean), { y: 150, opacity: 0, duration: 1.0, ease: 'power3.out', stagger: 0.05 }, 0.1);
+            tl.add(() => {
+                fx.forEach((el, i) => {
+                    gsap.to(el, { y: -13, duration: 2.4 + i * 0.25, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.3 });
+                    gsap.to(el, { rotation: 1.3, duration: 3.3 + i * 0.2, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.4 });
                 });
-
-                // Title drop-in with elastic bounce
-                tl.fromTo(titleRef.current,
-                    { y: 80, opacity: 0, scale: 0.85 },
-                    { y: 0, opacity: 1, scale: 1, duration: 1.1, ease: 'elastic.out(1, 0.6)' }, 0);
-
-                // Subtitle slide up
-                tl.fromTo(subRef.current,
-                    { y: 50, opacity: 0 },
-                    { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0.2);
-
-                // Product scale up with rotation
-                tl.fromTo(productRef.current,
-                    { y: 100, opacity: 0, scale: 0.7, rotate: 8 },
-                    { y: 0, opacity: 1, scale: 1, rotate: 0, duration: 1.2, ease: 'elastic.out(1, 0.5)' }, 0.3);
-
-                // Info block fade up
-                tl.fromTo(infoRef.current,
-                    { y: 40, opacity: 0 },
-                    { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out' }, 0.7);
-
-                // Once the entrance settles, start the idle float on the first can
-                tl.eventCallback('onComplete', () => startFloat(imgRefs.current[0]));
-
-            } catch (_) { /* GSAP unavailable */ }
+                if (bloomRef.current) gsap.to(bloomRef.current, { scale: 1.08, duration: 2.8, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+            }, '>-0.3');
+            cleanup.push(() => { tl.scrollTrigger?.kill(); tl.kill(); });
         };
+
         init();
-        return () => { cancelled = true; stopFloat(); };
-    }, [startFloat, stopFloat]);
 
-    // ── Slide with GSAP animation ──
-    const animateSlide = useCallback((newIndex: number) => {
-        if (sliding) return;
-        setSliding(true);
-        const gsap = gsapRef.current;
-        const currentImg = imgRefs.current[active];
-        const nextImg = imgRefs.current[newIndex];
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowLeft')  stepDir(-1);
+            if (e.key === 'ArrowRight') stepDir(1);
+        };
+        window.addEventListener('keydown', onKey);
 
-        if (gsap && currentImg && nextImg) {
-            stopFloat(); // freeze the idle bob during the transition
-            // Animate current out
-            gsap.to(currentImg, {
-                scale: 0.6, opacity: 0, rotate: -15, x: -60, y: 0,
-                duration: 0.35, ease: 'power2.in',
-                onComplete: () => {
-                    setActive(newIndex);
-                    // Set next image starting position (y:0 — float reset)
-                    gsap.set(nextImg, { scale: 0.6, opacity: 0, rotate: 15, x: 60, y: 0 });
-                    // Animate next in with elastic bounce
-                    gsap.to(nextImg, {
-                        scale: 1, opacity: 1, rotate: 0, x: 0,
-                        duration: 0.7, ease: 'elastic.out(1, 0.6)',
-                        onComplete: () => { setSliding(false); startFloat(nextImg); },
-                    });
-                },
-            });
-        } else {
-            setActive(newIndex);
-            setTimeout(() => setSliding(false), 400);
+        return () => {
+            cancelled = true;
+            window.removeEventListener('keydown', onKey);
+            snapTween.current?.kill();
+            splitRef.current?.revert?.();
+            cleanup.forEach((c) => { try { c(); } catch { /* ignore */ } });
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const onPointerDown = (e: React.PointerEvent) => {
+        if (!gsapRef.current || e.button !== 0) return;
+        snapTween.current?.kill();
+        drag.current = { on: true, startX: e.clientX, startPos: posRef.current, lastX: e.clientX, lastT: performance.now(), vel: 0, moved: false };
+        (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    };
+    const onPointerMove = (e: React.PointerEvent) => {
+        const d = drag.current;
+        if (!d.on) return;
+        const dx = d.startX - e.clientX;
+        posRef.current = d.startPos + dx / (unitRef.current * 1.5);
+        layout(posRef.current);
+        const now = performance.now();
+        const dt = now - d.lastT;
+        if (dt > 0) d.vel = (d.lastX - e.clientX) / dt;
+        d.lastX = e.clientX; d.lastT = now;
+        if (Math.abs(dx) > 4) d.moved = true;
+    };
+    const onPointerUp = (e: React.PointerEvent) => {
+        const d = drag.current;
+        if (!d.on) return;
+        d.on = false;
+        try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch { /* ignore */ }
+        if (!d.moved) {
+            const el = document.elementFromPoint(e.clientX, e.clientY);
+            const w = el?.closest('.hbf-can-wrap') as HTMLDivElement | null;
+            const idx = w ? wrapRefs.current.indexOf(w) : -1;
+            if (idx >= 0 && idx !== active) goToIndex(idx);
+            return;
         }
-    }, [active, sliding, startFloat, stopFloat]);
-
-    const goPrev = () => animateSlide((active - 1 + flavours.length) % flavours.length);
-    const goNext = () => animateSlide((active + 1) % flavours.length);
-
-    const cur = flavours[active];
+        const flick = clamp((d.vel * 1000 / (unitRef.current * 1.5)) * 0.35, -1.4, 1.4);
+        animateTo(posRef.current + flick);
+    };
 
     return (
         <section ref={sectionRef} id="flavours-section" className="hbf">
-            {/* ── Header ── */}
-            <div className="hbf-head" data-typography-target="flavour-head-text-field">
-                <h2 ref={titleRef} className="hbf-t1">Sri Lankanized, just the way you like it.</h2>
-                <h3 ref={subRef} className="hbf-t2">What&apos;s your flavour?</h3>
+            <div className="hbf-texture" aria-hidden="true" />
+            <div ref={ghostRef} className="hbf-ghost" aria-hidden="true">{cur.name}</div>
+            <div ref={bloomRef} className="hbf-bloom" aria-hidden="true" />
+
+            <div className="hbf-head">
+                <h2 className="hbf-kicker">Five ways to fuel the rebel</h2>
+                <h3 className="hbf-title">What&apos;s your flavour?</h3>
             </div>
 
-            {/* ── Centered product stage ── */}
-            <div style={{ position: 'relative', maxWidth: 900, margin: '0 auto' }}>
-                <div ref={productRef} className="hbf-stage">
-                    {/* Cinematic color glow */}
-                    <div className="hbf-glow" style={{ background: cur.color }} />
-                    {flavours.map((f, i) => (
-                        <div key={i} className="hbf-can-wrap">
-                            <img
-                                ref={el => { imgRefs.current[i] = el; }}
-                                className={`hbf-can ${i !== active ? 'hidden' : ''}`}
-                                src={f.image}
-                                alt={`Hype Bam ${f.name}`}
-                                draggable={false}
-                                /* First flavour is the default active — load eagerly so it's
-                                   ready when the GSAP entrance animation fires */
-                                loading={i === 0 ? "eager" : "lazy"}
-                                fetchPriority={i === 0 ? "high" : "low"}
-                                decoding="async"
-                            />
+            <div
+                ref={stageRef}
+                className="hbf-stage"
+                onPointerDown={onPointerDown}
+                onPointerMove={onPointerMove}
+                onPointerUp={onPointerUp}
+                onPointerCancel={onPointerUp}
+            >
+                {FLAVOURS.map((f, i) => (
+                    <div key={i} ref={(el) => { wrapRefs.current[i] = el; }} className="hbf-can-wrap">
+                        <div className="hbf-can-fx">
+                            <img className="hbf-can" src={f.image} alt={`Hype Bam ${f.name}`} draggable={false} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
                         </div>
-                    ))}
-                </div>
+                    </div>
+                ))}
 
-                {/* Arrows flanking the product */}
-                <div className="hbf-arrows">
-                    <button className="hbf-arr" onClick={goPrev} aria-label="Previous flavour">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-                    </button>
-                    <button className="hbf-arr" onClick={goNext} aria-label="Next flavour">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 18l6-6-6-6"/></svg>
-                    </button>
-                </div>
+                <button className="hbf-arr is-prev" onPointerDown={(e) => e.stopPropagation()} onClick={() => stepDir(-1)} aria-label="Previous flavour">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+                </button>
+                <button className="hbf-arr is-next" onPointerDown={(e) => e.stopPropagation()} onClick={() => stepDir(1)} aria-label="Next flavour">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+                </button>
             </div>
 
-            {/* ── Info ── */}
-            <div ref={infoRef} className="hbf-info">
-                <p className="hbf-lbl" style={{ color: cur.color }}>{cur.label}</p>
-                <h3 className={`hbf-name ${sliding ? 'slide-out' : ''}`}>{cur.name}</h3>
+            <div className="hbf-info">
+                <p ref={taglineRef} className="hbf-tagline">{cur.tagline}</p>
+                {/* name text is owned imperatively (SplitText) — render the initial
+                    flavour as a constant so React never fights the char spans */}
+                <h3 ref={nameRef} className="hbf-name">{FLAVOURS[0].name}</h3>
+
+                <div className="hbf-controls">
+                    <button className="hbf-arr is-flat is-prev" onClick={() => stepDir(-1)} aria-label="Previous flavour">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+                    </button>
+                    <span className="hbf-counter"><span ref={indexRef} className="hbf-counter-cur">{pad2(active)}</span><span className="hbf-counter-tot"> / {pad2(N - 1)}</span></span>
+                    <button className="hbf-arr is-flat is-next" onClick={() => stepDir(1)} aria-label="Next flavour">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+                    </button>
+                </div>
+
                 <Button href="#">Buy now</Button>
+
                 <div className="hbf-dots">
-                    {flavours.map((_, i) => (
-                        <button key={i} className={`hbf-dot ${i === active ? 'on' : ''}`}
-                            onClick={() => !sliding && animateSlide(i)} aria-label={`Flavour ${i + 1}`} />
+                    {FLAVOURS.map((f, i) => (
+                        <button key={i} className={`hbf-dot ${i === active ? 'on' : ''}`} style={i === active ? { background: f.color } : undefined} onClick={() => goToIndex(i)} aria-label={`Show ${f.name}`} />
                     ))}
                 </div>
             </div>
