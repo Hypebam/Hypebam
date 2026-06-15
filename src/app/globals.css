@@ -688,6 +688,15 @@ html.is-ready.lenis-stopped {
 
 @media (max-width: 991px) {
     .testimonial-section { overflow: clip !important; padding-bottom: 0 !important; }
+    /* The flame/can backdrop is translateY(-4%), so it ends ~53px above the
+       section bottom — leaving a hard image edge + a dark seam on the SIDES of
+       the centred white card right where it meets the flavour section (reads as
+       stray "cards" poking below). Fade the backdrop into the boundary so the
+       card sits on a clean transition instead. */
+    .testimonial-section .bg-img-wrapper {
+        -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 190px), transparent calc(100% - 40px));
+        mask-image: linear-gradient(to bottom, #000 calc(100% - 190px), transparent calc(100% - 40px));
+    }
 }
 
 /* Container 8: Benefits text field */

@@ -401,6 +401,29 @@ export const useAnimations = () => {
 
             if (gsapReady) initGSAPAnimations();
             if (gsapReady) initSequenceLightning();
+
+            // 6. Recalculate every ScrollTrigger once the layout above the sequence
+            //    has fully settled. The lightning trigger's scroll range is computed
+            //    right after app.js loads — BEFORE web-fonts swap and lazy media
+            //    settle the final page height. On loads where the height then shifts,
+            //    the section enters view at a progress already past the first bolt's
+            //    slice, so bolt #1 is set straight to "gone" and never draws ("first
+            //    lightning sometimes doesn't work"). Refreshing after fonts + full
+            //    load + a couple of delays re-syncs the range every time.
+            if (gsapReady) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const ST = (window as any).ScrollTrigger;
+                const refresh = () => { try { ST?.refresh(); } catch { /* noop */ } };
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (document as any).fonts?.ready?.then?.(refresh);
+                if (document.readyState === 'complete') refresh();
+                else window.addEventListener('load', refresh, { once: true });
+                const timers = [setTimeout(refresh, 500), setTimeout(refresh, 1500), setTimeout(refresh, 3000)];
+                cleanups.push(() => {
+                    window.removeEventListener('load', refresh);
+                    timers.forEach(clearTimeout);
+                });
+            }
         })();
 
         // ────────────────────────────────────────────────
