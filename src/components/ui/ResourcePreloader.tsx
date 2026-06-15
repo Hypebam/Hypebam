@@ -5,16 +5,19 @@ import { useEffect } from "react";
 /**
  * ResourcePreloader
  * ─────────────────
- * Handles all run-time asset preloading that can't be done statically in <head>.
+ * Pulls the heavy scroll-driven assets into cache AHEAD of time so nothing
+ * downloads in real time while the user scrolls (which causes canvas stutter /
+ * pop-in). It runs once the page is idle, in low-priority background chunks.
  *
- * Strategy by asset type:
- * 1. Flavour images  — Prefetch all 5 when flavour section is 400px away  (interactive gallery)
- * 2. Sequence frames — Prefetch in rolling batches as the user scrolls into the canvas section
- * 3. Testimonial videos — Set preload="metadata" when InsiderSection enters viewport
- *                         so the browser fetches only duration/dimensions, not the full file
+ * Smart by connection (we keep full image quality — only the *timing* adapts):
+ *   • Fast (wifi / 4g):   prefetch EVERYTHING ahead — hero frames, all 200
+ *                         sequence frames, every flavour can. Zero real-time loads.
+ *   • Slow / Save-Data:   only the tiny flavour cans up-front; the 35 MB sequence
+ *                         stays just-in-time (rolling batches as you approach it)
+ *                         so we never burn a metered connection.
  */
 
-// ── Flavour can images (local webps, ~190 KB each) ──────────────────────────
+// ── Asset maps ──────────────────────────────────────────────────────────────
 const FLAVOUR_IMAGES = [
   "/img/flavours/can-1.webp",
   "/img/flavours/can-2.webp",
@@ -23,116 +26,112 @@ const FLAVOUR_IMAGES = [
   "/img/flavours/can-5.webp",
 ];
 
-// ── Sequence section canvas frames ─────────────────────────────────────────
-//    seq_0 = 200 frames (HypeBam can spin). app.js's sequence canvas only ever
-//    loads seq_0_*; we prefetch them in batches so the browser pipeline stays clean.
-const SEQ_0_TOTAL = 200; // seq_0_0 … seq_0_199
-const SEQ_BATCH   = 30;  // frames per IntersectionObserver trigger
+const SEQ_TOTAL = 200; // seq_0_0 … seq_0_199   (~35 MB — the can-spin scrub)
+const HERO_TOTAL = 90; // hypeBamVideo001 … 090 (~4.3 MB — the hero can canvas)
 
-function buildSeqPaths(prefix: string, count: number): string[] {
-  return Array.from({ length: count }, (_, i) => `/img/${prefix}_${i}.webp`);
+const pad3 = (n: number) => String(n).padStart(3, "0");
+const seqPaths = (from: number, to: number) =>
+  Array.from({ length: to - from }, (_, i) => `/img/seq_0_${from + i}.webp`);
+const heroPaths = (from: number, to: number) =>
+  Array.from({ length: to - from + 1 }, (_, i) => `/img/hypeBamVideo${pad3(from + i)}.webp`);
+
+// ── Low-priority background prefetch ────────────────────────────────────────
+function prefetch(src: string): void {
+  // de-dupe so we never queue the same asset twice
+  if (document.querySelector(`link[rel="prefetch"][href="${src}"]`)) return;
+  const link = document.createElement("link");
+  link.rel = "prefetch";
+  link.as = "image";
+  link.href = src;
+  document.head.appendChild(link);
 }
 
-function prefetchImages(paths: string[]): void {
-  paths.forEach((src) => {
-    const link = document.createElement("link");
-    link.rel  = "prefetch";
-    link.as   = "image";
-    link.href = src;
-    document.head.appendChild(link);
-  });
+// Queue links in gentle chunks so we never spike the network all at once — the
+// browser then fetches them at idle priority, well before they're needed.
+function prefetchChunked(paths: string[], chunk = 16, gap = 350): void {
+  let i = 0;
+  const run = () => {
+    paths.slice(i, i + chunk).forEach(prefetch);
+    i += chunk;
+    if (i < paths.length) setTimeout(run, gap);
+  };
+  run();
 }
 
 export function ResourcePreloader() {
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const conn = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    const metered = !!conn && (conn.saveData === true || ["slow-2g", "2g", "3g"].includes(conn.effectiveType));
+
     const observers: IntersectionObserver[] = [];
 
-    // ── 1. Flavour images: prefetch all when section 600px away ───────────
-    const flavourSection = document.querySelector("#flavours-section") as HTMLElement | null;
-    if (flavourSection) {
+    const idle = (cb: () => void) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const ric = (window as any).requestIdleCallback;
+      if (typeof ric === "function") ric(cb, { timeout: 2500 });
+      else setTimeout(cb, 1000);
+    };
+
+    // ── Metered fallback: keep the 35 MB sequence just-in-time ──────────────
+    const sequenceJustInTime = () => {
+      const seqSection = document.querySelector("[data-sequence]");
+      if (!seqSection) return;
+      let n = 0;
+      const BATCH = 30;
+      const nextBatch = () => {
+        if (n >= SEQ_TOTAL) return;
+        seqPaths(n, Math.min(n + BATCH, SEQ_TOTAL)).forEach(prefetch);
+        n += BATCH;
+      };
+      // first batches well before it enters view, then more as you scroll through
+      const ahead = new IntersectionObserver(([e]) => { if (e.isIntersecting) nextBatch(); }, { rootMargin: "1200px" });
+      ahead.observe(seqSection);
+      const through = new IntersectionObserver(([e]) => { if (e.isIntersecting && n < SEQ_TOTAL) nextBatch(); }, { threshold: [0, 0.25, 0.5, 0.75] });
+      through.observe(seqSection);
+      observers.push(ahead, through);
+    };
+
+    idle(() => {
+      // Flavour cans are tiny (~960 KB) — always pull them ahead.
+      FLAVOUR_IMAGES.forEach(prefetch);
+
+      if (metered) {
+        sequenceJustInTime();
+        return;
+      }
+
+      // Fast connection → pull everything ahead, in the background, so nothing
+      // ever loads in real time. Hero frames first (needed soonest), then the
+      // full sequence.
+      prefetchChunked(heroPaths(6, HERO_TOTAL), 16, 250);
+      prefetchChunked(seqPaths(0, SEQ_TOTAL), 18, 350);
+    });
+
+    // ── Testimonial videos: fetch metadata only (≈50 KB) as you approach ────
+    const insider = document.querySelector(".insider-section");
+    if (insider) {
       let done = false;
       const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting && !done) {
+        ([e]) => {
+          if (e.isIntersecting && !done) {
             done = true;
-            prefetchImages(FLAVOUR_IMAGES);
-            obs.disconnect();
-          }
-        },
-        { rootMargin: "600px" } // trigger 600px before in viewport
-      );
-      obs.observe(flavourSection);
-      observers.push(obs);
-    }
-
-    // ── 2. Sequence frames: rolling batch prefetch ────────────────────────
-    const seqSection = document.querySelector("[data-sequence]") as HTMLElement | null;
-    if (seqSection) {
-      const seq0 = buildSeqPaths("seq_0", SEQ_0_TOTAL);
-      let batchIndex = 0;
-
-      const prefetchNextBatch = () => {
-        const start = batchIndex * SEQ_BATCH;
-        const end   = Math.min(start + SEQ_BATCH, SEQ_0_TOTAL);
-        if (start >= SEQ_0_TOTAL) return;
-        prefetchImages(seq0.slice(start, end));
-        batchIndex++;
-      };
-
-      // First batch immediately when section is 800px out
-      const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            prefetchNextBatch();
-          }
-        },
-        { rootMargin: "800px", threshold: 0 }
-      );
-      obs.observe(seqSection);
-      observers.push(obs);
-
-      // Continue prefetching remaining batches on scroll inside section
-      const scrollObs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting && batchIndex * SEQ_BATCH < SEQ_0_TOTAL) {
-            prefetchNextBatch();
-          }
-        },
-        { threshold: [0, 0.25, 0.5, 0.75] }
-      );
-      scrollObs.observe(seqSection);
-      observers.push(scrollObs);
-    }
-
-    // ── 3. Video preload: set preload="metadata" when insider section near ─
-    //    Full video data streams only when user scrolls to that section.
-    //    preload="metadata" fetches just the first frame + duration (~50KB).
-    const insiderSection = document.querySelector(".insider-section") as HTMLElement | null;
-    if (insiderSection) {
-      let videosUpgraded = false;
-      const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting && !videosUpgraded) {
-            videosUpgraded = true;
-            const videos = insiderSection.querySelectorAll<HTMLVideoElement>("video[data-video]");
-            videos.forEach((v) => {
-              if (v.preload === "none") {
-                v.preload = "metadata";
-              }
+            insider.querySelectorAll<HTMLVideoElement>("video[data-video]").forEach((v) => {
+              if (v.preload === "none") v.preload = "metadata";
             });
             obs.disconnect();
           }
         },
-        { rootMargin: "400px" }
+        { rootMargin: "600px" }
       );
-      obs.observe(insiderSection);
+      obs.observe(insider);
       observers.push(obs);
     }
 
     return () => observers.forEach((o) => o.disconnect());
   }, []);
 
-  // Renders nothing — pure side-effect component
+  // Pure side-effect component
   return null;
 }
 

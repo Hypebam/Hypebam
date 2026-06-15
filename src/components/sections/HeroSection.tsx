@@ -18,6 +18,57 @@ export const HeroSection: React.FC = () => {
         }
     }, []);
 
+    // ── Logo entrance "charge" ─────────────────────────────────────────────
+    // When the loader lifts and the logo arrives, it fires ONE electric "BAM"
+    // shudder — a scale punch + sharp jitter + warm glow flash that elastically
+    // settles. Mirrors the loader's charge-quiver → power-surge language and
+    // literally plays out the "BAM" as the logo lands. Afterwards it only keeps a
+    // very gentle breathe (no repeated shaking). Runs on the wrapper so it never
+    // fights app.js's container slide-in or the img's locked scale(1.3).
+    useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const anims: any[] = [];
+        let tries = 0;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const w = (window as any);
+        const iv = setInterval(() => {
+            const gsap = w.gsap;
+            const el = document.querySelector('.stage-logo-anim');
+            // wait for the loader to lift (is-ready) so the BAM happens on reveal
+            const ready = document.documentElement.classList.contains('is-ready');
+            if (gsap && el && ready) {
+                clearInterval(iv);
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                gsap.set(el, { transformOrigin: '50% 100%', willChange: 'transform, filter' });
+                const POP = 'drop-shadow(0 0 18px rgba(255,190,80,0.8)) drop-shadow(0 0 46px rgba(255,110,0,0.45))';
+                const OFF = 'drop-shadow(0 0 0px rgba(255,190,80,0))';
+                // ── ONE-TIME entrance BAM (slight delay so it lands as the logo reveals) ──
+                const entrance = gsap.timeline({
+                    delay: 0.4,
+                    onComplete: () => {
+                        // gentle, alive — but NO shake — once settled
+                        anims.push(
+                            gsap.to(el, { scale: 1.022, duration: 2.8, ease: 'sine.inOut', yoyo: true, repeat: -1 }),
+                            gsap.fromTo(el, { rotation: -0.5 }, { rotation: 0.5, duration: 3.6, ease: 'sine.inOut', yoyo: true, repeat: -1 }),
+                        );
+                    },
+                });
+                entrance
+                    .to(el, { scale: 1.075, filter: POP, duration: 0.08, ease: 'power3.out' })
+                    .to(el, { rotation: 4.4,  x: 7,  duration: 0.04,  ease: 'none' })
+                    .to(el, { rotation: -5.4, x: -8, duration: 0.05,  ease: 'none' })
+                    .to(el, { rotation: 3.8,  x: 5,  duration: 0.045, ease: 'none' })
+                    .to(el, { rotation: -2.4, x: -3, duration: 0.04,  ease: 'none' })
+                    .to(el, { rotation: 1.2,  x: 1.4, duration: 0.04, ease: 'none' })
+                    .to(el, { rotation: 0, x: 0, scale: 1, filter: OFF, duration: 0.95, ease: 'elastic.out(1, 0.4)' });
+                anims.push(entrance);
+            } else if (++tries > 280) {
+                clearInterval(iv);
+            }
+        }, 50);
+        return () => { clearInterval(iv); anims.forEach((a) => a && a.kill && a.kill()); };
+    }, []);
+
     return (
         <section data-load-stage="" data-inertia="" className="stage" style={{ paddingBottom: 0, overflow: 'visible' }}>
             <div className="stage-overlay"></div>
@@ -25,13 +76,18 @@ export const HeroSection: React.FC = () => {
                 <div className="stage-inner">
                     <div className="stage-content">
                         <div className="stage-logo" data-load-stage-logo="">
-                            <img
-                                src="/img/hypebam-logo-final-vector-02.svg"
-                                loading="eager"
-                                fetchPriority="high"
-                                alt="Hype Bam logo"
-                                className="stage-logo-img"
-                            />
+                            {/* Transparent wrapper so the idle "charged" animation can compose
+                                cleanly with app.js's container entrance AND the img's
+                                scale(1.3) !important — none of them fight. */}
+                            <span className="stage-logo-anim">
+                                <img
+                                    src="/img/hypebam-logo-final-vector-02.svg"
+                                    loading="eager"
+                                    fetchPriority="high"
+                                    alt="Hype Bam logo"
+                                    className="stage-logo-img"
+                                />
+                            </span>
                             {/* Animated Lottie logo (original site flourish), lazy-loaded.
                                 app.js yo() calls this element's .play() on hero intro. */}
                             <div
