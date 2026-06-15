@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const statementCards = [
     {
@@ -69,7 +69,81 @@ const statementCards = [
     }
 ];
 
+// Each visible bolt = your EXACT lightning art, masked by a stroke drawn along
+// the bolt's TRUE centreline — extracted by rasterising the artwork, dilating it
+// to a solid bolt, skeletonising it (Zhang–Suen thinning) and tracing the
+// longest path, so the line follows every zigzag (not a smoothed diagonal).
+// strokeWidth is the minimum that fully covers the bolt + its forks: verified
+// 0% clipped, so the reveal is pixel-identical to your SVG and runs tip-to-tip
+// exactly along the lightning path.
+const BOLTS = [
+    { cls: 'is-first',  mask: 'bolt-mask-1', img: '/img/Lines/lightning 1.svg', w: 170,
+      path: 'M 183 103 L 195 138 L 225 153 L 270 190 L 293 223 L 325 238 L 343 265 L 455 328 L 483 358 L 485 390 L 520 433 L 538 438 L 640 435 L 663 445 L 748 453 L 758 465 L 765 508 L 825 608 L 828 628 L 825 645 L 815 655 L 815 683 L 828 710 L 830 733 L 850 770 L 923 835 L 945 843 L 958 833 L 988 838 L 1098 883' },
+    { cls: 'is-second', mask: 'bolt-mask-2', img: '/img/Lines/lightning 2.svg', w: 200,
+      path: 'M 1098 163 L 1033 263 L 1025 293 L 1030 303 L 1020 325 L 945 378 L 908 390 L 830 395 L 803 368 L 773 373 L 665 413 L 610 418 L 603 425 L 588 498 L 570 525 L 548 635 L 495 663 L 460 663 L 435 678 L 340 783 L 318 790 L 290 823 L 265 828 L 243 853 L 225 860 L 195 895 L 150 908' },
+    { cls: 'is-third',  mask: 'bolt-mask-3', img: '/img/Lines/lightning 3.svg', w: 130,
+      path: 'M 140 95 L 278 145 L 303 148 L 308 138 L 343 143 L 360 160 L 375 188 L 430 365 L 460 400 L 478 438 L 483 468 L 525 530 L 528 565 L 523 583 L 530 593 L 550 595 L 565 605 L 648 603 L 665 613 L 773 605 L 808 610 L 813 625 L 853 670 L 853 703 L 875 730 L 1015 808 L 1035 840 L 1068 855 L 1085 888 L 1128 915 L 1143 933 L 1175 950 L 1200 1000' },
+] as const;
+
 export const SequenceSection: React.FC = () => {
+    const mobileTitleRef = useRef<HTMLHeadingElement>(null);
+
+    // Mobile finale title reveal. Every event-based approach (CSS
+    // `animation-timeline: view()`, IntersectionObserver one-shot, then a
+    // scroll-event scrub) was fine in desktop Chromium but failed on the user's
+    // phone — because on touch devices Lenis falls back to native scroll and
+    // iOS Safari does NOT fire `scroll` events continuously during momentum, so
+    // an event-driven scrub never ticks mid-swipe.
+    //
+    // Bulletproof fix: a requestAnimationFrame LOOP that re-reads the title's
+    // viewport position every frame and maps it to opacity + slide. It depends
+    // on nothing but rAF (universal) — no scroll events, no Lenis hook, no
+    // view-timeline support. An IntersectionObserver only starts/stops the loop
+    // so it costs nothing when the section is far away. CSS default keeps the
+    // title fully visible if JS never runs (never stuck blank).
+    useEffect(() => {
+        const el = mobileTitleRef.current;
+        if (!el) return;
+        const section: Element = el.closest('.sequence-section') ?? el;
+        let running = false;
+        let raf = 0;
+
+        const tick = () => {
+            if (!running) return;
+            if (el.offsetParent !== null) { // skip while hidden (desktop layout)
+                const r = el.getBoundingClientRect();
+                const vh = window.innerHeight || 1;
+                // 0 as the title first appears low on screen → 1 once it rises to ~mid.
+                const start = vh * 0.9, end = vh * 0.45;
+                const prog = Math.max(0, Math.min(1, (start - r.top) / (start - end)));
+                el.style.opacity = String(prog);
+                el.style.transform = `translateY(${(1 - prog) * 1.8}rem)`;
+            }
+            raf = requestAnimationFrame(tick);
+        };
+
+        const io = new IntersectionObserver(
+            (entries) => {
+                const near = entries[0]?.isIntersecting ?? false;
+                if (near && !running) {
+                    running = true;
+                    raf = requestAnimationFrame(tick);
+                } else if (!near && running) {
+                    running = false;
+                    if (raf) cancelAnimationFrame(raf);
+                }
+            },
+            { rootMargin: '300px 0px 300px 0px' }
+        );
+        io.observe(section);
+
+        return () => {
+            running = false;
+            if (raf) cancelAnimationFrame(raf);
+            io.disconnect();
+        };
+    }, []);
+
     return (
         <div id="nutrition" data-sequence="" className="sequence-section">
             <div className="sequence-signature">
@@ -121,10 +195,9 @@ export const SequenceSection: React.FC = () => {
                     </div>
 
                     <div className="sequence-lines">
-                        {/* HIDDEN RIG (opacity:0): app.js's sequence init queries
-                            [data-sequence-svg] path and throws (killing the canvas/can) if
-                            none exist. Keep the original stroked paths purely to satisfy it —
-                            they're invisible. The VISIBLE bolts are the lightning <img>s below. */}
+                        {/* HIDDEN RIG (opacity:0 in globals): app.js's sequence init queries
+                            [data-sequence-svg] path and breaks the canvas if none exist, so
+                            keep these stroked originals purely to satisfy it. */}
                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 691" fill="none" data-sequence-svg="" aria-hidden="true" className="sequence-line-rig">
                             <path d="M205.05 580.27 L405.14 634.84 L389.98 569.66 L706.78 634.84 L74.69 110.38 L677.98 174.04 L432.42 201.33 L1267.62 468.11 L955.37 319.56 L1825.43 -10.5" stroke="currentColor" strokeWidth="36" fill="none"></path>
                         </svg>
@@ -134,12 +207,24 @@ export const SequenceSection: React.FC = () => {
                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 2000 750" fill="none" data-sequence-svg="" aria-hidden="true" className="sequence-line-rig">
                             <path d="M2650.41 661.58l-434.27-85.16 43.2 42.58-584.34-210.83 138.69-31.83h-250.11l-532.04 213.73-497.94 50.77 154.61-187.19-216 109.14L924.69 85.3l-497.94 50.02 163.71 75.03c-385.77 13.64-771.54 27.28-1157.31 40.93l109.14-45.47-241.01-95.49 90.95 11.37-129.6-210.11" stroke="currentColor" strokeWidth="36" fill="none"></path>
                         </svg>
-                        {/* VISIBLE lightning: your filled SVG art, untouched, as <img>. Same
-                            is-first/second/third slots (size/rotation/placement). Recolored +
-                            made to STRIKE & flicker by useAnimations.ts (initSequenceLightning). */}
-                        <img src="/img/Lines/lightning%201.svg" alt="" aria-hidden="true" loading="lazy" data-lightning="" className="sequence-line-svg is-first" />
-                        <img src="/img/Lines/lightning%202.svg" alt="" aria-hidden="true" loading="lazy" data-lightning="" className="sequence-line-svg is-second" />
-                        <img src="/img/Lines/lightning%203.svg" alt="" aria-hidden="true" loading="lazy" data-lightning="" className="sequence-line-svg is-third" />
+                        {/* VISIBLE bolts = YOUR lightning art (img/Lines/lightning N.svg),
+                            revealed by an SVG mask whose stroke is DRAWN along the bolt's own
+                            centreline (data-bolt-reveal, animated by useAnimations →
+                            stroke-dashoffset). So the exact artwork appears tip-to-tip along
+                            the lightning path. Recolour + glow + placement in globals.css. */}
+                        {BOLTS.map((b) => (
+                            <svg key={b.cls} viewBox="0 0 1280 1024" data-lightning="" aria-hidden="true"
+                                className={`sequence-line-svg ${b.cls}`}>
+                                <defs>
+                                    <mask id={b.mask} maskUnits="userSpaceOnUse">
+                                        <path data-bolt-reveal="" d={b.path} stroke="#fff" strokeWidth={b.w}
+                                            fill="none" strokeLinecap="round" strokeLinejoin="round"
+                                            pathLength={1} style={{ strokeDasharray: 1, strokeDashoffset: 1 }} />
+                                    </mask>
+                                </defs>
+                                <image href={b.img} width={1280} height={1024} mask={`url(#${b.mask})`} />
+                            </svg>
+                        ))}
                     </div>
                 </div>
 
@@ -178,7 +263,7 @@ export const SequenceSection: React.FC = () => {
                 </div>
 
                 <div className="sequence-final-mobile">
-                    <h2 className="sequence-title">
+                    <h2 ref={mobileTitleRef} className="sequence-title">
                         Fuel The Rebel<br /><span className="light-green-span">Let&apos;s Get Bam&apos;ed</span><br />
                     </h2>
                     </div>

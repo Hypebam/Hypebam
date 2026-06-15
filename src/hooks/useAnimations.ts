@@ -259,19 +259,32 @@ export const useAnimations = () => {
             const bolts = Array.from(section.querySelectorAll<HTMLElement>('[data-lightning]'));
             if (!bolts.length) return;
 
+            // Each bolt's mask-reveal stroke — drawing it (offset 1→0) reveals the
+            // artwork tip-to-tip ALONG the lightning path.
+            const reveals = bolts.map((b) => b.querySelector<SVGPathElement>('[data-bolt-reveal]'));
+
             const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            // Hidden to start: clipped fully away + transparent.
-            gsap.set(bolts, { clipPath: 'inset(0 100% 0 0)', opacity: 0, '--bolt-bright': 1 });
+            // Hidden to start: reveal stroke fully retracted + bolt transparent.
+            gsap.set(reveals.filter(Boolean), { strokeDasharray: 1, strokeDashoffset: 1 });
+            gsap.set(bolts, { opacity: 0, '--bolt-bright': 1 });
 
-            // The strike flash — fires once when a bolt finishes drawing in.
+            // The strike flash — fires when a bolt finishes drawing in. A real bolt
+            // flickers in two bursts, so this is a DOUBLE strike: a first flash that
+            // settles, a beat of darkness, then a second, brighter flash that decays.
             const strike = (el: HTMLElement) =>
                 gsap.timeline()
-                    .fromTo(el, { '--bolt-bright': 3.0 }, { '--bolt-bright': 1.2, duration: 0.05, ease: 'none' })
-                    .to(el, { '--bolt-bright': 2.6, duration: 0.03, ease: 'none' })
+                    // ── first flash ──
+                    .fromTo(el, { '--bolt-bright': 3.2 }, { '--bolt-bright': 1.3, duration: 0.05, ease: 'none' })
+                    .to(el, { '--bolt-bright': 2.5, duration: 0.035, ease: 'none' })
+                    .to(el, { '--bolt-bright': 1.1, duration: 0.06, ease: 'power1.out' })
+                    // ── beat of darkness ──
+                    .to(el, { '--bolt-bright': 0.82, duration: 0.06, ease: 'none' })
+                    // ── second flash (bigger) ──
+                    .to(el, { '--bolt-bright': 3.4, duration: 0.04, ease: 'none' })
                     .to(el, { '--bolt-bright': 1.4, duration: 0.05, ease: 'none' })
-                    .to(el, { '--bolt-bright': 2.1, duration: 0.025, ease: 'none' })
-                    .to(el, { '--bolt-bright': 1,   duration: 0.35, ease: 'power2.out' });
+                    .to(el, { '--bolt-bright': 2.3, duration: 0.03, ease: 'none' })
+                    .to(el, { '--bolt-bright': 1,   duration: 0.4,  ease: 'power2.out' });
 
             const struck = bolts.map(() => false);
             const n = bolts.length;
@@ -285,22 +298,28 @@ export const useAnimations = () => {
                 onUpdate: (self: any) => {
                     const p = self.progress;
                     bolts.forEach((b, i) => {
+                        const reveal = reveals[i];
                         const local = (p - i * seg) / seg;   // 0..1 within this bolt's slice
-                        let reveal: number, op: number;
-                        if (local <= 0)        { reveal = 100; op = 0; struck[i] = false; }
-                        else if (local >= 1)   { reveal = 0;   op = 0; }       // gone — one at a time
-                        else if (local < 0.55) { reveal = 100 * (1 - local / 0.55); op = 1; } // DRAW IN
+                        let draw: number, op: number;        // draw = fraction drawn along the path
+                        if (local <= 0)        { draw = 0; op = 0; struck[i] = false; }
+                        else if (local >= 1)   { draw = 1; op = 0; }            // gone — one at a time
+                        else if (local < 0.55) { draw = local / 0.55; op = 1; } // DRAW IN along path
                         else if (local < 0.80) {                                 // fully drawn → STRIKE
-                            reveal = 0; op = 1;
+                            draw = 1; op = 1;
                             if (!reduce && !struck[i]) { struck[i] = true; strike(b); }
                         }
-                        else                   { reveal = 0; op = 1 - (local - 0.80) / 0.20; } // fade out
-                        gsap.set(b, { clipPath: `inset(0 ${reveal}% 0 0)`, opacity: op });
+                        else                   { draw = 1; op = 1 - (local - 0.80) / 0.20; } // fade out
+                        if (reveal) gsap.set(reveal, { strokeDashoffset: 1 - draw });
+                        gsap.set(b, { opacity: op });
                     });
                 },
             });
 
-            cleanups.push(() => { gsap.killTweensOf(bolts); st.kill(); });
+            cleanups.push(() => {
+                gsap.killTweensOf(bolts);
+                gsap.killTweensOf(reveals.filter(Boolean) as SVGPathElement[]);
+                st.kill();
+            });
         };
 
         // (No mobile finale-title reveal — it's static, matching the original.)

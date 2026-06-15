@@ -284,12 +284,23 @@ h1.hero-heading {
 
     .footer-full-height-container { grid-template-columns: 1fr !important; }
 
-    /* ── Benefits table ── */
-    .benefit-table-item { grid-template-columns: 2.5fr 1fr 1fr !important; align-items: center !important; }
+    /* ── Benefits table ──
+       The title-wrapper, each row, AND the nested checker-inner must share the
+       SAME column template AND column-gap, otherwise the "Hype Bam"/"Typical"
+       labels drift off the check/X columns. checker-inner spans cols 2–4 with a
+       0.5em internal gap, so the outer column-gap must also be 0.5em for the
+       split to land exactly on col2/col3. */
+    /* minmax(0, …) instead of bare fr: a bare `1fr` is `minmax(auto,1fr)`, so the
+       long "Typical Energy Drinks" label inflates its track and the title grid
+       stops matching the row grid. minmax(0,…) forces a pure fr split so the
+       wrapper and rows resolve to IDENTICAL columns and the labels sit dead-centre
+       over the check / X columns. */
+    .benefit-table-item { grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr) minmax(0, 1fr) !important; column-gap: 0.5em !important; align-items: center !important; }
     .benefit-item-title { grid-column: 1 / 2 !important; font-size: 0.85em !important; }
     .benefit-checker-inner { grid-column: 2 / 4 !important; display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 0.5em !important; }
     .benefit-item-check, .benefit-item-x { width: 100% !important; justify-content: center !important; }
-    .benefit-table-title-wrapper { display: grid !important; grid-template-columns: 2.5fr 1fr 1fr !important; align-items: center !important; }
+    .benefit-table-title-wrapper { display: grid !important; grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr) minmax(0, 1fr) !important; column-gap: 0.5em !important; align-items: center !important; }
+    .benefit-table-title-wrapper>.benefit-table-title { white-space: normal !important; min-width: 0 !important; }
     .benefit-table-title-wrapper>.benefit-table-title:first-child { grid-column: 1 !important; grid-row: 1 !important; }
     .benefit-table-title-img.is-desktop { display: none !important; }
     .benefit-table-title.is-mobile-only { display: block !important; grid-column: 2 !important; grid-row: 1 !important; text-align: center !important; }

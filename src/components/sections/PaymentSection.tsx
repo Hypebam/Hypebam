@@ -29,9 +29,6 @@ export const PaymentSection: React.FC = () => {
                                         </div>
                                     </div>
                                 ))}
-                                <div className="payment-signature-days is-mobile">
-                                    <img src="/img/cdn/68b2211dbd022ef87bf8047a_payment_3-5-days-delivery.svg" loading="lazy" width="269" height="150" alt="payment_3-5-days-delivery" className="payment-signature-days-img" />
-                                </div>
                             </div>
                         </div>
                         <div id="w-node-a4554c61-f2f6-fed6-6652-44ed900999ad-0ac01850" className="payment-signature">

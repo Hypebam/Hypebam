@@ -3011,22 +3011,18 @@ h1, h2, h3, h4, h5, h6,
       but a z-indexed sibling pseudo-element beats them).
       soft-light blend mode: brightens dark areas noticeably while
       preserving the vibrant can label colours. */
+/* Show the product photo close to its original colours: only a whisper of warm
+   tint to tie it to the brand, no heavy brighten/soft-light wash. */
 .footer-product .absolute-background::after {
-    background: rgba(255, 200, 80, 0.55) !important;
-    mix-blend-mode: soft-light !important;
+    background: rgba(255, 210, 120, 0.10) !important;
+    mix-blend-mode: normal !important;
     z-index: 10 !important;
 }
 
-/* 4. Also brighten the dark can-grid image directly so the
-      black background reads as warm charcoal instead of flat black.
-      Keeping saturate slightly down so it doesn't fight the overlay. */
 .footer-img.top {
-    filter: brightness(1.5) saturate(0.88) contrast(0.9) !important;
+    filter: none !important;
 }
 
-/* 5. The flame image is now visible again (no longer fully hidden
-      under the brightened + overlay-washed can grid), so reset it
-      to a clean warm amber tone. */
 .footer-img:not(.top) {
-    filter: brightness(1.35) saturate(0.78) hue-rotate(10deg) !important;
+    filter: none !important;
 }

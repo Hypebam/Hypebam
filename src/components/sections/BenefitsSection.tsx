@@ -9,7 +9,7 @@ const benefits = [
     'Hydration support',
     'Functional ingredients',
     'Smooth, everyday energy',
-    'Multiple fruity flavours'
+    '5 Bold Natural Flavours'
 ];
 
 export const BenefitsSection: React.FC = () => {

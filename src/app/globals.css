@@ -267,12 +267,6 @@ html.is-ready.lenis-stopped {
    and rotated so the lightning crosses the section from a
    different angle, then drawn-in one at a time on scroll.
    ======================================== */
-/* Contained lines (fit the screen), sharp miter, shifted up a bit via the
-   .sequence-lines transform below. (display:none <=991px.) */
-.sequence-line-svg.is-first  { width: 200% !important; rotate: 90deg; }
-.sequence-line-svg.is-second { width: 200% !important; rotate: 0deg; }
-.sequence-line-svg.is-third  { width: 150% !important; rotate: 110deg; }
-
 /* Nudge the whole lightning group upward (moves all 3 lines together; nothing
    else sets a transform on .sequence-lines). */
 .sequence-lines { transform: translateY(-60px) !important; }
@@ -290,27 +284,60 @@ html.is-ready.lenis-stopped {
         padding-bottom: 0 !important;
     }
 }
+/* ── Small-mobile fixes ─────────────────────────────────────────────────────
+   Two bugs visible at ≤390px:
+   1. White right-edge line: the testimonial slider card overflows the viewport
+      because width:calc(100% - 2rem) resolves wider than 360px at this size.
+      Clamp it to the viewport.
+   2. Large gap between navbar and stage-logo: webflow's stage-container has
+      padding-top:4.625em (≈74px) PLUS the stage-logo has marginTop from its
+      load animation stagger — tighten it at small sizes. */
+/* The testimonial slider-wrapper already has overflow:hidden at ≤991px (main.css
+   line 1990), but the flex row of cards still creates DOM rects that poke out of
+   the viewport and produce a white right-side line at small widths. Clip the
+   section itself so nothing escapes — `clip` (not `hidden`) avoids making it a
+   scroll container which would trap Lenis. */
+.testimonial-section {
+    overflow-x: clip !important;
+}
+
+@media (max-width: 390px) {
+    .stage-container {
+        padding-top: 1.2em !important;
+    }
+}
+
 /* Hero fact circles: keep the ORIGINAL more-nutrition size (8.75em ~= 140px) and
    the webflow staggered `inset` placement (is-first upper-right, is-second
    mid-center, is-third lower-left, below the can). No mobile size override — the
    inner text already scales down, matching the original. */
 
-/* Hidden rig SVGs — present only so app.js's sequence init finds
-   [data-sequence-svg] path (else the canvas/can breaks). Never seen. */
+/* ── Lightning bolts — YOUR art, drawn along its path ──────────────────────
+   Visible bolts are inline <svg> wrapping your lightning artwork
+   (<image href=lightning N.svg>) revealed by a mask whose stroke is drawn
+   tip-to-tip along the bolt's centreline — useAnimations animates that stroke's
+   stroke-dashoffset on scroll, so the EXACT artwork appears following the
+   lightning path. The stroked rig below stays hidden, only to satisfy app.js. */
 .sequence-lines .sequence-line-rig {
     position: absolute !important;
     width: 100% !important;
-    opacity: 0 !important;
+    opacity: 0 !important;        /* never seen — app.js just needs it to exist */
     pointer-events: none !important;
 }
 
-/* Lightning bolts are now <img> of your filled SVG art. Recolor the near-black
-   source to bright brand orange + an electric glow. --bolt-bright (animated by
-   initSequenceLightning) multiplies brightness + glow size on each strike so the
-   flashes read like real lightning. The recolor is a standard monochrome→colour
-   filter chain (brightness(0) flattens to black, then the hue chain tints it). */
+/* placement of the artwork — smaller so the bolts stay on-screen around the can
+   (shape/rotation unchanged, only the scale). */
+.sequence-line-svg.is-first  { width: 100% !important; rotate: 90deg; }
+.sequence-line-svg.is-second { width: 100% !important; rotate: 130deg; }
+.sequence-line-svg.is-third  { width: 100% !important; rotate: -10deg; }
+
+/* recolour the near-black artwork to electric brand orange + glow. --bolt-bright
+   (animated by useAnimations on each strike) pulses brightness + glow so the
+   reveal reads like a real lightning flash. */
 .sequence-lines .sequence-line-svg {
     --bolt-bright: 1;
+    overflow: visible;
+    pointer-events: none;
     filter:
         brightness(0) saturate(100%)
         invert(78%) sepia(46%) saturate(1200%) hue-rotate(329deg) contrast(101%)
@@ -336,7 +363,7 @@ html.is-ready.lenis-stopped {
     .sequence-line-svg.is-first,
     .sequence-line-svg.is-second,
     .sequence-line-svg.is-third {
-        width: 220% !important;
+        width: 270% !important;
     }
 }
 
@@ -612,19 +639,55 @@ html.is-ready.lenis-stopped {
 .hero-fact.is-third  { top: 52%; right: 75%; z-index: 5; }
 .hero-fact.is-fourth { top: 75%; left: 5%;  z-index: 4; }
 
-/* phones — the can shrinks & centres, so the right-anchored curve collides.
-   Switch to a 4-corner frame around the can and cap the pill size so the
-   prominent desktop scale doesn't overflow the narrow column. */
+/* tablet + phones — once the hero narrows, the right-anchored desktop curve
+   docks every pill off the LEFT screen edge (and leaves the right side empty).
+   Switch to a balanced frame instead: two pills pinned to the top corners, two
+   to the bottom corners, anchored to the screen edges (left/right) so nothing
+   can leave the viewport and the can is framed evenly on all four sides. */
+@media (max-width: 991px) {
+    .hero-fact.is-first  { top: 4%;    bottom: auto; left: 1%;   right: auto; }
+    .hero-fact.is-second { top: 4%;    bottom: auto; left: auto; right: 1%; }
+    .hero-fact.is-third  { top: auto;  bottom: 4%;   left: 1%;   right: auto; }
+    .hero-fact.is-fourth { top: auto;  bottom: 4%;   left: auto; right: 1%; }
+}
+
+/* phones — cap the pill size so the prominent desktop scale doesn't crowd the
+   narrow column or let the two top / two bottom pills collide in the middle. */
 @media (max-width: 479px) {
     .hero-fact { gap: 7px; padding: 5px 13px 5px 5px; }
     .hero-fact-icon-wrap { width: 42px; height: 42px; }
     .hero-fact-value { font-size: 17px; }
     .hero-fact-label { font-size: 10.5px; }
-    /* reset the desktop right-anchor so left positioning isn't stretched */
-    .hero-fact.is-first  { top: 1%;  left: 0%;  right: auto; }
-    .hero-fact.is-second { top: 4%;  left: 56%; right: auto; }
-    .hero-fact.is-third  { top: 74%; left: 0%;  right: auto; }
-    .hero-fact.is-fourth { top: 78%; left: 52%; right: auto; }
+}
+
+/* ── Footer product card (mobile) ──────────────────────────────────────────
+   webflow.css gives .footer-product `aspect-ratio: 1`, capping it to a square
+   that's shorter than its content (the 7em "Fuel The Rebel!" heading), so the
+   Buy-now button overflowed down onto the Shop-all / Samples cards. Drop the
+   aspect lock, let it grow to fit, and shrink the heading to a mobile scale. */
+@media (max-width: 767px) {
+    .footer-product {
+        aspect-ratio: auto !important;
+        height: auto !important;
+        min-height: 340px !important;
+    }
+    .footer-product-heading {
+        font-size: 3.6em !important;
+    }
+}
+
+/* ── Testimonials → Flavour seam (mobile) ──────────────────────────────────
+   The testimonials section reflows / parallaxes as it scrolls in, and with its
+   high z-index its card + flame background could visually cross into the amber
+   flavour section below. Clip the section to its own bounds so the two never
+   override each other. `clip` (not hidden) avoids creating a scroll container
+   that would break the pinned/parallax children. */
+/* zero at all widths — webflow sets padding-bottom:1em / 1.25em on the container
+   which creates a dead gap under the testimonial cards at every breakpoint. */
+.testimonial-container { padding-bottom: 0 !important; }
+
+@media (max-width: 991px) {
+    .testimonial-section { overflow: clip !important; padding-bottom: 0 !important; }
 }
 
 /* Container 8: Benefits text field */
@@ -722,6 +785,9 @@ h1.hero-heading {
 
 .insider-heading {
     font-size: 2.8em !important;
+    font-family: var(--font-secondary), sans-serif !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
 }
 
 /* Higher specificity (0,2,0) so it wins over any .insider-text-inner (0,1,0)
@@ -1059,7 +1125,6 @@ h1, h2, h3, h4, h5, h6,
 .big-heading,
 .benefit-heading,
 .insider-heading,
-.insider-subheading,
 .statement-heading,
 .testimonial-big-heading,
 .testimonial-item-heading,
@@ -1067,6 +1132,14 @@ h1, h2, h3, h4, h5, h6,
 .footer-heading {
     letter-spacing: 0.15em !important;
     line-height: 1.2 !important;
+}
+
+/* insider-subheading is a section title — normal tight letter-spacing and
+   bigger than its webflow 1.4em default so it reads as a real heading. */
+.insider-subheading {
+    letter-spacing: -0.02em !important;
+    line-height: 1.1 !important;
+    font-size: clamp(28px, 4vw, 56px) !important;
 }
 
 /* ========================================
@@ -1742,29 +1815,14 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /* ── Mobile finale title ("Fuel The Rebel") scroll reveal ───────────────────
-   Pure CSS via a view-timeline so the fade/slide is tied directly to the
-   title's scroll-into-view progress — no JS, no ScrollTrigger, no observer,
-   nothing to mis-time or get stuck. Every JS approach verified fine in this
-   harness but stayed stuck for the user in `next dev` + Chrome DevTools.
-   Falls back to fully visible where view-timeline is unsupported. */
-@keyframes seq-title-reveal {
-    from { opacity: 0; transform: translateY(2rem); }
-    to   { opacity: 1; transform: translateY(0); }
-}
+   Driven as a scroll-linked SCRUB from SequenceSection (sets inline opacity +
+   translateY every scroll frame) — robust on every mobile browser, unlike the
+   old `animation-timeline: view()` / one-shot observer. CSS only sets the
+   fallback (fully visible if JS never runs) and the GPU hint. */
 @media (max-width: 991px) {
-    /* Default / fallback: always visible (can never be stuck invisible). */
-    .sequence-final-mobile .sequence-title { opacity: 1; }
-
-    @supports (animation-timeline: view()) {
-        .sequence-final-mobile .sequence-title {
-            opacity: 0;
-            animation: seq-title-reveal linear both;
-            animation-timeline: view();
-            /* Scrub over a long span (from first appearing at the bottom to ~40%
-               up the screen) so the fade/slide is clearly visible, not finished
-               instantly within the element's own short entry phase. */
-            animation-range: cover 0% cover 40%;
-        }
+    .sequence-final-mobile .sequence-title {
+        opacity: 1;
+        will-change: opacity, transform;
     }
 }
 
