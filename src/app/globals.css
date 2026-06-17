@@ -43,6 +43,32 @@ body,
     overflow-x: clip !important;
 }
 
+/* ── Accessibility: honour reduced-motion ──────────────────────────────────
+   Users who ask for less motion get near-instant CSS animations/transitions
+   (the marquee/wiggle/idle flourishes stop). The page still loads & reveals;
+   scroll-driven GSAP that auto-plays already checks this flag in JS. */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ── Accessibility: visible keyboard focus (only for keyboard users, on-brand) ── */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #E8460F !important;
+    outline-offset: 2px !important;
+    border-radius: 4px;
+}
+
 /* Nav "Shop all" button: single line */
 .navbar .button-text {
     white-space: nowrap !important;
@@ -672,7 +698,49 @@ html.is-ready.lenis-stopped {
         min-height: 340px !important;
     }
     .footer-product-heading {
-        font-size: 3.6em !important;
+        font-size: 3.1em !important;
+    }
+    /* a little extra bottom room so the cans photo peeks below the button */
+    .footer-product-text-inner {
+        padding-bottom: 2.2em !important;
+    }
+}
+
+/* The "Fuel The Rebel!" text block was stacking BEHIND the cans image
+   (.footer-img.top is z-index:1, the text-inner had no z-index). Lift it above
+   the image; the transparent click-overlay link stays on top for the tap area.
+   Also render the heading in the SECONDARY (Goga) font. */
+.footer-product-text-inner {
+    z-index: 2 !important;
+}
+.footer-product .footer-product-link {
+    z-index: 3 !important;
+}
+.footer-product-heading {
+    font-family: var(--font-secondary), sans-serif !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.01em !important;
+}
+/* a touch smaller + more bottom space so the cans photo shows below the text
+   (the text block felt too big and covered the whole card). */
+@media (min-width: 768px) {
+    .footer-product-heading {
+        font-size: 5em !important;
+    }
+    .footer-product-text-inner {
+        padding-bottom: 3.4em !important;
+    }
+}
+
+/* The Buy-now hover did THREE slides at once — the whole pill translated ~40px
+   (translate:-2.5em) AND both arrows swapped. Calm the pill to a subtle nudge so
+   it reads as one clean motion (the arrow cycle stays). */
+@media (hover: hover) and (pointer: fine) {
+    .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-bg {
+        translate: -0.45em -0.12em 0 !important;
+        rotate: -2deg !important;
+        scale: 0.97 !important;
+        transform: none !important;
     }
 }
 
@@ -686,17 +754,35 @@ html.is-ready.lenis-stopped {
    which creates a dead gap under the testimonial cards at every breakpoint. */
 .testimonial-container { padding-bottom: 0 !important; }
 
+/* Lift the card off the bottom (ALL widths) so a band of the flame/lava backdrop
+   shows BELOW it, instead of the card sitting flush on the image edge. */
+.testimonial-section { overflow: clip !important; }
+.testimonial-slider-wrapper { padding-bottom: 72px !important; }
+/* Keep the backdrop visible in that band, fading only the very bottom edge for a
+   clean hand-off into the flavour section. */
+.testimonial-section .bg-img-wrapper {
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 44px), transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 44px), transparent 100%);
+}
+
 @media (max-width: 991px) {
-    .testimonial-section { overflow: clip !important; padding-bottom: 0 !important; }
-    /* The flame/can backdrop is translateY(-4%), so it ends ~53px above the
-       section bottom — leaving a hard image edge + a dark seam on the SIDES of
-       the centred white card right where it meets the flavour section (reads as
-       stray "cards" poking below). Fade the backdrop into the boundary so the
-       card sits on a clean transition instead. */
-    .testimonial-section .bg-img-wrapper {
-        -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 190px), transparent calc(100% - 40px));
-        mask-image: linear-gradient(to bottom, #000 calc(100% - 190px), transparent calc(100% - 40px));
-    }
+    .testimonial-section { padding-bottom: 0 !important; }
+}
+
+/* ── Sequence "Why people love it" signature — brand brush font ────────────
+   Replaces the handwritten-text SVG with real text in the primary (Bad Brush)
+   font, recoloured to the brand orange. The arrow stays an SVG. */
+.sequence-signature-text-el {
+    grid-area: 1 / 1;
+    display: block;
+    font-family: var(--font-primary), 'Brush Script MT', cursive;
+    font-size: 2.5em;
+    line-height: 0.9;
+    letter-spacing: 0.01em;
+    text-align: center;
+    color: #E8460F;
+    text-transform: none;
+    white-space: nowrap;
 }
 
 /* Container 8: Benefits text field */

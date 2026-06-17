@@ -27,13 +27,14 @@ const FLAVOUR_IMAGES = [
 ];
 
 const SEQ_TOTAL = 200; // seq_0_0 … seq_0_199   (~35 MB — the can-spin scrub)
-const HERO_TOTAL = 90; // hypeBamVideo001 … 090 (~4.3 MB — the hero can canvas)
+const HERO_TOTAL = 90; // hypeBamVideo001 … 0090 (~4.3 MB — the hero can canvas)
 
-const pad3 = (n: number) => String(n).padStart(3, "0");
 const seqPaths = (from: number, to: number) =>
   Array.from({ length: to - from }, (_, i) => `/img/seq_0_${from + i}.webp`);
+// NOTE: the hero frames are named "00" + raw number — i.e. 001…009 then 0010…0090
+// (NOT fixed-width padding). Matching that exactly avoids 404s.
 const heroPaths = (from: number, to: number) =>
-  Array.from({ length: to - from + 1 }, (_, i) => `/img/hypeBamVideo${pad3(from + i)}.webp`);
+  Array.from({ length: to - from + 1 }, (_, i) => `/img/hypeBamVideo00${from + i}.webp`);
 
 // ── Low-priority background prefetch ────────────────────────────────────────
 function prefetch(src: string): void {

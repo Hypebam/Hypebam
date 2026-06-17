@@ -13,22 +13,22 @@ interface SocialLinksProps {
 
 const defaultLinks: SocialLink[] = [
     {
-        href: 'https://www.instagram.com/hypebam/',
+        href: 'https://www.instagram.com/drinkhypebam',
         icon: '/img/cdn/688651ae6f6e0e5669c9d465_instagram.svg',
         alt: 'Instagram'
     },
     {
-        href: 'https://www.tiktok.com/@hypebam',
+        href: 'https://www.tiktok.com/@drinkhypebam',
         icon: '/img/cdn/688651aeea8f52f9e4d418f2_tiktok.svg',
         alt: 'TikTok'
     },
     {
-        href: 'https://www.youtube.com/@hypebam',
+        href: 'https://www.youtube.com/@Hypebam',
         icon: '/img/cdn/68d40d4b080c864fb3ec6e0f_youtube-svgrepo-com.svg',
         alt: 'YouTube'
     },
     {
-        href: 'https://www.facebook.com/hypebam',
+        href: 'https://www.facebook.com/drinkhypebam',
         icon: '/img/cdn/facebook.svg',
         alt: 'Facebook'
     }

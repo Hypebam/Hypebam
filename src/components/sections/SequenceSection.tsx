@@ -148,8 +148,8 @@ export const SequenceSection: React.FC = () => {
         <div id="nutrition" data-sequence="" className="sequence-section">
             <div className="sequence-signature">
                 <div className="sequence-signature-text">
-                    <img src="/img/cdn/68b9b2bf0b05111fd229e95c_sequence-why-people-love-it.svg" loading="lazy" width="300" height="104" alt="sequence-why-people-love-it" className="sequence-signature-text-img" />
-                    <img src="/img/cdn/68b9b2bf0b05111fd229e95c_sequence-why-people-love-it.svg" loading="lazy" width="300" height="104" alt="sequence-why-people-love-it" className="sequence-signature-text-img is-wiggle" />
+                    {/* Brand brush-font label (was an SVG of handwritten text). */}
+                    <span className="sequence-signature-text-el">Why people<br />love it</span>
                 </div>
                 <div className="sequence-signature-arrow">
                     <img src="/img/cdn/68b9b2bfdc8daf0458376a72_sequence-why-people-arrow.svg" loading="lazy" width="150" height="150" alt="sequence-why-people-arrow" className="sequence-signature-arrow-img" />

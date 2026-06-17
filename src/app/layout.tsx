@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
@@ -38,13 +38,71 @@ const caveat = localFont({
   display: "swap",
 });
 
+// Set NEXT_PUBLIC_SITE_URL in your deploy env to the real domain so social/OG
+// image + canonical URLs resolve absolutely. Falls back to the handle domain.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://drinkhypebam.com";
+const OG_IMAGE = "/og-image.jpg"; // dedicated 1200×630 social card (JPG = max platform support)
+
 export const metadata: Metadata = {
-  title: "Hype Bam — Sri Lankanized Energy Drink",
-  description:
-    "Hype Bam: The Sri Lankanized energy drink. 80mg caffeine, 200mg electrolytes, 5g sugar. 5 incredible flavours. Fuel the rebel in you.",
-  icons: {
-    icon: "/img/hypebam-logo-final-vector-02-orange.svg",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Hype Bam — Sri Lankanized Energy Drink",
+    template: "%s · Hype Bam",
   },
+  description:
+    "Hype Bam: The Sri Lankanized energy drink. 80mg caffeine, 200mg electrolytes, 5g sugar. 5 bold natural flavours. Fuel the rebel in you.",
+  applicationName: "Hype Bam",
+  keywords: [
+    "Hype Bam", "energy drink", "Sri Lanka", "Sri Lankanized", "caffeine",
+    "electrolytes", "low sugar", "natural flavours", "fuel the rebel",
+  ],
+  authors: [{ name: "Hype Bam" }],
+  creator: "Hype Bam",
+  publisher: "Hype Bam",
+  alternates: { canonical: "/" },
+  formatDetection: { telephone: false, address: false, email: false },
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/img/hypebam-logo-final-vector-02-orange.svg", type: "image/svg+xml" },
+    ],
+    apple: "/img/hypebam-logo-final-vector-02-orange.svg",
+  },
+  appleWebApp: {
+    capable: true,
+    title: "Hype Bam",
+    statusBarStyle: "black-translucent",
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Hype Bam",
+    title: "Hype Bam — Sri Lankanized Energy Drink",
+    description:
+      "80mg caffeine · 200mg electrolytes · 5g sugar · 5 bold natural flavours. Fuel the rebel in you.",
+    url: "/",
+    locale: "en_US",
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Hype Bam energy drink flavours" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hype Bam — Sri Lankanized Energy Drink",
+    description:
+      "80mg caffeine · 200mg electrolytes · 5g sugar · 5 bold natural flavours. Fuel the rebel in you.",
+    images: [OG_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover", // respect notch / safe areas on modern phones
+  themeColor: "#E8460F",
+  colorScheme: "light",
 };
 
 export default function RootLayout({
