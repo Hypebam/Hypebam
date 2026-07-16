@@ -1060,7 +1060,17 @@
             _dir = 1,     // direction of frame travel
             _gen = 0,     // bumped on flush — discards stale in-flight decodes
             _desk = window.matchMedia("(min-width: 992px)").matches,
-            _AHEAD = _desk ? 16 : 12,
+            // VELOCITY-AWARE LOOKAHEAD: the mobile runway packs ~3.5× more
+            // frames per scrolled pixel than desktop (short runway, same 200
+            // frames), so flicks consume 100–160 frames/s — far beyond any
+            // fixed window. _vel tracks live frames/sec; the leading edge of
+            // the window stretches to cover ~350 ms at that speed (capped),
+            // so fast swipes are decoded AHEAD of the scrub, not chased.
+            _vel = 0,
+            _velT = 0,
+            _BASE = _desk ? 16 : 14,
+            _ACAP = _desk ? 44 : 30,
+            _AHEAD = () => Math.min(_ACAP, _BASE + Math.round(.35 * _vel)),
             _BACK = 3,
             _drawH = () => Math.max(2, Math.round(_desk ? i.height : .8 * i.height)),
             _flush = () => {
@@ -1078,7 +1088,7 @@
             _want = new Set,
             _inflight = 0,
             _ndec = 0,
-            _MAXDEC = _desk ? 6 : 4,
+            _MAXDEC = _desk ? 6 : 5,
             // ── PRIORITY BLOB FETCH ───────────────────────────────────────
             // The background sweep downloads blobs serially 0→199, so a fast
             // scroll reaches frames whose data hasn't arrived yet (measured:
@@ -1105,11 +1115,12 @@
                     bd = 1 / 0,
                     bestFetch = -1,
                     bf = 1 / 0;
+                let stale = _AHEAD() + 16;
                 _want.forEach(r => {
                     if (_bm.has(r)) return void _want.delete(r);
                     let d2 = Math.abs(r - c2);
-                    if (d2 > 40) return void _want.delete(r); // stale — never decode
-                    (r - c2) * _dir < 0 && (d2 += 100);       // behind us: lowest priority
+                    if (d2 > stale) return void _want.delete(r); // stale — never decode
+                    (r - c2) * _dir < 0 && (d2 += 200);          // behind us: lowest priority
                     if (!_blobs[r]) return void (d2 < bf && (bf = d2, bestFetch = r));
                     d2 < bd && (bd = d2, best = r)
                 });
@@ -1135,8 +1146,9 @@
                 })
             },
             _ensure = t => {
-                let lo = Math.max(0, t - (_dir > 0 ? _BACK : _AHEAD)),
-                    hi = Math.min(199, t + (_dir > 0 ? _AHEAD : _BACK));
+                let a3 = _AHEAD(),
+                    lo = Math.max(0, t - (_dir > 0 ? _BACK : a3)),
+                    hi = Math.min(199, t + (_dir > 0 ? a3 : _BACK));
                 if (!_hasIB) {
                     for (let e = lo; e <= hi; e++) n[e] && n[e].decode && n[e].decode().catch(() => { });
                     return
@@ -1473,7 +1485,14 @@
                 e = Math.round(s.frame);
             // settled: the exact requested frame is already on the canvas
             if (!force && e === _last && e === _shown) return;
-            e !== _last && (_dir = e >= _last ? 1 : -1, _last = e);
+            if (e !== _last) {
+                _dir = e >= _last ? 1 : -1;
+                // live frames/sec estimate (EMA) drives the dynamic lookahead
+                let now = performance.now(),
+                    dt = now - _velT;
+                dt > 0 && dt < 250 && (_vel = .7 * _vel + .3 * (1e3 * Math.abs(e - _last) / dt));
+                _velT = now, _last = e
+            }
             // DRAW FIRST, decode/evict AFTER — _ensure()'s eviction used to run
             // before the search, destroying freshly-decoded catch-up frames
             // before they could ever be painted.
