@@ -1055,31 +1055,84 @@
         let _hasIB = "function" == typeof window.createImageBitmap,
             _blobs = new Array(200),
             _bm = new Map,
-            _pending = new Set,
             _last = -1,   // last REQUESTED frame index
             _shown = -1,  // frame index actually on the canvas
             _dir = 1,     // direction of frame travel
+            _gen = 0,     // bumped on flush — discards stale in-flight decodes
             _desk = window.matchMedia("(min-width: 992px)").matches,
             _AHEAD = _desk ? 16 : 12,
             _BACK = 3,
             _drawH = () => Math.max(2, Math.round(_desk ? i.height : .8 * i.height)),
             _flush = () => {
-                _bm.forEach(t => t.close && t.close()), _bm.clear(), _pending.clear(), _last = -1, _shown = -1
+                _bm.forEach(t => t.close && t.close()), _bm.clear(), _want.clear(), _gen++, _last = -1, _shown = -1
             },
-            _decode = r => {
-                _pending.add(r);
-                let e = _drawH(),
-                    p2 = e < 1440 ? createImageBitmap(_blobs[r], {
+            // ── PRIORITY DECODER ──────────────────────────────────────────
+            // A naive fire-everything approach queues decodes FIFO, so during
+            // a fast scroll the decoder pool is stuck working through frames
+            // 30–80 positions BEHIND the scrub before it ever reaches the
+            // current one → the can freezes ("stuck when scrolling fast").
+            // Instead: a bounded number of in-flight decodes, and each free
+            // slot picks the WANTED frame closest to the live scrub position
+            // (preferring the scroll direction). Stale wants are pruned, so
+            // the decoder always works on what the user is about to see.
+            _want = new Set,
+            _inflight = 0,
+            _ndec = 0,
+            _MAXDEC = _desk ? 6 : 4,
+            // ── PRIORITY BLOB FETCH ───────────────────────────────────────
+            // The background sweep downloads blobs serially 0→199, so a fast
+            // scroll reaches frames whose data hasn't arrived yet (measured:
+            // the whole pipeline was rate-limited by blob arrival, not decode)
+            // — the can froze at the download frontier. Wanted-but-missing
+            // blobs are now fetched on demand, nearest-to-the-scrub first.
+            _fetching = new Set,
+            _MAXFETCH = 6,
+            _fetchOne = r => {
+                if (_blobs[r] || _fetching.has(r) || _fetching.size >= _MAXFETCH) return;
+                _fetching.add(r);
+                fetch(o(r), {
+                    priority: "high"
+                }).then(t2 => t2.ok ? t2.blob() : Promise.reject()).then(t2 => {
+                    _blobs[r] = t2, _fetching.delete(r), _pump()
+                }).catch(() => {
+                    _fetching.delete(r), console.warn("Failed to load ", o(r))
+                })
+            },
+            _pump = () => {
+                if (_inflight >= _MAXDEC) return;
+                let c2 = Math.round(s.frame),
+                    best = -1,
+                    bd = 1 / 0,
+                    bestFetch = -1,
+                    bf = 1 / 0;
+                _want.forEach(r => {
+                    if (_bm.has(r)) return void _want.delete(r);
+                    let d2 = Math.abs(r - c2);
+                    if (d2 > 40) return void _want.delete(r); // stale — never decode
+                    (r - c2) * _dir < 0 && (d2 += 100);       // behind us: lowest priority
+                    if (!_blobs[r]) return void (d2 < bf && (bf = d2, bestFetch = r));
+                    d2 < bd && (bd = d2, best = r)
+                });
+                bestFetch >= 0 && _fetchOne(bestFetch);
+                if (best < 0) return;
+                _want.delete(best), _inflight++;
+                let g2 = _gen,
+                    e = _drawH(),
+                    p2 = e < 1440 ? createImageBitmap(_blobs[best], {
                         resizeHeight: e,
                         resizeQuality: "high"
-                    }).catch(() => createImageBitmap(_blobs[r])) : createImageBitmap(_blobs[r]);
+                    }).catch(() => createImageBitmap(_blobs[best])) : createImageBitmap(_blobs[best]);
                 p2.then(i2 => {
-                    _bm.set(r, i2), _pending.delete(r);
-                    let c2 = Math.round(s.frame);
+                    if (_inflight--, _ndec++, g2 !== _gen) return i2.close && i2.close(), _pump(); // stale (resized mid-decode)
+                    _bm.set(best, i2);
+                    let c3 = Math.round(s.frame);
                     // redraw if this frame IS current, or brings the canvas
                     // closer to current than whatever is displayed
-                    (c2 === r || -1 === _shown || Math.abs(r - c2) < Math.abs(_shown - c2)) && x(!0)
-                }).catch(() => _pending.delete(r))
+                    (c3 === best || -1 === _shown || Math.abs(best - c3) < Math.abs(_shown - c3)) && x(!0);
+                    _pump()
+                }).catch(() => {
+                    _inflight--, _pump()
+                })
             },
             _ensure = t => {
                 let lo = Math.max(0, t - (_dir > 0 ? _BACK : _AHEAD)),
@@ -1088,16 +1141,25 @@
                     for (let e = lo; e <= hi; e++) n[e] && n[e].decode && n[e].decode().catch(() => { });
                     return
                 }
-                for (let r = lo; r <= hi; r++) !_bm.has(r) && !_pending.has(r) && _blobs[r] && _decode(r);
+                for (let r = lo; r <= hi; r++) !_bm.has(r) && _blobs[r] && _want.add(r);
                 _bm.forEach((i2, r) => {
-                    r !== _shown && (r < lo - 4 || r > hi + 4) && (i2.close && i2.close(), _bm.delete(r))
-                })
+                    if (r === _shown) return;                              // on screen
+                    if (Math.abs(r - t) <= Math.abs(_shown - t)) return;   // CATCH-UP path:
+                    // closer to the live frame than what's displayed — these are
+                    // the frames the canvas is about to advance through. The old
+                    // code evicted them the instant they decoded (they land just
+                    // behind the moving window), so the can froze while decodes
+                    // kept completing and dying. NEVER evict them.
+                    (r < lo - 4 || r > hi + 4) && (i2.close && i2.close(), _bm.delete(r))
+                });
+                for (let e = _inflight; e < _MAXDEC; e++) _pump()
             };
         let _startLoad = () => {
             if (_hasIB) {
-                // chunked fetch keeps startup network calm
+                // chunked background sweep (skips anything the priority
+                // fetcher already grabbed)
                 let t2 = 0,
-                    _load = e2 => fetch(o(e2)).then(t3 => t3.ok ? t3.blob() : Promise.reject()).then(t3 => {
+                    _load = e2 => _blobs[e2] || _fetching.has(e2) ? Promise.resolve() : fetch(o(e2)).then(t3 => t3.ok ? t3.blob() : Promise.reject()).then(t3 => {
                         _blobs[e2] = t3
                     }).catch(() => console.warn("Failed to load ", o(e2)));
                 (function _next() {
@@ -1412,7 +1474,9 @@
             // settled: the exact requested frame is already on the canvas
             if (!force && e === _last && e === _shown) return;
             e !== _last && (_dir = e >= _last ? 1 : -1, _last = e);
-            _ensure(e);
+            // DRAW FIRST, decode/evict AFTER — _ensure()'s eviction used to run
+            // before the search, destroying freshly-decoded catch-up frames
+            // before they could ever be painted.
             let a2 = null,
                 sh = -1;
             if (_hasIB) {
@@ -1427,30 +1491,34 @@
                 let m = n[e];
                 m && m.complete && 0 !== m.naturalWidth && (a2 = m, sh = e)
             }
-            if (!a2) return;
-            // the best available frame is already displayed — nothing to paint
-            if (!force && sh === _shown) return;
-            _shown = sh;
-            t.clearRect(0, 0, i.width / E, i.height / E);
-            let o2, l2, h2, p2, W2 = a2.width || a2.naturalWidth,
-                H2 = a2.height || a2.naturalHeight,
-                c = W2 / H2;
-            if (_desk) {
-                let t2 = i.height / E,
-                    e2 = i.width / E;
-                l2 = t2, o2 = c * l2, h2 = Math.round((e2 - o2) / 2), p2 = 0
-            } else {
-                let t2 = i.height / E,
-                    e2 = i.width / E;
-                l2 = .8 * t2, o2 = c * l2, h2 = Math.round((e2 - o2) / 2), p2 = Math.round(t2 - l2)
+            if (a2 && sh !== _shown) {
+                _shown = sh;
+                t.clearRect(0, 0, i.width / E, i.height / E);
+                let o2, l2, h2, p2, W2 = a2.width || a2.naturalWidth,
+                    H2 = a2.height || a2.naturalHeight,
+                    c = W2 / H2;
+                if (_desk) {
+                    let t2 = i.height / E,
+                        e2 = i.width / E;
+                    l2 = t2, o2 = c * l2, h2 = Math.round((e2 - o2) / 2), p2 = 0
+                } else {
+                    let t2 = i.height / E,
+                        e2 = i.width / E;
+                    l2 = .8 * t2, o2 = c * l2, h2 = Math.round((e2 - o2) / 2), p2 = Math.round(t2 - l2)
+                }
+                t.drawImage(a2, Math.round(h2), Math.round(p2), Math.round(o2), Math.round(l2))
             }
-            t.drawImage(a2, Math.round(h2), Math.round(p2), Math.round(o2), Math.round(l2))
+            _ensure(e)
         }
         // tiny QA hook: lets tests measure how far the canvas trails the scrub
         i.__seq = {
             get req() { return _last },
             get shown() { return _shown },
-            get cached() { return _bm.size }
+            get cached() { return _bm.size },
+            get want() { return _want.size },
+            get inflight() { return _inflight },
+            get ndec() { return _ndec },
+            get dir() { return _dir }
         };
         let P = t.querySelector("[data-sequence-stage]");
 
