@@ -50,93 +50,111 @@ export const useAnimations = () => {
 
         // ────────────────────────────────────────────────
         // 1. MOUSE-TRACKING SPOTLIGHT (desktop pointer only)
+        //    PERF-CRITICAL ARCHITECTURE: the old version re-painted a
+        //    full-viewport radial-gradient background string onto TWO layers
+        //    every rAF and forced layout with a per-frame
+        //    getBoundingClientRect — profiling (LoAF) attributed ~100 ms
+        //    zero-script render frames PAGE-WIDE to it (it was the top cause
+        //    of the sequence-scrub lag). Now each glow is a fixed-size div
+        //    with a STATIC gradient whose transform moves — compositor-only:
+        //    zero paint, zero layout, and idle frames write nothing.
         // ────────────────────────────────────────────────
+        const GLOW_SIZE = 1200;   // gradient hits 0 at 70% of its 600px half-size
         let mouseX = 0, mouseY = 0;
         let currentX = 0, currentY = 0;
+        let lastX = -1, lastY = -1, lastSY = -1;
+        let mqDocTop = 0, mqDocLeft = 0, mqMeasured = false;
 
         const handleMouseMove = (e: MouseEvent) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
         };
 
-        const GLOW = (x: number, y: number) =>
-            `radial-gradient(600px circle at ${x}px ${y}px, rgba(230,81,0,0.06) 0%, rgba(230,81,0,0.02) 40%, transparent 70%)`;
+        const GLOW_DOT_CSS =
+            `position:absolute;top:0;left:0;width:${GLOW_SIZE}px;height:${GLOW_SIZE}px;pointer-events:none;` +
+            'background:radial-gradient(circle closest-side, rgba(230,81,0,0.06) 0%, rgba(230,81,0,0.02) 40%, transparent 70%);' +
+            'will-change:transform;transform:translate3d(-9999px,-9999px,0)';
 
-        const animate = () => {
-            currentX += (mouseX - currentX) * 0.08;
-            currentY += (mouseY - currentY) * 0.08;
-            const overlay = document.getElementById('mouse-glow-overlay');
-            if (overlay) {
-                overlay.style.background = GLOW(currentX, currentY);
-            }
-            // Scoped marquee glow: the fixed overlay above is occluded by the
-            // marquee's opaque cream triangle (inside the marquee's own stacking
-            // context), so the marquee never received the page-wide hover tint.
-            // Paint the SAME glow into a marquee-local layer, positioned relative
-            // to the marquee so the cursor lines up. (Only this layer is tinted —
-            // the videos below are untouched.)
-            const mq = document.getElementById('marquee-glow');
-            if (mq && mq.parentElement) {
-                const r = mq.parentElement.getBoundingClientRect();
-                mq.style.background = GLOW(currentX - r.left, currentY - r.top);
-            }
-            animationId = requestAnimationFrame(animate);
-        };
+        let glowDot: HTMLDivElement | null = null;
+        let mqDot: HTMLDivElement | null = null;
 
         if (!document.getElementById('mouse-glow-overlay')) {
             const overlay = document.createElement('div');
             overlay.id = 'mouse-glow-overlay';
-            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;background:transparent';
+            overlay.style.cssText = 'position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:1';
+            glowDot = document.createElement('div');
+            glowDot.style.cssText = GLOW_DOT_CSS;
+            overlay.appendChild(glowDot);
             document.body.appendChild(overlay);
         }
 
-        // Inject the marquee-scoped glow layer. It sits above the cream overlay
-        // (z-index:-1) but below the marquee text (z-index:2), and is clipped to
-        // the SAME diagonal polygon as .marquee-overlay so only the cream area
-        // tints — exactly matching the hover feel of the insider section below.
+        // Marquee-scoped glow: the fixed overlay is occluded by the marquee's
+        // opaque cream triangle, so it carries its own clipped glow layer. The
+        // marquee never moves in document flow — its document position is
+        // measured once (+ on resize/load), so the per-frame math needs no
+        // layout reads at all.
         const marqueeInner = document.querySelector('.marquee-inner');
         if (marqueeInner && !document.getElementById('marquee-glow')) {
             const mqGlow = document.createElement('div');
             mqGlow.id = 'marquee-glow';
             mqGlow.style.cssText =
-                'position:absolute;inset:0;pointer-events:none;z-index:0;' +
-                'clip-path:polygon(66% 10%,100% 53%,100% 100%,0 100%,0 79%);' +
-                'background:transparent';
+                'position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;' +
+                'clip-path:polygon(66% 10%,100% 53%,100% 100%,0 100%,0 79%)';
+            mqDot = document.createElement('div');
+            mqDot.style.cssText = GLOW_DOT_CSS;
+            mqGlow.appendChild(mqDot);
             marqueeInner.appendChild(mqGlow);
         }
 
+        const measureMarquee = () => {
+            const mq = document.getElementById('marquee-glow');
+            if (!mq || !mq.parentElement) return;
+            const r = mq.parentElement.getBoundingClientRect();
+            mqDocTop = r.top + window.scrollY;
+            mqDocLeft = r.left + window.scrollX;
+            mqMeasured = true;
+        };
+
+        const animate = () => {
+            currentX += (mouseX - currentX) * 0.08;
+            currentY += (mouseY - currentY) * 0.08;
+            const sy = window.scrollY;
+            // Skip all writes while nothing changed (idle mouse, no scroll).
+            if (Math.abs(currentX - lastX) > 0.2 || Math.abs(currentY - lastY) > 0.2 || sy !== lastSY) {
+                const half = GLOW_SIZE / 2;
+                if (glowDot) {
+                    glowDot.style.transform = `translate3d(${currentX - half}px,${currentY - half}px,0)`;
+                }
+                if (mqDot && mqMeasured) {
+                    const lx = currentX - (mqDocLeft - window.scrollX);
+                    const ly = currentY - (mqDocTop - sy);
+                    mqDot.style.transform = `translate3d(${lx - half}px,${ly - half}px,0)`;
+                }
+                lastX = currentX; lastY = currentY; lastSY = sy;
+            }
+            animationId = requestAnimationFrame(animate);
+        };
+
         if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
             window.addEventListener('mousemove', handleMouseMove);
+            measureMarquee();
+            window.addEventListener('load', measureMarquee, { once: true });
+            window.addEventListener('resize', measureMarquee);
+            cleanups.push(() => {
+                window.removeEventListener('load', measureMarquee);
+                window.removeEventListener('resize', measureMarquee);
+            });
             animationId = requestAnimationFrame(animate);
         }
 
         // ────────────────────────────────────────────────
-        // 2. TESTIMONIAL SLIDER (custom horizontal scroll)
+        // 2. TESTIMONIAL SLIDER — owned entirely by app.js.
+        //    app.js wo() instantiates its transform-based infinite slider on
+        //    [data-slider] (drag + virtual scroll + is-active toggling) and
+        //    binds the arrow buttons via createInterface(). The previous custom
+        //    scrollTo() slider here DOUBLE-BOUND the same buttons — every click
+        //    fired both systems and both fought over .is-active. Removed.
         // ────────────────────────────────────────────────
-        const initTestimonialSlider = () => {
-            const slider = document.querySelector('[data-slider]') as HTMLElement;
-            const leftBtn = document.querySelector('[data-slider-left-button]');
-            const rightBtn = document.querySelector('[data-slider-right-button]');
-            if (!slider) return;
-
-            const items = slider.querySelectorAll('.testimonial-slider-item-wrap');
-            const totalItems = items.length;
-            let currentIndex = 0;
-
-            const updateSlider = () => {
-                items.forEach((item, i) => item.classList.toggle('is-active', i === currentIndex));
-                const activeItem = items[currentIndex] as HTMLElement;
-                if (!activeItem) return;
-                const sliderRect = slider.getBoundingClientRect();
-                const itemRect = activeItem.getBoundingClientRect();
-                const scrollOffset = itemRect.left - sliderRect.left - (sliderRect.width / 2) + (itemRect.width / 2) + slider.scrollLeft;
-                slider.scrollTo({ left: scrollOffset, behavior: 'smooth' });
-            };
-
-            leftBtn?.addEventListener('click', () => { currentIndex = Math.max(0, currentIndex - 1); updateSlider(); });
-            rightBtn?.addEventListener('click', () => { currentIndex = Math.min(totalItems - 1, currentIndex + 1); updateSlider(); });
-            updateSlider();
-        };
 
         // ────────────────────────────────────────────────
         // 3. VIDEO SOUND — owned entirely by app.js Ao().
@@ -272,8 +290,13 @@ export const useAnimations = () => {
             // The strike flash — fires when a bolt finishes drawing in. A real bolt
             // flickers in two bursts, so this is a DOUBLE strike: a first flash that
             // settles, a beat of darkness, then a second, brighter flash that decays.
+            // .is-striking scopes the EXPENSIVE drop-shadow glows to just this
+            // ~0.9s burst (see globals.css) — the draw-in phase carries none.
             const strike = (el: HTMLElement) =>
-                gsap.timeline()
+                gsap.timeline({
+                    onStart: () => el.classList.add('is-striking'),
+                    onComplete: () => el.classList.remove('is-striking'),
+                })
                     // ── first flash ──
                     .fromTo(el, { '--bolt-bright': 3.2 }, { '--bolt-bright': 1.3, duration: 0.05, ease: 'none' })
                     .to(el, { '--bolt-bright': 2.5, duration: 0.035, ease: 'none' })
@@ -287,6 +310,9 @@ export const useAnimations = () => {
                     .to(el, { '--bolt-bright': 1,   duration: 0.4,  ease: 'power2.out' });
 
             const struck = bolts.map(() => false);
+            const lit = bolts.map(() => false);  // tracks the .is-lit perf class
+            const lastDraw = bolts.map(() => -1); // skip same-value style writes
+            const lastOp = bolts.map(() => -1);
             const n = bolts.length;
             const seg = 1 / n;              // each bolt owns one slice of the scroll
 
@@ -309,8 +335,14 @@ export const useAnimations = () => {
                             if (!reduce && !struck[i]) { struck[i] = true; strike(b); }
                         }
                         else                   { draw = 1; op = 1 - (local - 0.80) / 0.20; } // fade out
-                        if (reveal) gsap.set(reveal, { strokeDashoffset: 1 - draw });
-                        gsap.set(b, { opacity: op });
+                        // glow filters (.is-lit) only exist while the bolt is
+                        // visible — invisible bolts cost zero filter layers.
+                        const isLive = op > 0.001;
+                        if (isLive !== lit[i]) { lit[i] = isLive; b.classList.toggle('is-lit', isLive); }
+                        // 2/3 of bolts are idle at any scrub position — writing
+                        // the same draw/opacity to them every tick is pure churn.
+                        if (reveal && draw !== lastDraw[i]) { lastDraw[i] = draw; gsap.set(reveal, { strokeDashoffset: 1 - draw }); }
+                        if (op !== lastOp[i]) { lastOp[i] = op; gsap.set(b, { opacity: op }); }
                     });
                 },
             });
@@ -318,6 +350,7 @@ export const useAnimations = () => {
             cleanups.push(() => {
                 gsap.killTweensOf(bolts);
                 gsap.killTweensOf(reveals.filter(Boolean) as SVGPathElement[]);
+                bolts.forEach((b) => b.classList.remove('is-lit', 'is-striking'));
                 st.kill();
             });
         };
@@ -395,8 +428,8 @@ export const useAnimations = () => {
             if (cancelled) return;
 
             // 5. Our own init tasks (each no-ops gracefully if its DOM is absent).
-            //    Video sound/play is owned by app.js Ao() — do NOT init here.
-            initTestimonialSlider();
+            //    Video sound/play is owned by app.js Ao(); the testimonial
+            //    slider by app.js wo() — do NOT init either here.
             initFooterCredits();
 
             if (gsapReady) initGSAPAnimations();
@@ -411,10 +444,8 @@ export const useAnimations = () => {
             //    lightning sometimes doesn't work"). Refreshing after fonts + full
             //    load + a couple of delays re-syncs the range every time.
             if (gsapReady) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const ST = (window as any).ScrollTrigger;
                 const refresh = () => { try { ST?.refresh(); } catch { /* noop */ } };
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (document as any).fonts?.ready?.then?.(refresh);
                 if (document.readyState === 'complete') refresh();
                 else window.addEventListener('load', refresh, { once: true });

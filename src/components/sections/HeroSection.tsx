@@ -26,10 +26,10 @@ export const HeroSection: React.FC = () => {
     // very gentle breathe (no repeated shaking). Runs on the wrapper so it never
     // fights app.js's container slide-in or the img's locked scale(1.3).
     useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const anims: any[] = [];
+        const idle: any[] = [];   // the infinite breathe/rotate tweens — visibility-gated
+        let io: IntersectionObserver | null = null;
         let tries = 0;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const w = (window as any);
         const iv = setInterval(() => {
             const gsap = w.gsap;
@@ -46,11 +46,22 @@ export const HeroSection: React.FC = () => {
                 const entrance = gsap.timeline({
                     delay: 0.4,
                     onComplete: () => {
-                        // gentle, alive — but NO shake — once settled
-                        anims.push(
+                        // gentle, alive — but NO shake — once settled. These are
+                        // repeat:-1 tweens: pause them whenever the hero is off
+                        // screen so they don't tick for the page's whole lifetime.
+                        idle.push(
                             gsap.to(el, { scale: 1.022, duration: 2.8, ease: 'sine.inOut', yoyo: true, repeat: -1 }),
                             gsap.fromTo(el, { rotation: -0.5 }, { rotation: 0.5, duration: 3.6, ease: 'sine.inOut', yoyo: true, repeat: -1 }),
                         );
+                        anims.push(...idle);
+                        const stage = el.closest('.stage');
+                        if (stage) {
+                            io = new IntersectionObserver(([entry]) => {
+                                const on = entry?.isIntersecting ?? true;
+                                idle.forEach((a) => (on ? a.play() : a.pause()));
+                            });
+                            io.observe(stage);
+                        }
                     },
                 });
                 entrance
@@ -66,7 +77,7 @@ export const HeroSection: React.FC = () => {
                 clearInterval(iv);
             }
         }, 50);
-        return () => { clearInterval(iv); anims.forEach((a) => a && a.kill && a.kill()); };
+        return () => { clearInterval(iv); io?.disconnect(); anims.forEach((a) => a && a.kill && a.kill()); };
     }, []);
 
     return (

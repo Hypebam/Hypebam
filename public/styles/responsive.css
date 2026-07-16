@@ -351,7 +351,16 @@ h1.hero-heading {
    the `lvh`/`svh` line. This file loads last, so these win by source order
    (same specificity as webflow.css, no !important needed).
    ────────────────────────────────────────────────────────────────────────── */
-.sequence-scroll-wrap { height: 720vh; height: 720lvh; }
+/* ⚠ The 720lvh runway is DESKTOP-ONLY (webflow gives mobile height:auto so
+   the runway is sized by the stacked mobile cards). Leaving this unscoped
+   force-set a 7.2-viewport runway on phones — the mobile content only fills
+   ~3.7 viewports, so users scrolled through ~3 empty screens of pinned can. */
+@media (min-width: 992px) {
+    .sequence-scroll-wrap { height: 720vh; height: 720lvh; }
+}
+@media (max-width: 991px) {
+    .sequence-scroll-wrap { height: auto; }
+}
 .sequence-sticky { height: 100vh; height: 100lvh; }
 .sequence-cards { height: 100vh; height: 100lvh; }
 .stage-logo { height: max(12.5em, 34vh); height: max(12.5em, 34svh); }

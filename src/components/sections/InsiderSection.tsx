@@ -5,29 +5,36 @@ import { Button } from '@/components/ui';
 
 // Local compressed videos (served from /public/img/video/compressed/)
 // Original: ~225 MB total → Compressed: ~11.4 MB total (94.9% reduction)
+// Posters: native-resolution first frames — iOS Low Power Mode blocks
+// autoplay, and without a poster those users saw a black box.
 const testimonialVideos = [
     {
         src: "/img/video/compressed/Story_01.mp4",
+        poster: "/img/video/posters/Story_01.jpg",
         position: "is-first",
         buttonPosition: "is-top"
     },
     {
         src: "/img/video/compressed/Story_02.mp4",
+        poster: "/img/video/posters/Story_02.jpg",
         position: "is-second",
         buttonPosition: ""
     },
     {
         src: "/img/video/compressed/Story_03.mp4",
+        poster: "/img/video/posters/Story_03.jpg",
         position: "is-third",
         buttonPosition: ""
     },
     {
         src: "/img/video/compressed/Story_04.mp4",
+        poster: "/img/video/posters/Story_04.jpg",
         position: "is-fourth",
         buttonPosition: ""
     },
     {
         src: "/img/video/compressed/Story_05.mp4",
+        poster: "/img/video/posters/Story_05.jpg",
         position: "is-fifth",
         buttonPosition: ""
     }
@@ -61,6 +68,7 @@ export const InsiderSection: React.FC = () => {
                 entries.forEach((entry) => {
                     const video = entry.target as HTMLVideoElement;
                     if (entry.isIntersecting) {
+                        if (video.dataset.poster && !video.poster) video.poster = video.dataset.poster;
                         const source = video.querySelector('source');
                         if (source && source.dataset.src && !source.src) {
                             source.src = source.dataset.src;
@@ -100,16 +108,23 @@ export const InsiderSection: React.FC = () => {
                                 >
                                     <div data-inertia-item-child="" className={`testimonial-inner _${index + 1}`}>
                                         <div className="testimonial-media w-embed">
+                                            {/* poster is hydrated from data-poster together with the
+                                                source (IO below / ResourcePreloader) so the ~1 MB of
+                                                poster JPEGs never load before the section approaches */}
                                             <video
                                                 playsInline
                                                 loop
                                                 muted
                                                 preload="none"
+                                                data-poster={video.poster}
                                                 data-video=""
                                                 data-video-id={`v${index}`}
                                             >
-                                                {/* data-src used by IntersectionObserver for true lazy loading */}
-                                                <source data-src={video.src} src={video.src} type="video/mp4" />
+                                                {/* NO src on first paint — the IntersectionObserver below
+                                                    (and ResourcePreloader as you approach) injects it from
+                                                    data-src, so mobile browsers never fetch video bytes for
+                                                    off-screen cards. */}
+                                                <source data-src={video.src} type="video/mp4" />
                                             </video>
                                         </div>
                                         <button
@@ -135,7 +150,7 @@ export const InsiderSection: React.FC = () => {
                                 Buy now
                             </Button>
                             <div className="rating-inner">
-                                <a href="#" className="rating-link w-inline-block">
+                                <a href="#reviews" className="rating-link w-inline-block">
                                     <div className="rating-star-wrap">
                                         {[1, 2, 3, 4].map(i => (
                                             <img key={i} src="/img/cdn/68ae178a6c618dbc4bb25c48_icon-star.svg" loading="lazy" width="20" height="20" alt="icon-star" className="rating-star" />

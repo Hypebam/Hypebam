@@ -1,80 +1,60 @@
-# More Nutrition Matcha Protein - React Clone
+# Hype Bam — Sri Lankanized Energy Drink
 
-A pixel-perfect React + TypeScript clone of the More Nutrition Matcha Protein landing page, featuring smooth animations, canvas-based product sequences, and responsive design.
+Production landing page for **Hype Bam** (drinkhypebam.com), built with **Next.js 15 + React 19 + TypeScript**. Fully self-hosted: every script, style, font, image and video ships from this repo — a production `Content-Security-Policy` blocks anything external.
 
-## 🚀 Features
+## Stack
 
-- **React 18 + TypeScript** - Modern React with full type safety
-- **Vite** - Lightning-fast development and build
-- **GSAP Animations** - Smooth scroll-triggered animations and canvas sequences
-- **Lenis Smooth Scrolling** - Buttery smooth scroll experience
-- **Swiper** - Touch-enabled sliders for testimonials and flavours
-- **Lottie Animations** - Animated logo and icons
-- **Responsive Design** - Fully responsive across all devices
+- **Next.js 15 (App Router)** — static prerender, deployed on Vercel
+- **GSAP 3.14 + plugins** (ScrollTrigger, SplitText, DrawSVG, Inertia, CustomEase) — vendored UMD builds in `public/vendor/gsap`
+- **Lenis smooth scroll + Webflow animation bundle** — `public/scripts/app.js` (hero canvas intro, 200-frame sequence scrub, inertia hovers, testimonial slider)
+- **Local fonts** via `next/font/local` (Bad Brush, Goga Test, Caveat)
 
-## 📦 Installation
+## Commands
 
 ```bash
-npm install
+npm install       # install deps
+npm run dev       # dev server → http://localhost:3000
+npm run build     # production build
+npm start         # serve the production build
 ```
 
-## 🛠️ Development
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:5173](http://localhost:5173) to view the project.
-
-## 🏗️ Build
-
-```bash
-npm run build
-```
-
-## 📁 Project Structure
+## Structure
 
 ```
 src/
-├── components/          # React components
-│   ├── Benefits.tsx     # Comparison table section
-│   ├── Button.tsx       # Reusable animated button
-│   ├── Flavour.tsx      # Flavour slider section
-│   ├── Footer.tsx       # Footer with credits modal
-│   ├── Insider.tsx      # Video testimonials section
-│   ├── Loader.tsx       # Loading screen
-│   ├── Marquee.tsx      # Text marquee section
-│   ├── Navbar.tsx       # Navigation bar
-│   ├── Payment.tsx      # Payment methods section
-│   ├── Sequence.tsx     # Scroll-driven canvas sequence
-│   ├── Stage.tsx        # Hero section with canvas
-│   └── Testimonials.tsx # Review slider
-├── styles/              # CSS files
-│   ├── base.css         # Reset and base styles
-│   ├── components.css   # Component-specific styles
-│   ├── fonts.css        # Font definitions
-│   ├── insider.css      # Insider section styles
-│   ├── navbar.css       # Navigation styles
-│   ├── sequence.css     # Sequence section styles
-│   ├── stage.css        # Hero section styles
-│   └── variables.css    # CSS custom properties
-├── utils/               # Utility functions
-│   ├── animations.ts    # GSAP animation utilities
-│   └── lenis.ts         # Lenis smooth scroll init
-├── App.tsx              # Main application component
-└── main.tsx             # Entry point
+├── app/
+│   ├── layout.tsx        # fonts, meta/OG, CSS links, GSAP scripts, fallback loaders
+│   ├── page.tsx          # section composition
+│   ├── globals.css       # ALL custom CSS fixes (bundled LAST → wins the cascade)
+│   └── error / not-found / manifest / robots / sitemap
+├── components/
+│   ├── layout/           # Navbar, Loader (mascot intro)
+│   ├── sections/         # Hero, Insider (videos), Sequence (pinned canvas +
+│   │                     #   lightning), Benefits, Testimonials, Flavour
+│   │                     #   (custom 3D coverflow), Payment, Footer
+│   └── ui/               # Button, SocialLinks, ResourcePreloader (smart prefetch)
+└── hooks/useAnimations.ts # GSAP boot pipeline + custom scroll animations
+
+public/
+├── img/                  # ~63 MB of frames/photos — NEVER resize or re-encode
+│   ├── hypeBamVideo001…0090.webp   # hero can canvas frames (names NOT zero-padded)
+│   ├── seq_0_0…199.webp            # sequence scrub frames
+│   └── video/compressed/           # testimonial mp4s (originals git-ignored)
+├── scripts/app.js        # Webflow bundle (Lenis + Lottie + site animations)
+├── styles/               # webflow.css → main.css → responsive.css (load order matters)
+└── vendor/gsap/          # GSAP core + plugins (all free since 3.13)
+
+scripts/
+├── compress-videos.mjs   # one-time ffmpeg pass for testimonial videos
+└── optimize-images.mjs   # one-time sharp pass (already applied — do not re-run)
 ```
 
-## 🎨 Technologies
+## CSS cascade (important)
 
-- **React 18** - UI library
-- **TypeScript** - Type safety
-- **Vite** - Build tool
-- **GSAP** - Animation library
-- **Lenis** - Smooth scrolling
-- **Swiper** - Touch slider
-- **Lottie** - Animation player
+`webflow.css`, `main.css`, `responsive.css` are static `<link>` files (no hot reload). `globals.css` is bundled by Next, loads **after** all of them, and is where every fix/override belongs.
 
-## 📄 License
+## Conventions
 
-This project is for educational purposes only.
+- Images stay at their original sizes — performance work adapts *loading timing* (preload/prefetch/lazy), never quality.
+- No external resources of any kind; the CSP in `next.config.ts` enforces `'self'` for scripts, styles, fonts, media and connections.
+- Set `NEXT_PUBLIC_SITE_URL` in the deploy environment so canonical/OG/sitemap URLs resolve to the real domain.

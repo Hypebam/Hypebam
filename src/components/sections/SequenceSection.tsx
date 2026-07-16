@@ -63,7 +63,7 @@ const statementCards = [
                 aria-hidden="true"
                 className="sequence-text-target-icon is-flavours"
             /></span>{' '}
-            Flavours to make you go 'aaaahhh'
+            Flavours to make you go &lsquo;aaaahhh&rsquo;
         </>,
         isLeft: true
     }
@@ -190,7 +190,7 @@ export const SequenceSection: React.FC = () => {
 
                     <div className="sequence-final">
                         <h2 data-sequence-title="" className="sequence-title">
-                            Fuel The Rebel<br /><span data-sequence-title-split="" className="light-green-span">Let's Get Bam'ed</span><br />
+                            Fuel The Rebel<br /><span data-sequence-title-split="" className="light-green-span">Let&apos;s Get Bam&apos;ed</span><br />
                         </h2>
                     </div>
 

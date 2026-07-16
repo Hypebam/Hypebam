@@ -37,9 +37,14 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Prevent horizontal overflow on mobile.
    IMPORTANT: Do NOT use overflow-x:hidden on html — it breaks position:fixed (GSAP pin).
-   Do NOT use overflow-x:clip on .stage — it clips the canvas animation. */
+   Do NOT use overflow-x:clip on .stage — it clips the canvas animation.
+   `hidden` is declared FIRST as the fallback: Safari < 16 (iOS 13–15) treats
+   `clip` as invalid and drops that declaration — without the fallback those
+   devices could scroll the whole page sideways. Browsers that know `clip`
+   use it (declared last, same specificity). */
 body,
 .body {
+    overflow-x: hidden !important;
     overflow-x: clip !important;
 }
 
@@ -104,9 +109,16 @@ textarea:focus-visible {
         scale: 1 !important;
     }
 
+    /* max() folds in the notch/punch-hole safe areas (viewport-fit=cover is
+       set in layout.tsx, so in landscape the viewport extends under the
+       camera housing on iPhones/Androids — without this the social icons /
+       Shop button could sit beneath it). Safari 11.1+/Chrome 79+ support
+       max()+env(); older browsers keep the plain 1.25em line above. */
     .navbar .nav-container {
         padding-right: 1.25em !important;
         padding-left: 1.25em !important;
+        padding-right: max(1.25em, env(safe-area-inset-right)) !important;
+        padding-left: max(1.25em, env(safe-area-inset-left)) !important;
     }
 }
 
@@ -324,6 +336,7 @@ html.is-ready.lenis-stopped {
    section itself so nothing escapes — `clip` (not `hidden`) avoids making it a
    scroll container which would trap Lenis. */
 .testimonial-section {
+    overflow-x: hidden !important; /* Safari <16 fallback */
     overflow-x: clip !important;
 }
 
@@ -348,6 +361,8 @@ html.is-ready.lenis-stopped {
     position: absolute !important;
     width: 100% !important;
     opacity: 0 !important;        /* never seen — app.js just needs it to exist */
+    visibility: hidden !important; /* guarantees zero paint work; SVG geometry
+                                      (getTotalLength etc.) still computes fine */
     pointer-events: none !important;
 }
 
@@ -359,11 +374,34 @@ html.is-ready.lenis-stopped {
 
 /* recolour the near-black artwork to electric brand orange + glow. --bolt-bright
    (animated by useAnimations on each strike) pulses brightness + glow so the
-   reveal reads like a real lightning flash. */
+   reveal reads like a real lightning flash.
+   PERF: the two drop-shadows are EXPENSIVE filter layers over near-viewport-
+   sized SVGs, and they used to run permanently — even while a bolt sat at
+   opacity 0 — taxing every frame of the canvas scrub. The base rule now only
+   recolours (also the no-JS fallback tint); useAnimations toggles .is-lit on
+   a bolt exactly while it is visible, and only then do the glows exist. */
 .sequence-lines .sequence-line-svg {
     --bolt-bright: 1;
     overflow: visible;
     pointer-events: none;
+    filter:
+        brightness(0) saturate(100%)
+        invert(78%) sepia(46%) saturate(1200%) hue-rotate(329deg) contrast(101%) !important;
+    will-change: opacity;
+}
+.sequence-lines .sequence-line-svg.is-lit {
+    filter:
+        brightness(0) saturate(100%)
+        invert(78%) sepia(46%) saturate(1200%) hue-rotate(329deg) contrast(101%)
+        brightness(calc(1.02 * var(--bolt-bright))) !important;
+    will-change: opacity, filter;
+}
+/* The drop-shadow glows are the single most expensive raster on the page
+   (two blurs over a viewport-scale rotated SVG, re-run per scroll frame —
+   isolated at ~100ms/frame). They now exist ONLY during the ~0.7s strike
+   flash (class toggled by the strike timeline), exactly when the eye is on
+   the bolt — the slow draw-in keeps the cheap recolour + brightness. */
+.sequence-lines .sequence-line-svg.is-striking {
     filter:
         brightness(0) saturate(100%)
         invert(78%) sepia(46%) saturate(1200%) hue-rotate(329deg) contrast(101%)
@@ -400,6 +438,27 @@ html.is-ready.lenis-stopped {
     .sequence-cards-mobile,
     .sequence-final-mobile {
         display: none !important;
+    }
+}
+
+/* MOBILE: the webflow runway (65lvh gaps + 50lvh lead-in + 100lvh finale)
+   made the section ~5.3 viewports of mostly-empty scroll — measured as "too
+   long" to swipe through. Tightened ~20%: cards arrive sooner and closer
+   together while the pinned-can scrub keeps a comfortable cadence. vh first
+   as the Safari <15.4 fallback, lvh where supported. */
+@media (max-width: 991px) {
+    /* !important is REQUIRED: Next hoists this bundled stylesheet BEFORE the
+       static webflow/main/responsive <link>s (data-precedence), so plain
+       declarations here LOSE to responsive.css's 65lvh/50lvh/100lvh. */
+    .sequence-cards-mobile {
+        grid-column-gap: 44vh !important; grid-row-gap: 44vh !important; row-gap: 44vh !important;
+        grid-column-gap: 44lvh !important; grid-row-gap: 44lvh !important; row-gap: 44lvh !important;
+        padding-top: 36vh !important;
+        padding-top: 36lvh !important;
+    }
+    .sequence-final-mobile {
+        min-height: 85vh !important;
+        min-height: 85lvh !important;
     }
 }
 
@@ -756,7 +815,7 @@ html.is-ready.lenis-stopped {
 
 /* Lift the card off the bottom (ALL widths) so a band of the flame/lava backdrop
    shows BELOW it, instead of the card sitting flush on the image edge. */
-.testimonial-section { overflow: clip !important; }
+.testimonial-section { overflow: hidden !important; overflow: clip !important; } /* hidden = Safari <16 fallback */
 .testimonial-slider-wrapper { padding-bottom: 72px !important; }
 /* Keep the backdrop visible in that band, fading only the very bottom edge for a
    clean hand-off into the flavour section. */
@@ -825,6 +884,318 @@ html.is-ready.lenis-stopped {
     text-transform: uppercase !important;
 }
 
+/* ============================================================
+   REVIEWS WALL — "THE REBELS HAVE SPOKEN" (ReviewsSection)
+   Rebel sticker wall: tilted white review stickers on the cream
+   halftone, giant ghosted Bad-Brush "BAM!" behind. GSAP entrance
+   + app.js inertia hover live in ReviewsSection.tsx.
+   ============================================================ */
+/* The section reads as "embers → sunrise": it opens in the loader's espresso
+   void (continuing the lava stage above — .testimonial-section's bottom mask
+   now fades into this same darkness) and melts through burnt orange and amber
+   into #FFF1DE, the exact tone the flavour studio (.hbf) opens with below.
+   Layered dark browns (never flat black) + an ember radial behind the title. */
+.revwall {
+    position: relative;
+    isolation: isolate;
+    padding: clamp(72px, 8vw, 140px) clamp(16px, 4vw, 64px) clamp(84px, 9vw, 150px);
+    overflow: hidden;
+    color: #3D1800;
+    background:
+        radial-gradient(55% 38% at 50% 14%, rgba(255, 110, 10, 0.16) 0%, rgba(255, 110, 10, 0) 70%),
+        radial-gradient(40% 30% at 18% 46%, rgba(232, 70, 15, 0.10) 0%, rgba(232, 70, 15, 0) 70%),
+        linear-gradient(180deg,
+            #170B01 0%,      /* seam — same tone the lava stage fades into */
+            #1C0D02 38%,     /* layered void (loader aesthetic) */
+            #2E1503 58%,
+            #5C2604 71%,     /* embers ignite */
+            #A64A06 80%,
+            #E87808 88%,     /* the hero's deep orange */
+            #F5A020 94%,
+            #FFD060 100%);   /* hands off to .warm-zone's opening gold */
+}
+.revwall-texture {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: url('/img/texture.png') center / cover no-repeat;
+    mix-blend-mode: multiply;
+    opacity: 0.1;
+}
+/* Dark seam: the lava photo's bottom mask fade must dissolve into the SAME
+   espresso void the reviews wall opens with (it used to reveal cream). */
+.testimonial-section {
+    background-color: #170B01 !important;
+}
+.revwall-ghost {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    rotate: -6deg;
+    font-family: var(--font-primary), 'Brush Script MT', cursive;
+    font-size: clamp(160px, 34vw, 520px);
+    line-height: 1;
+    white-space: nowrap;
+    color: #FF7A18;          /* ember neon on the dark void */
+    opacity: 0.55;           /* graffiti presence — bold but behind the quotes */
+}
+.revwall-head {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    margin-bottom: clamp(34px, 4.5vw, 64px);
+}
+/* Mascot sticker hovering over the title — the loader's dark-void star,
+   back for an encore. GSAP drops it in and keeps a gentle ember breathe. */
+.revwall-mascot {
+    display: block;
+    width: clamp(56px, 6vw, 84px);
+    height: auto;
+    margin: 0 auto 14px;
+    filter: drop-shadow(0 6px 22px rgba(255, 120, 20, 0.35));
+    user-select: none;
+    -webkit-user-select: none;
+    pointer-events: none;
+}
+/* Typography container — Goga, bold, ALL CAPS (site-wide branding rule). */
+[data-typography-target="reviews-wall-text-field"],
+[data-typography-target="reviews-wall-text-field"] * {
+    font-family: var(--font-secondary), sans-serif !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+}
+.revwall-kicker {
+    font-size: clamp(12px, 1.5vw, 16px) !important;
+    letter-spacing: 0.32em !important;
+    line-height: 1.4 !important;
+    color: rgba(255, 248, 239, 0.6);   /* cream on the void */
+    margin: 0 0 12px;
+}
+.revwall-title {
+    font-size: clamp(34px, 6.5vw, 84px) !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.02em !important;
+    line-height: 0.98 !important;
+    color: #FFF8EF;                    /* cream headline, orange span below */
+    margin: 0;
+    text-shadow: 0 4px 26px rgba(0, 0, 0, 0.35);
+}
+.revwall-title .light-green-span {
+    text-shadow: 0 2px 18px rgba(255, 110, 10, 0.35);
+}
+/* hero-style scribble underline — re-filtered to brand ORANGE so it burns
+   on the dark void (the default .subline-img filter is espresso-dark). */
+.revwall-underline {
+    display: grid;
+    justify-content: center;
+    margin-top: clamp(6px, 1vw, 14px);
+}
+.revwall-underline .subline-img {
+    grid-area: 1 / 1;
+    width: clamp(120px, 14vw, 190px);
+    margin-top: 0;
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(140%) contrast(102%) !important;
+}
+
+/* ── the wall ── */
+.revwall-grid {
+    position: relative;
+    z-index: 2;
+    max-width: 1180px;
+    margin: 0 auto;
+    columns: 3;
+    column-gap: 1.5em;
+}
+@media (max-width: 991px) { .revwall-grid { columns: 2; column-gap: 1.1em; } }
+@media (max-width: 599px) { .revwall-grid { columns: 1; } }
+
+.revwall-card {
+    break-inside: avoid;
+    margin-bottom: 1.5em;
+    rotate: var(--tilt, 0deg);   /* longhand — composes with GSAP/inertia transforms */
+}
+@media (max-width: 991px) { .revwall-card { margin-bottom: 1.1em; } }
+
+.revwall-card-anim {
+    position: relative;
+    background: #FFF8EF;               /* brand cream — pops off the void */
+    border: 1px solid rgba(61, 24, 0, 0.07);
+    border-radius: 0.375em;
+    padding: 1.7em 1.6em 1.4em;
+    box-shadow:
+        0 18px 44px rgba(0, 0, 0, 0.38),
+        0 3px 8px rgba(0, 0, 0, 0.22);
+    will-change: transform;
+}
+/* ghosted Bad-Brush quote mark — same flourish as the flavour slider cards */
+.revwall-card-anim::before {
+    content: "\201C";
+    position: absolute;
+    top: 0.02em;
+    right: 0.1em;
+    font-family: var(--font-primary), serif;
+    font-size: 5.5em;
+    line-height: 0.9;
+    color: #E8460F;
+    opacity: 0.14;
+    pointer-events: none;
+}
+.revwall-stars {
+    display: flex;
+    gap: 0.25em;
+    margin-bottom: 0.9em;
+}
+.revwall-star {
+    width: 1.15em;
+    height: 1.15em;
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%);
+}
+.revwall-quote {
+    font-size: 1.02em !important;
+    line-height: 1.34 !important;
+    letter-spacing: 0.02em !important;
+    color: #3D1800;
+    margin: 0 0 1.2em;
+}
+.revwall-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75em;
+    border-top: 1px solid rgba(61, 24, 0, 0.12);
+    padding-top: 0.9em;
+}
+.revwall-name {
+    font-size: 1.05em !important;
+    letter-spacing: 0.05em !important;
+    color: #E8460F;
+}
+.revwall-verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-size: 0.78em !important;
+    letter-spacing: 0.08em !important;
+    color: rgba(61, 24, 0, 0.55);
+    white-space: nowrap;
+}
+.revwall-verified-icon {
+    width: 1.2em;
+    height: 1.2em;
+    filter: brightness(0) saturate(100%) invert(28%) sepia(99%) saturate(1500%) hue-rotate(6deg) brightness(98%) contrast(102%);
+}
+/* desktop: cursor hints that the stickers react (inertia fling on hover) —
+   hover adds an ember halo, like the card is catching heat. */
+@media (hover: hover) and (pointer: fine) {
+    .revwall-card { cursor: default; }
+    .revwall-card-anim { transition: box-shadow 0.35s ease; }
+    .revwall-card:hover .revwall-card-anim {
+        box-shadow:
+            0 22px 52px rgba(0, 0, 0, 0.42),
+            0 0 34px rgba(255, 110, 10, 0.28),
+            0 4px 10px rgba(0, 0, 0, 0.22);
+    }
+}
+
+/* ============================================================
+   REVIEWS SLIDER — flavour highlight cards (TestimonialsSection)
+   Card = 5 stars → big Goga-caps headline → description
+   → rule → name + Verified. GSAP ignition runs on every slide
+   change (see TestimonialsSection.tsx); these rules only set the
+   static type scale + the brush quote-mark flourish.
+   ============================================================ */
+
+/* Big Bad Brush quotation mark ghosted in the card's top-right —
+   the section's Bad-Brush accent, echoing the "why people love it"
+   signatures. currentColor: cream on outlined cards, orange on the
+   active white card. */
+.testimonial-slider-item {
+    position: relative !important;
+}
+.testimonial-slider-item::before {
+    content: "\201C";
+    position: absolute;
+    top: 0.05em;
+    right: 0.12em;
+    font-family: var(--font-primary), serif;
+    font-size: 6.5em;
+    line-height: 0.9;
+    opacity: 0.14;
+    pointer-events: none;
+}
+
+/* Pull-quote headline: big, tight, punchy. */
+[data-typography-target="testimonial-cards-text-field"] .testimonial-item-heading {
+    font-size: 2.1em !important;
+    line-height: 0.98 !important;
+    letter-spacing: 0.04em !important;
+}
+
+/* Full quote: readable caps — smaller size, looser leading than the
+   webflow default (which was sized for 1-line flavour blurbs). */
+[data-typography-target="testimonial-cards-text-field"] .testimonial-item-text {
+    font-size: 1.05em !important;
+    line-height: 1.32 !important;
+    letter-spacing: 0.02em !important;
+    opacity: 0.92;
+}
+
+[data-typography-target="testimonial-cards-text-field"] .testimonial-client-name {
+    font-size: 1.2em !important;
+    letter-spacing: 0.05em !important;
+}
+
+.testimonial-item-inner-text {
+    row-gap: 0.9em !important;
+    grid-row-gap: 0.9em !important;
+    padding-bottom: 1.6em !important;
+}
+
+/* SplitText word spans (quote cascade + heading reveal) need to be
+   transformable blocks. */
+.review-word {
+    display: inline-block;
+    will-change: transform;
+}
+
+/* Handwritten swipe cue under the slider — touch layouts only.
+   GSAP fades it out on the first swipe / slide change. */
+.reviews-swipe-hint {
+    display: none;
+    font-family: var(--font-sub), cursive;
+    font-size: 1.45em;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    /* brand orange — the hint sits on the section's bottom fade where the
+       lava image melts into cream, so it must read on BOTH backgrounds
+       (cream text vanished on the cream seam). */
+    color: #E8460F;
+    opacity: 0.9;
+    margin-top: -2.4em;   /* sits inside the wrapper's 72px seam padding */
+    position: relative;
+    z-index: 3;
+}
+@media (max-width: 991px) {
+    .reviews-swipe-hint { display: block; }
+}
+
+/* Phones: keep the headline dominant but let the quote breathe. */
+@media (max-width: 767px) {
+    [data-typography-target="testimonial-cards-text-field"] .testimonial-item-heading {
+        font-size: 1.8em !important;
+    }
+    [data-typography-target="testimonial-cards-text-field"] .testimonial-item-text {
+        font-size: 1em !important;
+    }
+    .testimonial-slider-item::before {
+        font-size: 5.5em;
+    }
+}
+
 /* Testimonial slider heading ("why they keep coming back"): an <h3> that
    otherwise inherits the primary brush font — switch it to the secondary sans.
    Reset letter-spacing to normal (it inherited a too-wide tracking). */
@@ -859,11 +1230,11 @@ html.is-ready.lenis-stopped {
 
 /* ========================================
    RESPONSIVE LAYOUT OVERRIDES
-   These MUST live in globals.css (Next.js bundled)
-   because main.css loads via <link> tag BEFORE
-   the Next.js bundle, so webflow.css rules
-   (also <link>) can override main.css rules.
-   globals.css is injected AFTER all <link> stylesheets.
+   ⚠ CASCADE REALITY (verified in the built HTML): Next/React 19 hoists
+   this bundled stylesheet with data-precedence BEFORE the manual
+   webflow/main/responsive <link>s — so globals.css loads FIRST, not last.
+   Any rule here that must beat those files needs !important or higher
+   specificity; plain same-specificity declarations will LOSE.
    ======================================== */
 
 /* ── Desktop base ── */
@@ -1017,11 +1388,11 @@ h1.hero-heading {
 }
 
 /* ============================================================
-   BOTTOM "SUNSET DEEPEN" ZONE — Flavour -> Payment -> Footer
-   One continuous warm gradient (amber/yellow at the top, deep red
-   at the footer) + the hero's texture overlay, replacing the plain
-   cream. White cards/chips stay as contrast islands; text is dark up
-   top and light at the footer. page.tsx wraps the three sections in
+   BOTTOM "SUNSET DEEPEN" ZONE — Payment -> Footer
+   One continuous warm gradient (gold at the top — receiving the
+   reviews wall's sunrise hand-off — deepening to vivid orange at
+   the footer) + the hero's texture overlay. White cards/chips stay
+   as contrast islands. page.tsx wraps the two sections in
    .warm-zone. ============================================================ */
 .warm-zone {
     position: relative;
@@ -1627,59 +1998,16 @@ h1, h2, h3, h4, h5, h6,
     .payment-signature-days.is-mobile,
     .payment-signature-mobile { display: none !important; }
 }
-/* Mobile payment-methods — ported from the original site so the 7 circles
-   form the same scattered/overlapping cluster (not a plain column).
-   `.payment-method-item-outer { display:contents }` makes each `.payment-method-item._N`
-   the real flex child of .pament-methods, so the original align-self/margin offsets work. */
+/* Mobile payment-methods — the retailer logos are RECTANGULAR CARDS laid out
+   by main.css as a centred flex-wrap grid (2 per row on phones). The old
+   scattered "circle cluster" offsets that used to live here (right:18.25em
+   etc., ported for the original site's round icons) pushed cards off-screen
+   and overlapped them on phones — deleted so the clean card grid governs
+   every width. Only the signature visibility swap remains. */
 @media (max-width: 991px) {
     .payment-signature-days.is-desktop { display: none !important; }
     .payment-signature-days.is-mobile,
     .payment-signature-mobile { display: grid !important; }
-
-    .payment-methods-inner { height: auto !important; margin-top: 0 !important; margin-bottom: 0 !important; }
-    .pament-methods {
-        flex-flow: column !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        width: 100% !important;
-        position: relative !important;
-    }
-    .payment-method-item-outer { display: contents !important; }
-    .payment-method-item {
-        width: 10.75em !important;
-        height: 10.75em !important;
-        aspect-ratio: 1 !important;
-        border: 1px solid rgba(0,0,0,0.06) !important;
-        position: relative !important;
-    }
-    .payment-method-item._5 { z-index: 5; margin-top: -5em;      margin-left: auto;  bottom: 0; right: 18.25em; }
-    .payment-method-item._6 { z-index: 6; margin-top: -3.75em;   margin-right: auto; bottom: 0; left: 5.5em; }
-    .payment-method-item._7 { z-index: 7; margin-top: -2.9375em; margin-right: auto; bottom: 0; left: 11.25em; }
-    .payment-method-item._1 { z-index: 0;                        margin-right: auto; bottom: 0; left: 7em; }
-    .payment-method-item._2 { z-index: 1; margin-top: -5em;      bottom: 0; }
-    .payment-method-item._3 { z-index: 2; margin-top: -4.375em;  margin-left: auto;  bottom: 0; right: 7em; }
-    .payment-method-item._4 { z-index: 4; margin-top: -2.25em;   margin-left: auto;  right: 10.75em; }
-}
-
-@media (max-width: 767px) {
-    .payment-methods-inner { height: 100% !important; }
-    .payment-method-item { width: 10.7863em !important; height: 10.7863em !important; }
-    .payment-method-item._5 { align-self: flex-start; right: 15.5em; }
-    .payment-method-item._6 { align-self: flex-start; left: 2.5em; }
-    .payment-method-item._7 { align-self: center;     left: 8em; }
-    .payment-method-item._1 { align-self: flex-start; left: 4em; }
-    .payment-method-item._2 { align-self: center; }
-    .payment-method-item._3 { align-self: flex-end;   right: 4em; }
-    .payment-method-item._4 { align-self: center;     right: 8.5em; }
-}
-
-@media (max-width: 479px) {
-    .payment-method-item._5 { right: 9em; }
-    .payment-method-item._6 { left: -1.25em; }
-    .payment-method-item._7 { left: 4.25em; }
-    .payment-method-item._1 { left: -0.5em; }
-    .payment-method-item._3 { right: -1em; }
-    .payment-method-item._4 { right: 2em; }
 }
 
 /* ========================================
@@ -1695,18 +2023,20 @@ h1, h2, h3, h4, h5, h6,
     text-align: center;
     /* extra bottom padding gives the fade a clear empty zone below the controls */
     padding: clamp(48px, 5vw, 92px) 0 clamp(130px, 13vw, 200px);
-    /* Cream studio glow behind the can over a cream→amber wash. The wash stays
-       solid amber until ~150px from the bottom, then FADES TO TRANSPARENT —
-       revealing the warm-zone amber→orange gradient underneath so the section
-       melts seamlessly into the payment section (no hard seam), while the info
-       above stays on the readable lighter backdrop. */
+    /* Cream studio glow behind the can over a cream→amber wash. The section
+       now lives between the white benefits card and the dark lava stage:
+       the top opens at the body cream (#FFF8EF — the tone visible around the
+       white card above), and the bottom settles BACK to that same cream so
+       the flame image of the testimonial section (which overlaps up by
+       -2.5em) breaks over a calm cream base, exactly like the old
+       benefits→testimonials seam. */
     background:
         radial-gradient(58% 44% at 50% 35%, rgba(255, 248, 233, 0.92) 0%, rgba(255, 248, 233, 0) 70%),
         linear-gradient(180deg,
-            #FFF1DE 0%,
+            #FFF8EF 0%,
             #FFE6BE 28%,
-            #FFD089 calc(100% - 150px),
-            rgba(255, 200, 110, 0) 100%);
+            #FFD089 calc(100% - 220px),
+            #FFF8EF 100%);
     isolation: isolate;
     color: #3D1800;
 }
@@ -1983,4 +2313,95 @@ h1, h2, h3, h4, h5, h6,
 .hbf-info .button .button-bg,
 .hbf-info .button .button-cycle-bg {
     background-color: #3D1800 !important;
+}
+
+/* ========================================
+   CROSS-DEVICE / TOUCH HARDENING (loads last so it wins the cascade)
+   ======================================== */
+
+/* Home-indicator clearance on iOS + gesture-nav Androids: the copyright row is
+   the page's last content and viewport-fit=cover lets it slide under the bar.
+   Declared AFTER the ≤767px `padding:` shorthand above so the longhand wins. */
+.footer-bottom {
+    padding-bottom: calc(1.25em + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* Flavour carousel dots: 9px circles are far below the ~44px touch-target
+   guideline. On touch devices, keep the same 9px VISUAL dot but grow the
+   button's real hit area to 28px via padding + content-box clipping. */
+@media (pointer: coarse) {
+    .hbf-dot {
+        width: 28px;
+        height: 28px;
+        padding: 9.5px;               /* 28 − 2·9.5 = 9px visible circle */
+        background-clip: content-box;
+    }
+    .hbf-dots { gap: 2px; }           /* 2px + 2·9.5px padding ≈ former 10px visual gap */
+}
+
+/* Ultra-narrow phones (Galaxy S-series 360px, iPhone SE 320px, Fold cover
+   screens): the two top / two bottom hero pills share a row — at 479px sizing
+   ("200mg of Electrolytes" ≈ 170px wide) they can collide mid-screen. Shrink
+   a step further so both rows always fit with clear air between pills. */
+@media (max-width: 374px) {
+    .hero-fact { gap: 5px; padding: 4px 9px 4px 4px; }
+    .hero-fact-icon-wrap { width: 34px; height: 34px; }
+    .hero-fact-value { font-size: 14px; }
+    .hero-fact-label { font-size: 9px; letter-spacing: 0.03em; }
+}
+
+/* ── MOBILE LAYOUT FIXES (verified by rendered-viewport measurement) ─────── */
+
+/* 1. Marquee band overlapped the insider heading by a measured 33–42px at
+   EVERY phone width (320→767; ≥768 clears fine) — the first heading line sat
+   fully hidden behind the cream curve. Fixed clearance in px because the
+   band's below-stage overhang is near-constant in px, while the em margins
+   shrink exactly where more room is needed. Specificity (0,2,0) + loads last
+   → beats the 4em/2.5em rules in responsive.css. */
+@media (max-width: 991px) {
+    .page-wrapper .insider-section {
+        margin-top: calc(4em + 56px) !important;
+    }
+}
+@media (max-width: 767px) {
+    .page-wrapper .insider-section {
+        margin-top: calc(2.5em + 56px) !important;
+    }
+}
+
+/* 2. webflow.css ships .sequence-cards-mobile { z-index: -1 } — on phones the
+   statement cards scrolled BEHIND the pinned can canvas (headings/copy hidden
+   behind the can). The cards must ride OVER the canvas like the original
+   design intends. */
+@media (max-width: 991px) {
+    .sequence-cards-mobile {
+        z-index: 2 !important;
+    }
+}
+
+/* 3. Payment retailer cards: webflow's ≤991 `.pament-methods{flex-flow:column}`
+   direction leaked through (main.css only forces flex-WRAP), stacking all 8
+   cards in one very tall column. Row direction restores the intended
+   2-per-row wrapped grid on phones. */
+@media (max-width: 991px) {
+    .pament-methods {
+        flex-direction: row !important;
+    }
+}
+
+/* 4. Navbar overflow on phones: social icons + Shop-All are all flex:none and
+   their combined width exceeded the container ≤479px-breakpoint sizing — the
+   pill hung 11–15px off the right screen edge at 320–479px (measured). Shrink
+   the pill text/padding and tighten the icon gap ONLY in that zone. */
+@media (max-width: 560px) {
+    [data-typography-target="navbar-text-fields"] .button .button-text {
+        font-size: 1.32em !important;
+    }
+    [data-typography-target="navbar-text-fields"] .button .button-bg {
+        padding: 0.55em 0.75em 0.36em !important;
+    }
+    .navbar .nav-social-media-inner {
+        grid-column-gap: 0.2em !important;
+        column-gap: 0.2em !important;
+    }
 }

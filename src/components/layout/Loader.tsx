@@ -6,9 +6,31 @@ export const Loader: React.FC = () => {
 
     useEffect(() => {
         let observer: MutationObserver | null = null;
+        let cancelled = false;
+
+        // Use the vendored GSAP core (loaded by layout.tsx as an afterInteractive
+        // script) instead of bundling a SECOND copy of gsap from npm (~25 kB gzip
+        // saved, and one engine instead of two). It loads within a few ticks of
+        // hydration; until then the icon just sits static, which is fine.
+        const waitForGsap = (timeoutMs = 5000): Promise<typeof window.gsap | null> =>
+            new Promise((resolve) => {
+                const start = performance.now();
+                const tick = () => {
+                    if (cancelled) return resolve(null);
+                    if (window.gsap) return resolve(window.gsap);
+                    if (performance.now() - start > timeoutMs) return resolve(null);
+                    setTimeout(tick, 40);
+                };
+                tick();
+            });
 
         const init = async () => {
-            const { gsap } = await import('gsap');
+            const gsap = await waitForGsap();
+            if (!gsap || cancelled) return;
+            // If the page already revealed (is-ready landed before gsap did),
+            // the loader is hidden — starting the entrance + INFINITE breathe/
+            // glow tweens now would tick invisibly forever. Do nothing.
+            if (document.documentElement.classList.contains('is-ready')) return;
             const icon = iconRef.current;
             if (!icon) return;
 
@@ -172,7 +194,7 @@ export const Loader: React.FC = () => {
         };
 
         init();
-        return () => observer?.disconnect();
+        return () => { cancelled = true; observer?.disconnect(); };
     }, []);
 
     return (

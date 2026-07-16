@@ -72,13 +72,18 @@ export const FlavourSection: React.FC = () => {
         });
     }, []);
 
-    // parallax — bloom + ghost word drift opposite the carousel for depth
+    // parallax — bloom + ghost word drift opposite the carousel for depth.
+    // CRITICAL: the ghost is centred by CSS translate(-50%,-50%); a bare
+    // gsap x-set REPLACES that transform and drops the horizontal centring
+    // (the word then hangs ~270px right of centre as a broken half-word).
+    // Setting xPercent/yPercent alongside x keeps the centring in GSAP's own
+    // transform model — exactly how the bloom below already does it.
     const layout = useCallback((p: number) => {
         wrapRefs.current.forEach((el, i) => { if (el) place(el, offsetOf(i, p)); });
         const gsap = gsapRef.current;
         if (!gsap) return;
         if (bloomRef.current) gsap.set(bloomRef.current, { xPercent: -50, yPercent: -50, x: -p * 6 });
-        if (ghostRef.current) gsap.set(ghostRef.current, { x: -p * 22 });
+        if (ghostRef.current) gsap.set(ghostRef.current, { xPercent: -50, yPercent: -50, x: -p * 22 });
     }, [place]);
 
     // Morph bloom + cross-fade the ghost word + reveal name (SplitText) on change.
@@ -94,9 +99,11 @@ export const FlavourSection: React.FC = () => {
         if (taglineRef.current) gsap.to(taglineRef.current, { color: f.color, duration: 0.5, ease: 'power2.out' });
 
         requestAnimationFrame(() => {
-            // ghost word swap
+            // ghost word swap (xPercent/yPercent keep the CSS centring intact)
             if (ghostRef.current) {
-                gsap.fromTo(ghostRef.current, { opacity: 0, scale: 1.12 }, { opacity: 0.07, scale: 1, duration: 0.7, ease: 'power2.out' });
+                gsap.fromTo(ghostRef.current,
+                    { opacity: 0, scale: 1.12, xPercent: -50, yPercent: -50 },
+                    { opacity: 0.07, scale: 1, xPercent: -50, yPercent: -50, duration: 0.7, ease: 'power2.out' });
             }
             // index counter flip
             if (indexRef.current) {
@@ -158,6 +165,8 @@ export const FlavourSection: React.FC = () => {
 
     const stepDir = useCallback((dir: number) => animateTo(Math.round(goalRef.current) + dir), [animateTo]);
 
+    const inViewRef = useRef(false);          // arrow keys only act while the section is visible
+
     useEffect(() => {
         let cancelled = false;
         const cleanup: Array<() => void> = [];
@@ -185,26 +194,46 @@ export const FlavourSection: React.FC = () => {
             layout(0);
             if (bloomRef.current) gsap.set(bloomRef.current, { backgroundColor: FLAVOURS[0].glow });
             if (nameRef.current)  gsap.set(nameRef.current,  { color: FLAVOURS[0].color });
-            if (ghostRef.current) gsap.set(ghostRef.current, { opacity: 0.07 });
+            if (ghostRef.current) gsap.set(ghostRef.current, { opacity: 0.07, xPercent: -50, yPercent: -50 });
 
             const fx = wrapRefs.current.map((el) => el?.querySelector('.hbf-can-fx')).filter(Boolean) as HTMLElement[];
+            // The can floats + bloom breathe are repeat:-1 tweens (11 of them) —
+            // collect them and pause whenever the section is off screen, so they
+            // don't tick for the rest of the page's lifetime after first reveal.
+            const idleTweens: any[] = [];
             const tl = gsap.timeline({ scrollTrigger: { trigger: sectionRef.current, start: 'top 72%' } });
             tl.set(stageRef.current, { autoAlpha: 1 });
             tl.from(bloomRef.current, { scale: 0.4, opacity: 0, duration: 1.1, ease: 'power2.out' }, 0);
             tl.from(wrapRefs.current.filter(Boolean), { y: 150, opacity: 0, duration: 1.0, ease: 'power3.out', stagger: 0.05 }, 0.1);
             tl.add(() => {
                 fx.forEach((el, i) => {
-                    gsap.to(el, { y: -13, duration: 2.4 + i * 0.25, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.3 });
-                    gsap.to(el, { rotation: 1.3, duration: 3.3 + i * 0.2, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.4 });
+                    idleTweens.push(
+                        gsap.to(el, { y: -13, duration: 2.4 + i * 0.25, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.3 }),
+                        gsap.to(el, { rotation: 1.3, duration: 3.3 + i * 0.2, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.4 }),
+                    );
                 });
-                if (bloomRef.current) gsap.to(bloomRef.current, { scale: 1.08, duration: 2.8, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+                if (bloomRef.current) idleTweens.push(gsap.to(bloomRef.current, { scale: 1.08, duration: 2.8, ease: 'sine.inOut', yoyo: true, repeat: -1 }));
             }, '>-0.3');
-            cleanup.push(() => { tl.scrollTrigger?.kill(); tl.kill(); });
+            const idleIo = new IntersectionObserver(([entry]) => {
+                const on = entry?.isIntersecting ?? true;
+                idleTweens.forEach((a) => (on ? a.play() : a.pause()));
+            });
+            if (sectionRef.current) idleIo.observe(sectionRef.current);
+            cleanup.push(() => { idleIo.disconnect(); idleTweens.forEach((a) => a.kill()); tl.scrollTrigger?.kill(); tl.kill(); });
         };
 
         init();
 
+        // Track visibility so global arrow keys don't hijack the carousel while
+        // the user is elsewhere on the page (e.g. keyboard-scrolling the hero).
+        const io = new IntersectionObserver(
+            (entries) => { inViewRef.current = entries[0]?.isIntersecting ?? false; },
+            { threshold: 0.2 }
+        );
+        if (sectionRef.current) io.observe(sectionRef.current);
+
         const onKey = (e: KeyboardEvent) => {
+            if (!inViewRef.current) return;
             if (e.key === 'ArrowLeft')  stepDir(-1);
             if (e.key === 'ArrowRight') stepDir(1);
         };
@@ -212,6 +241,7 @@ export const FlavourSection: React.FC = () => {
 
         return () => {
             cancelled = true;
+            io.disconnect();
             window.removeEventListener('keydown', onKey);
             snapTween.current?.kill();
             splitRef.current?.revert?.();
