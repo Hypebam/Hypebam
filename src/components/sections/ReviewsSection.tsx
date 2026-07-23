@@ -56,6 +56,11 @@ const REVIEWS = [
         name: 'Abdul Basith R.',
         tilt: -2,
     },
+    {
+        quote: '“Hype Bam feels fresh, modern and proudly Sri Lankan. That alone makes me interested in supporting the brand.”',
+        name: 'Saad A.',
+        tilt: 2.3,
+    },
 ];
 
 export const ReviewsSection: React.FC = () => {

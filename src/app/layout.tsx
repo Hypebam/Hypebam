@@ -128,11 +128,17 @@ export default function RootLayout({
         {/* ── Responsive overrides — MUST be last to win cascade ── */}
         <link href="/styles/responsive.css" rel="stylesheet" type="text/css" />
 
-        {/* ── Preload: Hero canvas — first frame must paint instantly ── */}
-        <link rel="preload" href="/img/hypeBamVideo001.webp" as="image" type="image/webp" />
-
-        {/* ── Preload: Sequence section — first frame so canvas isn't blank ── */}
-        <link rel="preload" href="/img/seq_0_0.webp" as="image" type="image/webp" />
+        {/* ── Preload: Hero canvas + sequence first frames ──
+             app.js consumes these via fetch()+createImageBitmap (NOT as <img>),
+             so they MUST preload as `fetch`, not `image`. An `as=image` preload
+             here is never matched by the fetch → the browser logs "preloaded but
+             not used" AND may download the bytes twice. `crossorigin` (anonymous)
+             makes the preload's request mode match app.js's same-origin fetch so
+             the cached response is reused. (Ancient iOS<14 without
+             createImageBitmap falls back to <img>, forgoing the head-start —
+             acceptable for <1% of traffic.) ── */}
+        <link rel="preload" href="/img/hypeBamVideo001.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
+        <link rel="preload" href="/img/seq_0_0.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
 
         {/* ── Adaptive preload: extra hero frames 2-5 only on fast connections ── */}
         <Script id="adaptive-frame-preload" strategy="beforeInteractive">
@@ -148,8 +154,9 @@ export default function RootLayout({
                 ['002','003','004','005'].forEach(function (n) {
                   var l = document.createElement('link');
                   l.rel = 'preload';
-                  l.as = 'image';
+                  l.as = 'fetch';
                   l.type = 'image/webp';
+                  l.crossOrigin = 'anonymous';
                   l.href = '/img/hypeBamVideo' + n + '.webp';
                   document.head.appendChild(l);
                 });

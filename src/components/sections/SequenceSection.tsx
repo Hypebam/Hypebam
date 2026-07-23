@@ -88,59 +88,65 @@ const BOLTS = [
 export const SequenceSection: React.FC = () => {
     const mobileTitleRef = useRef<HTMLHeadingElement>(null);
 
-    // Mobile finale title reveal. Every event-based approach (CSS
-    // `animation-timeline: view()`, IntersectionObserver one-shot, then a
-    // scroll-event scrub) was fine in desktop Chromium but failed on the user's
-    // phone — because on touch devices Lenis falls back to native scroll and
-    // iOS Safari does NOT fire `scroll` events continuously during momentum, so
-    // an event-driven scrub never ticks mid-swipe.
+    // Mobile finale title reveal. The desktop finale (.sequence-final) gets a
+    // rich SplitText word-fly-in from app.js; the mobile block (.sequence-final-
+    // mobile) previously had only a faint opacity/slide rAF scrub that read as
+    // "no animation". This gives mobile the SAME calibre reveal as desktop.
     //
-    // Bulletproof fix: a requestAnimationFrame LOOP that re-reads the title's
-    // viewport position every frame and maps it to opacity + slide. It depends
-    // on nothing but rAF (universal) — no scroll events, no Lenis hook, no
-    // view-timeline support. An IntersectionObserver only starts/stops the loop
-    // so it costs nothing when the section is far away. CSS default keeps the
+    // Robustness: the animation is a self-clocked GSAP timeline played ONCE when
+    // the title scrolls into view (IntersectionObserver). It does NOT depend on
+    // continuous scroll events (which iOS Safari drops during momentum) nor on
+    // ScrollTrigger's scroll sync — the IO only needs to fire a single time, and
+    // the timeline then runs on GSAP's own ticker. `.from()` means CSS keeps the
     // title fully visible if JS never runs (never stuck blank).
     useEffect(() => {
         const el = mobileTitleRef.current;
         if (!el) return;
-        const section: Element = el.closest('.sequence-section') ?? el;
-        let running = false;
-        let raf = 0;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-        const tick = () => {
-            if (!running) return;
-            if (el.offsetParent !== null) { // skip while hidden (desktop layout)
-                const r = el.getBoundingClientRect();
-                const vh = window.innerHeight || 1;
-                // 0 as the title first appears low on screen → 1 once it rises to ~mid.
-                const start = vh * 0.9, end = vh * 0.45;
-                const prog = Math.max(0, Math.min(1, (start - r.top) / (start - end)));
-                el.style.opacity = String(prog);
-                el.style.transform = `translateY(${(1 - prog) * 1.8}rem)`;
+        let cancelled = false;
+        let io: IntersectionObserver | null = null;
+        let split: any = null;
+        let tl: any = null;
+
+        (async () => {
+            const t0 = performance.now();
+            while (!(window as any).gsap || !(window as any).SplitText) {
+                if (cancelled || performance.now() - t0 > 8000) return;
+                await new Promise((r) => setTimeout(r, 50));
             }
-            raf = requestAnimationFrame(tick);
-        };
+            if (cancelled) return;
+            const gsap = (window as any).gsap;
+            const SplitText = (window as any).SplitText;
 
-        const io = new IntersectionObserver(
-            (entries) => {
-                const near = entries[0]?.isIntersecting ?? false;
-                if (near && !running) {
-                    running = true;
-                    raf = requestAnimationFrame(tick);
-                } else if (!near && running) {
-                    running = false;
-                    if (raf) cancelAnimationFrame(raf);
-                }
-            },
-            { rootMargin: '300px 0px 300px 0px' }
-        );
-        io.observe(section);
+            io = new IntersectionObserver(
+                (entries) => {
+                    // fire once, only in the mobile layout (element laid out)
+                    if (!entries[0]?.isIntersecting || el.offsetParent === null || tl) return;
+                    io?.disconnect();
+                    split = SplitText.create(el, { type: 'words', wordsClass: 'seq-final-word' });
+                    tl = gsap.timeline();
+                    tl.from(split.words, {
+                        yPercent: 120,
+                        opacity: 0,
+                        rotationX: -45,
+                        transformOrigin: '50% 100% -30',
+                        scale: 0.7,
+                        duration: 0.9,
+                        stagger: 0.06,
+                        ease: 'back.out(1.8)',
+                    });
+                },
+                { threshold: 0.25 }
+            );
+            io.observe(el);
+        })();
 
         return () => {
-            running = false;
-            if (raf) cancelAnimationFrame(raf);
-            io.disconnect();
+            cancelled = true;
+            io?.disconnect();
+            tl?.kill();
+            try { split?.revert(); } catch { /* ignore */ }
         };
     }, []);
 

@@ -252,8 +252,9 @@ h1.hero-heading {
     .stage-container { padding-left: 1em !important; padding-right: 1em !important; }
     .stage { margin-bottom: 1em !important; }
     .marquee { transform: translateY(20px) !important; }
-    /* Nudge the marquee text up so it sits centered in the band on mobile */
-    .marquee-text-svg { top: 10px !important; }
+    /* Centre the marquee text on the curved band — was sitting low (less space
+       below the letters than above). Raised so top/bottom padding matches. */
+    .marquee-text-svg { top: 2px !important; }
 
     .stage-fact-number { font-size: 1.4em !important; }
     .stage-fact-unit { font-size: 0.7em !important; }
@@ -264,7 +265,10 @@ h1.hero-heading {
     .stage-logo-img { transform: scale(0.85) !important; }
 
     .insider-section { margin-top: 2.5em !important; }
-    .insider-heading { font-size: 1.5em !important; }
+    /* Fit the heading to its 4 authored (<br>) lines — 1.5em overflowed the
+       two longest lines onto a 6th line on phones. Tighter size + normal
+       tracking keeps "Sri-Lankanized just for you" on ONE line. */
+    .insider-heading { font-size: 1.3em !important; letter-spacing: 0 !important; }
     .insider-text-inner { margin-top: 1.5em !important; font-size: 0.85em !important; }
 
     .testimonial-inner-wrap,
@@ -302,6 +306,30 @@ h1.hero-heading {
     .benefit-table-title-wrapper { display: grid !important; grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr) minmax(0, 1fr) !important; column-gap: 0.5em !important; align-items: center !important; }
     .benefit-table-title-wrapper>.benefit-table-title { white-space: normal !important; min-width: 0 !important; }
     .benefit-table-title-wrapper>.benefit-table-title:first-child { grid-column: 1 !important; grid-row: 1 !important; }
+    .benefit-table-title-img.is-desktop { display: none !important; }
+    .benefit-table-title.is-mobile-only { display: block !important; grid-column: 2 !important; grid-row: 1 !important; text-align: center !important; }
+    .benefit-table-title-wrapper>.benefit-table-title:last-child { grid-column: 3 !important; grid-row: 1 !important; text-align: center !important; }
+}
+
+/* ========================================
+   TABLET PORTRAIT/BAND — 768–991px
+   The benefit table's 3-col grid only existed in the ≤767 block, so this band
+   fell back to webflow's ID-specificity grid rules (#w-node…{grid-column:span 5})
+   which win over main.css's class rules: the "Hype Bam" header was hidden
+   (base `is-mobile-only{display:none!important}`) and "Typical Energy Drinks"
+   auto-placed into column 1, stacking under "Benefits" with the check/X columns
+   misaligned. These !important rules re-establish the correct 3-column table
+   (Benefits | Hype Bam | Typical) at tablet size, matching the phone layout.
+   ======================================== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .benefit-table-item { grid-template-columns: minmax(0, 2.6fr) minmax(0, 1fr) minmax(0, 1fr) !important; column-gap: 0.75em !important; align-items: center !important; }
+    .benefit-item-title { grid-column: 1 / 2 !important; font-size: 1.15em !important; }
+    .benefit-checker-inner { grid-column: 2 / 4 !important; display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 0.75em !important; }
+    .benefit-item-check, .benefit-item-x { width: 100% !important; justify-content: center !important; }
+    .benefit-item-check { height: 2.75em !important; }
+    .benefit-table-title-wrapper { display: grid !important; grid-template-columns: minmax(0, 2.6fr) minmax(0, 1fr) minmax(0, 1fr) !important; column-gap: 0.75em !important; align-items: center !important; }
+    .benefit-table-title-wrapper>.benefit-table-title { white-space: normal !important; min-width: 0 !important; font-size: 1.1em !important; line-height: 1.15 !important; }
+    .benefit-table-title-wrapper>.benefit-table-title:first-child { grid-column: 1 !important; grid-row: 1 !important; text-align: left !important; }
     .benefit-table-title-img.is-desktop { display: none !important; }
     .benefit-table-title.is-mobile-only { display: block !important; grid-column: 2 !important; grid-row: 1 !important; text-align: center !important; }
     .benefit-table-title-wrapper>.benefit-table-title:last-child { grid-column: 3 !important; grid-row: 1 !important; text-align: center !important; }
@@ -374,6 +402,62 @@ h1.hero-heading {
         padding-top: 50vh; padding-top: 50lvh;
     }
     .sequence-final-mobile { min-height: 100vh; min-height: 100lvh; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE/TABLET POLISH (loads last — wins the cascade)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* STAGE LOGO — the slot forced `height: max(12.5em, 34svh)` (≈287px on a phone)
+   while the logo's width-constrained box is only ~200px tall and bottom-aligned
+   in the slot, leaving ~85px of dead space above it (ugly gap under the nav).
+   The tablet band already fit (slot≈logo), so this is phone-only: drop the svh
+   term so the slot hugs the logo. (`height:auto` is NOT usable — the logo is
+   `width:100%` so an auto slot lets it balloon to the column width.) */
+@media screen and (max-width: 767px) {
+    .stage-logo { height: 13.5em !important; }
+    /* the `scale(0.85)` shrank the VISUAL logo below its layout box, so even a
+       tight slot left a scale-sized gap. Drop the transform on mobile and let
+       the slot height (via max-height:100% on the img) set the size — the logo
+       then fills the slot exactly, zero dead space. */
+    .stage-logo-img { transform: none !important; }
+}
+@media screen and (max-width: 479px) {
+    .stage-logo { height: 12em !important; }
+    .stage-logo-img { transform: none !important; }
+}
+
+/* MARQUEE TEXT — also raise it off the bottom of the band on tablet. */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .marquee-text-svg { top: 6px !important; }
+}
+
+/* TESTIMONIAL SECTION must be FLEX on mobile so the container fills the full
+   viewport height and the grid-layout's space-between can drop the review card
+   to the lower third. main.css forces `display:block !important` here (for a
+   legacy visibility reset), which killed the flex layout — re-assert flex last.
+   The bg-img-wrapper is position:absolute so it's unaffected by the flex flow. */
+@media screen and (max-width: 991px) {
+    .testimonial-section {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+}
+
+/* SEQUENCE SIGNATURE ("why people love it") — was positioned low enough to
+   collide with the pinned canvas / first statement card on tablet+phone. Lift
+   it into the section's opening space and keep it above the canvas. */
+@media screen and (max-width: 991px) {
+    .sequence-signature {
+        top: 1.5em !important;
+        z-index: 5 !important;
+    }
+}
+@media screen and (max-width: 767px) {
+    .sequence-signature {
+        top: 1em !important;
+    }
 }
 
 @media (orientation: landscape) {

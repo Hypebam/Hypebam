@@ -885,6 +885,346 @@ html.is-ready.lenis-stopped {
 }
 
 /* ============================================================
+   TESTIMONIAL SECTION — FIT THE WINDOW (height AND width)
+   ────────────────────────────────────────────────────────────
+   THE BUG: webflow sized this section `height: 78.1875em`. `em`
+   resolves against the root font-size, which the Osmo system
+   derives from viewport WIDTH ONLY — viewport HEIGHT is never
+   consulted. Measured result: the section ran 35–81% taller than
+   the window at EVERY size (1440×900 → 1251px; 1920×1080 →
+   1668px; 1366×660 → 1187px; 390×844 → 1251px), and on wide
+   monitors the type scaled up with width (139px heading, 588px
+   cards) with no height ceiling.
+
+   THE FIX — two moves:
+   1. Height comes from the viewport: `min-height: 100svh` with a
+      `vh` fallback, `height: auto` so content can never be clipped.
+      Content is centred, so the section is exactly one screen.
+   2. ONE SCALING LEVER: every dimension inside this section is
+      em-based (webflow's convention), and `em` cascades — so the
+      section's own `font-size` proportionally drives fonts,
+      padding, gaps, card size, arrows and line-heights together.
+      Setting it to `min(1rem, K·svh)` means: keep the width-based
+      size normally, but shrink EVERYTHING in lockstep the moment
+      the window is too short. K is calibrated per breakpoint from
+      each layout's measured natural content height.
+   ============================================================ */
+.testimonial-section {
+    height: auto !important;
+    min-height: 100vh !important;    /* Safari < 15.4 fallback */
+    min-height: 100svh !important;   /* small-viewport: fits with the URL bar shown */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    /* The lever (see note above), calibrated from this layout's measured
+       natural content height (≈52.7em on desktop) so content lands at ~88%
+       of the window with even breathing room. `max(10px, …)` is a
+       readability floor — on extreme aspect ratios we let the section grow
+       past one screen rather than render unreadable type.
+       Ancient-browser fallback first. */
+    font-size: 1rem;
+    font-size: max(10px, min(1rem, 1.67vh));
+    font-size: max(10px, min(1rem, 1.67svh));
+}
+/* Kill the stretch chain that spread content over the old fixed height:
+   container/grid/slider were all `height: 100%` of 78.1875em. */
+.testimonial-section .testimonial-container {
+    height: auto !important;
+    padding-top: 2.2em !important;
+    padding-bottom: 2.2em !important;
+}
+.testimonial-section .testimonial-container > .grid-layout {
+    height: auto !important;
+    min-height: 0 !important;
+    align-content: center !important;
+}
+.testimonial-section .testimonial-slider {
+    height: auto !important;
+}
+/* px/rem values inside the section would NOT follow the lever — convert the
+   few offenders to em so they scale with everything else. */
+.testimonial-slider-wrapper {
+    padding-bottom: 3em !important;   /* was a fixed 72px */
+}
+/* The bottom fade into the reviews wall is applied to the two image layers
+   INDIVIDUALLY, not to their wrapper: a `mask-image` creates a stacking
+   context, and one on the wrapper would trap the can inside it — making it
+   impossible to sit the big heading between the stage and the can. */
+.testimonial-section .bg-img,
+.testimonial-section .testimonial-top-img {
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 2.75em), transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 2.75em), transparent 100%);
+}
+
+/* ── BACKGROUND ARTWORK — never crop the hero composition ──────────────────
+   The two layers are a matched pair authored at 1400×1180 (aspect 1.186):
+     • 1/6.webp  = the stage  — orange sky → flames → lava plinth
+     • 1/4.webp  = the can    — a product CUTOUT that stands ON that plinth
+   They only read correctly while in registration and while the can's base +
+   the plinth are both in frame.
+
+   On a window WIDER than 1.186 (most desktops/laptops: 1.60, 1.78, 2.07…),
+   `object-fit: cover` scales the art to the width and slices 26–43% off the
+   top and bottom — decapitating the can and cutting away the lava plinth it
+   stands on. So above that aspect we show the artwork COMPLETE (`contain`,
+   which scales both layers identically so registration is preserved) and
+   fill the leftover width with a blurred, enlarged copy of the same stage
+   image. Using the artwork itself as the fill means there is no colour seam
+   and no letterbox bars — it reads as a cinematic backdrop.
+
+   Below 1.186 (phones/portrait tablets) the box is TALLER than the art, so
+   `cover` only trims the decorative flame margins at the sides while keeping
+   the can and plinth fully visible — that stays exactly as it was. */
+/* FULL-BLEED, BOTTOM-ANCHORED. The artwork always fills the full width, and
+   any excess height is taken OFF THE TOP ONLY (`object-position: center
+   bottom`) — the top of the frame is empty orange sky, so nothing of value is
+   lost, while the lava plinth and the foreground rocks at the bottom stay
+   complete. Both layers use identical geometry, so the can remains in
+   registration with the rock it stands on.
+   On phones the box is TALLER than the art, so `cover` fills the height
+   exactly and only trims the decorative side flames — unchanged. */
+.testimonial-section .bg-img,
+.testimonial-section .testimonial-top-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center bottom !important;
+    transform: none !important;   /* clears the ≤991 translateY(-4%) nudge */
+}
+.testimonial-section .bg-img {
+    scale: 1 !important;
+}
+.testimonial-section .testimonial-top-img {
+    position: absolute !important;
+    inset: 0 !important;
+}
+/* ── CAN NEVER CLIPS (wide/short windows) ──────────────────────────────────
+   `object-fit: cover` on a window WIDER than the art (1.186) crops the art's
+   TOP — and once cropped, no transform can bring the can's lid back (a
+   translate just shifts the already-cropped image). So on wide aspect ratios
+   the CAN layer switches to `object-fit: contain`: the full can art is scaled
+   to FIT BY HEIGHT and centred, so the whole can (lid → base) is always in
+   frame. It's a transparent cutout, so the "letterbox" sides simply reveal the
+   flames of the bg-img (stage) behind — no bars, no seams. The stage keeps
+   `cover` (full-bleed flames). The can's base sits behind the centre review
+   card, so the slight scale difference vs the stage plinth is invisible. As
+   the window gets shorter the can naturally scales down WITH the height (the
+   user's ask) instead of being decapitated. */
+@media (min-aspect-ratio: 1400/1180) {
+    .testimonial-section .bg-img-wrapper .testimonial-top-img {
+        object-fit: contain !important;
+        object-position: center center !important;
+        translate: 0 !important;      /* nudge no longer needed / used */
+        --hb-can-scale: 1.28;         /* prominent, lid stays ~7% below the top edge */
+    }
+}
+
+/* ── LAYER ORDER: the display heading sits BEHIND the can ──────────────────
+   Everything is placed in ONE stacking context on the section so the layers
+   can interleave:  stage(1) → big heading(2) → can(3) → slider cards(4).
+   The wrapper/container/grid must NOT create their own contexts or the can
+   would be trapped below the heading (main.css gives them z-index 10/20 at
+   ≤991px — reset to auto). */
+.testimonial-section {
+    isolation: isolate;
+}
+.testimonial-section .bg-img-wrapper,
+.testimonial-section .testimonial-container,
+.testimonial-section .testimonial-container > .grid-layout {
+    z-index: auto !important;
+}
+.testimonial-section .bg-img {
+    position: relative;
+    z-index: 1 !important;
+}
+.testimonial-section .big-title-wrapper {
+    position: relative;
+    z-index: 2 !important;
+}
+.testimonial-section .testimonial-top-img {
+    z-index: 3 !important;
+}
+.testimonial-section .testimonial-slider {
+    position: relative;
+    z-index: 4 !important;
+}
+
+/* ── HERO CAN SIZE ─────────────────────────────────────────────────────────
+   The can is the product hero and was reading too small once the section
+   became viewport-height. Measured from the artwork's alpha channel, the can
+   occupies x 572–826 / y 330–981 of 1400×1180 — i.e. it is dead-centre
+   (49.9%) with its BASE at 83.1% of the art height.
+
+   Scaling from that exact contact point is what keeps this believable: the
+   can grows upward and outward from where it meets the lava plinth, so it
+   still stands ON the rock instead of floating above it. Both fit modes map
+   the art to the element's full HEIGHT (contain fits by height on wide boxes;
+   cover fits by height on tall ones), so this origin is correct in both.
+   Ceiling is 1.51× — beyond that the can's top would clip the section. */
+.testimonial-section .bg-img-wrapper .testimonial-top-img {
+    transform-origin: 49.9% 83.1% !important;
+    transform: none !important;
+    scale: var(--hb-can-scale, 1.28) !important;
+    /* KEEP THE LID IN FRAME. Cropping the stage from the top also crops the
+       can, and on 16:9-and-wider windows that sliced the can's lid off
+       (85px at 1920×1080, 169px at 1366×660) — a decapitated hero product.
+       The art covers the width at height 0.843·W, so the can's top sits at
+       0.236·W and the overflow removed from the top is (0.843·W − H); the
+       lid is therefore clipped by exactly (0.607·W − H) whenever positive.
+       Push the can down by that much (plus a small margin) to restore it.
+       This is invisible to the "standing on the rock" illusion because the
+       contact point is hidden behind the centre review card. */
+    translate: 0 max(0px, calc(60.7vw - 100svh + 1em)) !important;
+}
+@supports not (translate: 0 max(0px, calc(60.7vw - 100vh + 1em))) {
+    /* older engines: no dynamic nudge, just keep the lid safe by not scaling */
+    .testimonial-section .bg-img-wrapper .testimonial-top-img {
+        --hb-can-scale: 1;
+    }
+}
+/* Phones magnify the can already (`cover` crops the width away), and the
+   plinth contact point stays VISIBLE below the card here — so a gentler
+   boost keeps the can hero-sized without swallowing the headline. */
+@media (max-width: 991px) {
+    .testimonial-section .bg-img-wrapper .testimonial-top-img {
+        --hb-can-scale: 1.20;
+    }
+}
+
+/* With the can this large the white display type now crosses the product's
+   pale yellow label. A soft warm shadow keeps both headings crisp over the
+   can AND over the sky — standard practice for type set over imagery. */
+.testimonial-section .testimonial-big-heading,
+.testimonial-section .testimonial-heading {
+    text-shadow:
+        0 2px 10px rgba(90, 30, 0, 0.42),
+        0 1px 3px rgba(90, 30, 0, 0.35) !important;
+}
+
+/* Mobile/tablet: the layout is different here (the big heading is small and
+   the card is full-width), so its natural content is much shorter than
+   desktop's — a taller K keeps phones at their natural size and only
+   shrinks in landscape / very short windows. */
+/* 768–991px: this band still uses the LARGE heading (the ≥768 rule), so its
+   natural content is the tallest of all (~57.6em) and needs the smallest K. */
+@media (max-width: 991px) {
+    .testimonial-section {
+        font-size: 1rem;
+        font-size: max(9px, min(1rem, 1.53vh));
+        font-size: max(9px, min(1rem, 1.53svh));
+    }
+    .testimonial-section .testimonial-container {
+        padding-top: 1.6em !important;
+        padding-bottom: 1.6em !important;
+    }
+    /* card rail: was `calc(100% - 2rem)` / `max-width: 420px` (rem+px, immune
+       to the lever) — em keeps the card proportional to the scaled type. */
+    .testimonial-slider-item-wrap {
+        width: calc(100% - 2em) !important;
+        max-width: 26em !important;
+    }
+    .testimonial-slider-wrapper {
+        padding-bottom: 2.2em !important;
+    }
+}
+/* ≤767px: the phone layout swaps to the SMALL big-heading, so its natural
+   content is only ~38.5em — a much larger K keeps phones at their full
+   natural size and only engages on short/landscape windows. */
+@media (max-width: 767px) {
+    .testimonial-section {
+        font-size: 1rem;
+        font-size: max(9px, min(1rem, 2.29vh));
+        font-size: max(9px, min(1rem, 2.29svh));
+    }
+    /* HIERARCHY FIX: the display title ("Sri Lankanized Hydration") was
+       rendering SMALLER than its own sub-heading ("why they keep coming
+       back") on phones — 26px vs 48px, an inverted hierarchy. The section
+       title now leads and the sub-heading supports it, matching how the
+       desktop layout already reads. */
+    .testimonial-section .testimonial-big-heading {
+        font-size: 2.9em !important;
+    }
+    .testimonial-section .testimonial-heading {
+        font-size: 2em !important;
+    }
+}
+@media (max-width: 479px) {
+    .testimonial-section .testimonial-big-heading {
+        font-size: 2.3em !important;
+    }
+    .testimonial-section .testimonial-heading {
+        font-size: 1.75em !important;
+    }
+}
+@media (max-width: 479px) {
+    .testimonial-slider-item-wrap {
+        max-width: 21em !important;
+    }
+}
+
+/* ── SLIDER SITS LOWER (mobile/tablet) ─────────────────────────────────────
+   The section was flex-centred but the content pinned near the top, leaving a
+   ~215px dead gap below the review card. Distribute the two rows (big heading /
+   slider) top-and-bottom so the card drops to the lower third — over the can
+   body + plinth — with only the container's padding as the bottom margin. */
+@media (max-width: 991px) {
+    /* the container must FILL the section height (it's the section's only flex
+       child) so the grid-layout's space-between has room to push the slider
+       down — without flex:1 it collapsed to content height and did nothing. */
+    .testimonial-section .testimonial-container {
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 1 auto !important;
+        align-self: stretch !important;
+    }
+    .testimonial-section .testimonial-container > .grid-layout {
+        flex: 1 1 auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        min-height: 0 !important;
+    }
+    /* the slider owns its sub-heading + arrows + card; keep them grouped and
+       bottom-weighted (no internal stretch that would re-open the gap). */
+    .testimonial-section .testimonial-slider {
+        flex: 0 0 auto !important;
+        justify-content: flex-end !important;
+    }
+}
+
+/* Mobile finale title ("Fuel The Rebel / Let's Get Bam'ed") — SplitText words
+   fly up with an elastic settle (SequenceSection.tsx). Needs 3D perspective +
+   block words so rotationX/yPercent render. */
+.sequence-final-mobile .sequence-title {
+    perspective: 800px;
+}
+.sequence-final-mobile .sequence-title .seq-final-word {
+    display: inline-block;
+    will-change: transform, opacity;
+}
+
+/* Landscape phones/tablets (very short windows): the 768–991 band would
+   otherwise carry the full-size display heading into a ~390px-tall window.
+   Trim the heading and gaps so the section still lands near one screen. */
+@media (max-width: 991px) and (max-height: 520px) {
+    .testimonial-section .testimonial-big-heading {
+        font-size: 3.2em !important;
+    }
+    .testimonial-section .big-title-wrapper {
+        grid-column-gap: 0.8em !important;
+        grid-row-gap: 0.8em !important;
+        gap: 0.8em !important;
+    }
+    .testimonial-section .testimonial-container {
+        padding-top: 1em !important;
+        padding-bottom: 1em !important;
+    }
+    .testimonial-slider-wrapper {
+        padding-bottom: 1.4em !important;
+    }
+}
+
+/* ============================================================
    REVIEWS WALL — "THE REBELS HAVE SPOKEN" (ReviewsSection)
    Rebel sticker wall: tilted white review stickers on the cream
    halftone, giant ghosted Bad-Brush "BAM!" behind. GSAP entrance
