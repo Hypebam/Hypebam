@@ -1,8 +1,7 @@
 "use client";
 
 import React from 'react';
-import { ArrowIcon } from '@/components/icons';
-import { SocialLinks } from '@/components/ui';
+import { Button, SocialLinks } from '@/components/ui';
 
 export const Footer: React.FC = () => {
     return (
@@ -15,19 +14,17 @@ export const Footer: React.FC = () => {
                     </div>
                     <div className="footer-product-text-inner">
                         <h3 className="footer-product-heading">Fuel<br />The<br />Rebel!</h3>
-                        <div aria-hidden="true" className="button is-light">
-                            <div className="button-cycle is-first">
-                                <ArrowIcon />
-                                <div className="button-cycle-bg light-bg"></div>
-                            </div>
-                            <div className="button-bg light-bg">
-                                <div className="button-text dark-font">Buy now</div>
-                            </div>
-                            <div className="button-cycle is-second">
-                                <ArrowIcon />
-                                <div className="button-cycle-bg light-bg"></div>
-                            </div>
-                        </div>
+                        {/* Same shared Button every other section uses (hero, insider,
+                            flavour) — was hand-rolled markup with the wrong icon
+                            (ArrowIcon chevron instead of the brand mascot) and wasn't
+                            a real link. `aria-hidden` on the button (not the whole
+                            card): .footer-product-link below is the actual, larger
+                            tap target and already drives this button's hover state
+                            via :has(), so the visible button stays decorative/inert
+                            to assistive tech and isn't announced twice. */}
+                        <Button href="#" variant="light" aria-hidden="true" tabIndex={-1}>
+                            Buy now
+                        </Button>
                     </div>
                     <a aria-label="Buy now" href="#" className="footer-product-link w-inline-block"></a>
                 </div>

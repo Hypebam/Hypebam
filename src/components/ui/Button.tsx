@@ -7,6 +7,8 @@ interface ButtonProps {
     className?: string;
     target?: string;
     rel?: string;
+    'aria-hidden'?: boolean | 'true' | 'false';
+    tabIndex?: number;
 }
 
 const BrandIcon = () => (
@@ -25,7 +27,9 @@ export const Button: React.FC<ButtonProps> = ({
     variant = 'default',
     className = '',
     target,
-    rel
+    rel,
+    'aria-hidden': ariaHidden,
+    tabIndex
 }) => {
     const bgClass = variant === 'white' ? 'white-bg' : variant === 'light' ? 'light-bg' : '';
     const textClass = variant === 'white' || variant === 'light' ? 'dark-font' : '';
@@ -43,6 +47,8 @@ export const Button: React.FC<ButtonProps> = ({
             href={href}
             target={finalTarget}
             rel={finalRel}
+            aria-hidden={ariaHidden}
+            tabIndex={tabIndex}
             className={`button ${buttonClass} w-inline-block ${className}`}
         >
             <div className="button-cycle is-first">

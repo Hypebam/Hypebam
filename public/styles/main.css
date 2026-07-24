@@ -848,13 +848,13 @@ html.lenis body {
 
 @media (max-width: 991px) {
     .stage-canvas {
-        scale: 0.85 !important;
+        scale: 1 !important;
     }
 }
 
 @media (max-width: 479px) {
     .stage-canvas {
-        scale: 0.7 !important;
+        scale: 0.9 !important;
     }
 }
 

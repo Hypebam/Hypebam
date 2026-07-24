@@ -348,7 +348,10 @@ h1.hero-heading {
     .stage-fact { padding: 0.5em !important; }
 
     .stage-logo-img { transform: scale(0.7) !important; }
-    .stage-canvas { scale: 0.7 !important; }
+    /* PHONE stage-canvas — matched to tablet scale so the hero can reads
+       bolder on phones (user request: "lil bit close to tab mode"). Keeps
+       the translate that drops it into the circle rig's centre. */
+    .stage-canvas { scale: 0.9 !important; translate: 0 8% -5% !important; }
 
     .testimonial-inner-wrap,
     .testimonial-inner-wrap.is-first,
@@ -457,6 +460,24 @@ h1.hero-heading {
 @media screen and (max-width: 767px) {
     .sequence-signature {
         top: 1em !important;
+    }
+}
+
+/* SECOND STATEMENT CARD ICON ("Hydration, done right" — the lightning bolt) —
+   webflow's own ≤991px rule (`inset: -1.5em 0% auto auto`) only lifts it 1.5em
+   above the paragraph wrap, which isn't enough to clear the icon's own height:
+   its bottom edge dips back down into the wrap and clips the first line of
+   the paragraph text ("...TO HELP YOU"). Pull it up further so it sits
+   cleanly in the gap above the paragraph as a corner flourish, matching how
+   the OTHER statement icons (first/third/fourth) already sit clear of their text. */
+@media screen and (max-width: 991px) {
+    .second-icon {
+        top: -3.4em !important;
+    }
+}
+@media screen and (max-width: 767px) {
+    .second-icon {
+        top: -3em !important;
     }
 }
 

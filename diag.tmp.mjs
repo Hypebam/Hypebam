@@ -2,69 +2,94 @@ import { chromium } from 'playwright';
 let browser;
 try { browser = await chromium.launch({ channel: 'msedge' }); }
 catch { browser = await chromium.launch({ channel: 'chrome' }); }
-for (const c of [{n:'tablet 768',w:768,h:1024},{n:'phone 390',w:390,h:844},{n:'phone 360',w:360,h:800}]) {
-  const ctx = await browser.newContext({ viewport:{width:c.w,height:c.h}, isMobile:true, hasTouch:true });
+
+for (const c of [{n:'phone 390',w:390,h:844,m:true},{n:'phone 360',w:360,h:800,m:true},{n:'tab 768',w:768,h:1024,m:true},{n:'desk 1440',w:1440,h:900,m:false}]) {
+  const ctx = await browser.newContext({ viewport:{width:c.w,height:c.h}, isMobile:c.m, hasTouch:c.m });
   const page = await ctx.newPage();
   await page.goto('http://localhost:3000',{waitUntil:'load'});
   await page.waitForFunction(()=>document.documentElement.classList.contains('is-ready'),null,{timeout:12000}).catch(()=>{});
   await page.waitForTimeout(1400);
   await page.evaluate(async()=>{const H=document.body.scrollHeight;for(let y=0;y<=H;y+=innerHeight*0.5){window.scrollTo(0,y);await new Promise(r=>setTimeout(r,80));}});
 
-  // ---- TESTIMONIAL layering + slider position ----
-  const t = await page.evaluate(()=>{
-    const sec=document.querySelector('.testimonial-section');
-    window.scrollTo(0, sec.getBoundingClientRect().top+scrollY);
-    const zi=s=>{const e=document.querySelector(s);if(!e)return null;const cs=getComputedStyle(e);return {z:cs.zIndex,pos:cs.position,tf:cs.transform.slice(0,20),op:cs.opacity};};
-    const box=s=>{const e=document.querySelector(s);if(!e)return null;const r=e.getBoundingClientRect();return {top:Math.round(r.top),bot:Math.round(r.bottom),h:Math.round(r.height)};};
-    const secH=Math.round(sec.getBoundingClientRect().height);
-    const sw=box('.testimonial-slider-wrapper');
-    return {
-      secH,
-      bgImg:zi('.bg-img'), can:zi('.testimonial-top-img'), heading:zi('.big-title-wrapper'), slider:zi('.testimonial-slider'),
-      container:zi('.testimonial-container'), gridLayout:zi('.testimonial-container .grid-layout'), bgWrap:zi('.bg-img-wrapper'),
-      sliderWrapBox: sw, gapBelowSlider: sw ? secH - sw.bot : null,
-      bigHeadingBox: box('.big-title-wrapper'), canBox: box('.testimonial-top-img'),
+  // 1) testimonial-big-heading centering (mobile issue)
+  const heading = await page.evaluate(()=>{
+    const s=document.querySelector('.testimonial-section'); window.scrollTo(0,s.getBoundingClientRect().top+scrollY);
+    const bt=document.querySelector('.big-title-wrapper'), h=document.querySelector('.testimonial-big-heading');
+    if(!bt||!h)return null;
+    const btr=bt.getBoundingClientRect(), hr=h.getBoundingClientRect();
+    return {vw:innerWidth,
+      wrapper:{L:Math.round(btr.left),R:Math.round(btr.right),W:Math.round(btr.width),centerOffset:Math.round((btr.left+btr.width/2)-innerWidth/2)},
+      heading:{L:Math.round(hr.left),R:Math.round(hr.right),W:Math.round(hr.width),centerOffset:Math.round((hr.left+hr.width/2)-innerWidth/2)},
+      textAlign:getComputedStyle(h).textAlign, wrapperPad:getComputedStyle(bt).padding, wrapperMargin:getComputedStyle(bt).margin,
+      wrapperAlign:getComputedStyle(bt).alignItems + '/' + getComputedStyle(bt).justifyContent
     };
   });
 
-  // ---- INSIDER heading line count ----
-  const ins = await page.evaluate(()=>{
-    const h=document.querySelector('.insider-heading'); if(!h)return null;
-    const cs=getComputedStyle(h); const lh=parseFloat(cs.lineHeight)||parseFloat(cs.fontSize)*1.2;
-    const r=h.getBoundingClientRect();
-    return {fontSize:Math.round(parseFloat(cs.fontSize)), lines:Math.round(r.height/lh), h:Math.round(r.height), brCount:h.querySelectorAll('br').length};
+  // 2) mobile finale — how progress-linked is it? sample opacity at scroll frac
+  const finale = await page.evaluate(async()=>{
+    const wrap=document.querySelector('.sequence-scroll-wrap'); if(!wrap)return null;
+    const top=wrap.getBoundingClientRect().top+scrollY, H=wrap.scrollHeight-innerHeight;
+    const t=document.querySelector('.sequence-final-mobile .sequence-title');
+    if(!t||t.offsetParent===null) return {visible:false};
+    // scroll to 40%, 60%, 80%, 100% and sample word states
+    const results=[];
+    for (const f of [0.30, 0.60, 0.80, 0.95, 1.0]) {
+      window.scrollTo(0, top+H*f);
+      await new Promise(r=>setTimeout(r,200));
+      const words=[...t.querySelectorAll('.seq-final-word')];
+      results.push({frac:f, wordCount:words.length, firstOp:words[0]?getComputedStyle(words[0]).opacity:'nowords', firstY:words[0]?getComputedStyle(words[0]).transform:'n/a'});
+    }
+    return {visible:true, results};
   });
 
-  // ---- STAGE-LOGO padding/empty space ----
-  const logo = await page.evaluate(()=>{
-    const slot=document.querySelector('.stage-logo'); const img=document.querySelector('.stage-logo-img');
-    if(!slot||!img)return null;
-    const sr=slot.getBoundingClientRect(), ir=img.getBoundingClientRect();
-    return {slotH:Math.round(sr.height), imgH:Math.round(ir.height), emptyAbove:Math.round(ir.top-sr.top), emptyBelow:Math.round(sr.bottom-ir.bottom), marginTop:getComputedStyle(slot).marginTop};
-  });
-
-  // ---- MARQUEE text vertical balance on band ----
+  // 3) marquee text vertical alignment vs band CENTER (not top)
   const marq = await page.evaluate(()=>{
-    const band=document.querySelector('.marquee-bg-svg'), txt=document.querySelector('.marquee-text-svg text');
-    if(!band||!txt)return null;
-    const br=band.getBoundingClientRect(), tr=txt.getBoundingClientRect();
-    return {bandTop:Math.round(br.top),bandBot:Math.round(br.bottom),txtTop:Math.round(tr.top),txtBot:Math.round(tr.bottom),
-      gapAbove:Math.round(tr.top-br.top),gapBelow:Math.round(br.bottom-tr.bottom)};
+    const m=document.querySelector('.marquee'); if(!m)return null;
+    window.scrollTo(0,m.getBoundingClientRect().top+scrollY-innerHeight*0.35);
+  });
+  await page.waitForTimeout(500);
+  const marqData = await page.evaluate(()=>{
+    const bg=document.querySelector('.marquee-bg-svg path'), txt=document.querySelector('.marquee-text-svg textPath');
+    if(!bg||!txt)return null;
+    const br=bg.getBoundingClientRect(), tr=txt.getBoundingClientRect();
+    const bandCenter=br.top+br.height/2, txtCenter=tr.top+tr.height/2;
+    return {
+      band:{top:Math.round(br.top),bot:Math.round(br.bottom),h:Math.round(br.height),center:Math.round(bandCenter)},
+      text:{top:Math.round(tr.top),bot:Math.round(tr.bottom),h:Math.round(tr.height),center:Math.round(txtCenter)},
+      offsetFromCenter:Math.round(txtCenter-bandCenter),  // + = text below center, - = text above center
+    };
   });
 
-  // ---- SEQUENCE-SIGNATURE overlap ----
-  const sig = await page.evaluate(()=>{
-    const s=document.querySelector('.sequence-signature'); if(!s)return null;
-    const sr=s.getBoundingClientRect();
-    return {top:Math.round(sr.top+scrollY),bot:Math.round(sr.bottom+scrollY),h:Math.round(sr.height),pos:getComputedStyle(s).position};
+  // 4) stage-visual (hero can) size/position on mobile
+  const stage = await page.evaluate(()=>{
+    window.scrollTo(0,0);
+    const sv=document.querySelector('.stage-visual'), cv=document.querySelector('.stage-canvas');
+    if(!sv)return null;
+    const svr=sv.getBoundingClientRect(), cvr=cv?.getBoundingClientRect();
+    return {vh:innerHeight, stage:{top:Math.round(svr.top),bot:Math.round(svr.bottom),w:Math.round(svr.width),h:Math.round(svr.height)}, canvas:cvr?{w:Math.round(cvr.width),h:Math.round(cvr.height),scale:getComputedStyle(cv).scale}:null};
   });
+
+  // 5) desktop testimonial can position (only for desktop)
+  let deskCan = null;
+  if (!c.m) {
+    deskCan = await page.evaluate(()=>{
+      const s=document.querySelector('.testimonial-section'); window.scrollTo(0,s.getBoundingClientRect().top+scrollY);
+      const can=document.querySelector('.testimonial-top-img'), sec=document.querySelector('.testimonial-section');
+      if(!can)return null;
+      const cr=can.getBoundingClientRect(), sr=sec.getBoundingClientRect();
+      return {vh:innerHeight,vw:innerWidth,secH:Math.round(sr.height),
+        canBox:{top:Math.round(cr.top-sr.top),h:Math.round(cr.height)},
+        fit:getComputedStyle(can).objectFit, pos:getComputedStyle(can).objectPosition, scale:getComputedStyle(can).scale, tr:getComputedStyle(can).translate
+      };
+    });
+  }
 
   console.log(`\n===== ${c.n} =====`);
-  console.log('TESTIMONIAL:', JSON.stringify(t));
-  console.log('INSIDER heading:', JSON.stringify(ins));
-  console.log('STAGE-LOGO:', JSON.stringify(logo));
-  console.log('MARQUEE:', JSON.stringify(marq));
-  console.log('SEQ-SIGNATURE:', JSON.stringify(sig));
+  console.log('BIG HEADING:', JSON.stringify(heading));
+  console.log('MOBILE FINALE:', JSON.stringify(finale));
+  console.log('MARQUEE:', JSON.stringify(marqData));
+  console.log('STAGE:', JSON.stringify(stage));
+  if(deskCan) console.log('DESK CAN:', JSON.stringify(deskCan));
   await ctx.close();
 }
 await browser.close();
