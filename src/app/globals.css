@@ -791,17 +791,13 @@ html.is-ready.lenis-stopped {
     }
 }
 
-/* The Buy-now hover did THREE slides at once — the whole pill translated ~40px
-   (translate:-2.5em) AND both arrows swapped. Calm the pill to a subtle nudge so
-   it reads as one clean motion (the arrow cycle stays). */
-@media (hover: hover) and (pointer: fine) {
-    .footer-product:has(.footer-product-link:is(:hover, :focus-visible)) .button .button-bg {
-        translate: -0.45em -0.12em 0 !important;
-        rotate: -2deg !important;
-        scale: 0.97 !important;
-        transform: none !important;
-    }
-}
+/* NOTE: this footer button used to carry its own "calmed" hover (a smaller
+   translate/rotate/scale than every other button) — deliberately REMOVED so
+   the footer "Buy now" hovers exactly like the hero/insider/flavour buttons
+   (the shared `.button:is(:hover,:focus-visible) .button-bg` rule in
+   main.css, triggered here via the `:has(.footer-product-link:hover)` chain
+   since the full-card overlay link sits above the button and owns hover/
+   click). One consistent hover language site-wide instead of a special case. */
 
 /* ── Testimonials → Flavour seam (mobile) ──────────────────────────────────
    The testimonials section reflows / parallaxes as it scrolls in, and with its
@@ -1182,6 +1178,7 @@ html.is-ready.lenis-stopped {
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
+        align-items: center !important;   /* CENTRE flex children horizontally */
         min-height: 0 !important;
     }
     /* the slider owns its sub-heading + arrows + card; keep them grouped and
@@ -1189,6 +1186,17 @@ html.is-ready.lenis-stopped {
     .testimonial-section .testimonial-slider {
         flex: 0 0 auto !important;
         justify-content: flex-end !important;
+        width: 100% !important;
+    }
+    /* the big-title-wrapper's webflow rules (`place-self:start center` +
+       `span 12`) are grid-only; in this flex column it collapses to content
+       width and left-anchors. Force it full-width + centred so the section
+       title sits dead-centre horizontally. */
+    .testimonial-section .big-title-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        align-self: stretch !important;
+        text-align: center !important;
     }
 }
 
@@ -1862,6 +1870,24 @@ h1.hero-heading {
     text-transform: uppercase !important;
     font-weight: 700 !important;
     line-height: 1 !important;
+}
+/* SIZING — exact copy of the hero/flavour "Buy now" pills. This button never
+   got the per-context sizing every other CTA has (compare
+   [data-typography-target="hero-buy-button"] / .hbf-info .button below):
+   without it, text fell back to webflow's raw 2em default (32px) — bigger
+   than every other button's text (26.4px) yet the PILL still read smaller
+   overall because it was also missing the desktop scale bump hero/navbar
+   get. Same numbers as hero-buy-button, verbatim. */
+.footer-product .button .button-text {
+    font-size: 1.65em !important;
+}
+.footer-product .button .button-bg {
+    padding: 0.68em 0.86em 0.44em !important;
+}
+@media (min-width: 992px) {
+    .footer-product .button {
+        scale: 1.25 !important;
+    }
 }
 
 /* The big "Sri Lankanized Hydration" title is oversized at desktop

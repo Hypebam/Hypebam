@@ -23,6 +23,14 @@ next-env.d.ts
 # mobile-audit.mjs screenshot output
 mobile-audit-shots/
 
+# ad-hoc diagnostic/debug scripts (Playwright probes etc.) written during
+# live debugging sessions — throwaway, never meant to be committed
+*.tmp.mjs
+*.tmp.js
+
+# Claude Code local settings (machine-specific permissions)
+.claude/settings.local.json
+
 # Large original video files (use compressed versions in /compressed/ instead)
 # Story 01-05 originals are 20-96MB — excluded to keep repo size manageable
 public/img/video/*.mp4

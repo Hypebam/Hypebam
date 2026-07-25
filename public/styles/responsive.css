@@ -181,7 +181,7 @@ h1.hero-heading {
     .stage-fact-text { font-size: 0.7em !important; }
 
     /* ── Stage logo ── */
-    .stage-logo { margin-top: 2em !important; }
+    .stage-logo { margin-top: 0 !important; }
     .stage-logo-img { transform: scale(1) !important; }
 
     /* ── Stage layout ── */
@@ -261,7 +261,7 @@ h1.hero-heading {
     .stage-fact-text { font-size: 0.55em !important; }
     .stage-fact { padding: 0.6em !important; }
 
-    .stage-logo { margin-top: 1.5em !important; }
+    .stage-logo { margin-top: 0 !important; }
     .stage-logo-img { transform: scale(0.85) !important; }
 
     .insider-section { margin-top: 2.5em !important; }
@@ -478,6 +478,28 @@ h1.hero-heading {
 @media screen and (max-width: 767px) {
     .second-icon {
         top: -3em !important;
+    }
+}
+
+/* TESTIMONIAL SLIDER — "Find Us"/"Original" cards overlapping on mobile/tab.
+   The vendored infinite-loop slider (app.js's `ji` class, `sr()` layout fn)
+   positions each item with `transform: translateX(wrapDelta * itemWidth)` —
+   using ONLY the item's own width, no notion of a gap between items. But
+   main.css gives `.testimonial-slider-inner { gap: 1rem }` at ≤991px, so the
+   REAL on-screen step between cards is (itemWidth + 16px), not itemWidth.
+   For non-wrapped items this is invisible (flex's own gap already spaces them
+   correctly and the JS shift is uniform across all of them) — but WRAPPED
+   items (those looping around to sit "before" the first card, e.g. the last
+   1–2 cards looping back near the start) get a transform computed against the
+   narrower bare-itemWidth step, undershooting by 16px per wrapped position —
+   enough, compounded, to land back on top of the visible cards. Zeroing the
+   flex gap here makes the real on-screen step match the JS's assumption
+   exactly (itemWidth with no extra gap), eliminating the drift at its root —
+   card-to-card breathing room still comes from each item's own
+   `padding: 0 5px` (main.css), so cards don't end up touching edge-to-edge. */
+@media screen and (max-width: 991px) {
+    .testimonial-slider-inner {
+        gap: 0 !important;
     }
 }
 

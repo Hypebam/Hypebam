@@ -2947,7 +2947,14 @@ h1, h2, h3, h4, h5, h6,
 
 .marquee-text-svg text,
 .marquee-text-svg textPath {
-    letter-spacing: 0.15em !important;
+    /* was 0.15em — the SAME relative tracking as normal headings, but here
+       applied to fontSize={160} (an SVG user-unit value set inline in
+       HeroSection.tsx), so 0.15em resolved to 24 user-units of letter-spacing
+       — a full 15% tracking that reads as excessive at this size (tracking
+       should shrink, not stay constant, as display type gets larger).
+       `normal` removes the added spacing entirely, letting Goga's own
+       default glyph spacing show through. */
+    letter-spacing: normal !important;
     font-weight: 700 !important;
 }
 
