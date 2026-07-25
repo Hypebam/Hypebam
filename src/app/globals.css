@@ -809,13 +809,10 @@ html.is-ready.lenis-stopped {
    which creates a dead gap under the testimonial cards at every breakpoint. */
 .testimonial-container { padding-bottom: 0 !important; }
 
-/* Lift the card off the bottom (ALL widths) so a band of the flame/lava backdrop
-   shows BELOW it, instead of the card sitting flush on the image edge. */
 .testimonial-section { overflow: hidden !important; overflow: clip !important; } /* hidden = Safari <16 fallback */
-.testimonial-slider-wrapper { padding-bottom: 72px !important; }
 /* Keep the backdrop visible in that band, fading only the very bottom edge for a
    clean hand-off into the flavour section. */
-.testimonial-section .bg-img-wrapper {
+.testimonial-section .testimonial-flame-bg {
     -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 44px), transparent 100%);
     mask-image: linear-gradient(to bottom, #000 calc(100% - 44px), transparent 100%);
 }
@@ -937,107 +934,133 @@ html.is-ready.lenis-stopped {
 .testimonial-section .testimonial-slider {
     height: auto !important;
 }
-/* px/rem values inside the section would NOT follow the lever — convert the
-   few offenders to em so they scale with everything else. */
+/* Slider sits flush at the bottom of the container now (user request) — no
+   bottom padding holding it up. */
 .testimonial-slider-wrapper {
-    padding-bottom: 3em !important;   /* was a fixed 72px */
+    padding-bottom: 0 !important;
 }
-/* The bottom fade into the reviews wall is applied to the two image layers
-   INDIVIDUALLY, not to their wrapper: a `mask-image` creates a stacking
-   context, and one on the wrapper would trap the can inside it — making it
-   impossible to sit the big heading between the stage and the can. */
+/* ── BACKGROUND ARTWORK — DECOUPLED LAYERS ───────────────────────────────────
+   The stage art (1/6.webp: sky→flames→lava plinth) and the can cutout
+   (1/4.webp) are a matched, PRECISELY composed pair at 1400×1180 (1.186) —
+   there is exactly one correct arrangement, and no crop of an arbitrary
+   viewport aspect ratio can show that full arrangement AND fill the screen
+   edge-to-edge at the same time (every `cover` crop tried so far either cut
+   the can's lid, misjudged the crop math, or — once fixed — still relied on
+   a precise per-viewport formula that left little room for error). Trying to
+   force one full-bleed image to be both "fills the whole screen" and "one
+   fixed correct composition" is the wrong model.
+
+   THE FIX — split those two jobs onto two independent layers, the way a real
+   hero section is actually built:
+     1. `.testimonial-flame-bg` — a MIRRORED TRIPTYCH of the same stage photo
+        (mirror / original / mirror, laid out as three equal flex panels)
+        instead of one arbitrarily off-centre crop. The rock-and-flame
+        composition then continues symmetrically all the way to both edges
+        at any width — reads as a deliberate wide panorama, not a cropped
+        snapshot, and there's never a seam because it's built from copies of
+        the SAME photo. Full-bleed, `object-fit:cover` per panel.
+     2. `.bg-img-wrapper` — the exact can+plinth composition, sized to ITS
+        OWN native aspect-ratio (not the viewport's) via `aspect-ratio:
+        1400/1180`. Because the box's aspect always matches the art's
+        exactly, `object-fit:cover` inside it never has anything to crop —
+        it's a perfect 1:1 fit at every size. The composition just scales as
+        a whole unit and is never distorted, cropped, or misregistered, and
+        sits (sharp, on top) over the centre panel of the triptych. */
+.testimonial-section .testimonial-flame-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+}
+/* EVERY copy renders at the SAME scale: height locked to the container,
+   width left to its own natural aspect ratio (no per-panel object-fit
+   cropping — that was the bug that made the last attempt look like 3
+   mismatched, obviously-stitched photos: each panel got cover-cropped to a
+   different forced width, so the rock sat at a different apparent zoom
+   level in each one, breaking the seam). With identical scale everywhere,
+   adjacent copies butt together as an exact reflection, seamlessly. */
+.testimonial-section .testimonial-flame-bg img {
+    flex: 0 0 auto;
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+    object-position: center bottom;
+}
+.testimonial-section .testimonial-flame-bg .is-mirror {
+    transform: scaleX(-1);
+}
+/* The composition box: as large as the section allows while keeping its
+   native aspect ratio (the standard `aspect-ratio` + `max-width`/`max-height`
+   responsive-box pattern) — bottom-anchored so the plinth sits low, behind
+   the review cards, matching where it always read correctly. */
+.testimonial-section .bg-img-wrapper {
+    position: absolute !important;
+    left: 50% !important;
+    bottom: 0 !important;
+    top: auto !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    aspect-ratio: 1400 / 1180;
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+.testimonial-section .bg-img,
+.testimonial-section .testimonial-top-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    transform: none !important;   /* clears the ≤991 translateY(-4%) nudge */
+    translate: none !important;
+}
+.testimonial-section .testimonial-top-img {
+    position: absolute !important;
+    inset: 0 !important;
+}
+.testimonial-section .bg-img {
+    scale: 1 !important;
+}
+/* The bottom fade into the reviews wall lives on the flame-bg layer now (the
+   thing that actually spans the full section height) plus the composition's
+   own two images, so neither layer leaves a hard edge at the hand-off. */
 .testimonial-section .bg-img,
 .testimonial-section .testimonial-top-img {
     -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 2.75em), transparent 100%);
     mask-image: linear-gradient(to bottom, #000 calc(100% - 2.75em), transparent 100%);
 }
 
-/* ── BACKGROUND ARTWORK — never crop the hero composition ──────────────────
-   The two layers are a matched pair authored at 1400×1180 (aspect 1.186):
-     • 1/6.webp  = the stage  — orange sky → flames → lava plinth
-     • 1/4.webp  = the can    — a product CUTOUT that stands ON that plinth
-   They only read correctly while in registration and while the can's base +
-   the plinth are both in frame.
-
-   On a window WIDER than 1.186 (most desktops/laptops: 1.60, 1.78, 2.07…),
-   `object-fit: cover` scales the art to the width and slices 26–43% off the
-   top and bottom — decapitating the can and cutting away the lava plinth it
-   stands on. So above that aspect we show the artwork COMPLETE (`contain`,
-   which scales both layers identically so registration is preserved) and
-   fill the leftover width with a blurred, enlarged copy of the same stage
-   image. Using the artwork itself as the fill means there is no colour seam
-   and no letterbox bars — it reads as a cinematic backdrop.
-
-   Below 1.186 (phones/portrait tablets) the box is TALLER than the art, so
-   `cover` only trims the decorative flame margins at the sides while keeping
-   the can and plinth fully visible — that stays exactly as it was. */
-/* FULL-BLEED, BOTTOM-ANCHORED. The artwork always fills the full width, and
-   any excess height is taken OFF THE TOP ONLY (`object-position: center
-   bottom`) — the top of the frame is empty orange sky, so nothing of value is
-   lost, while the lava plinth and the foreground rocks at the bottom stay
-   complete. Both layers use identical geometry, so the can remains in
-   registration with the rock it stands on.
-   On phones the box is TALLER than the art, so `cover` fills the height
-   exactly and only trims the decorative side flames — unchanged. */
-.testimonial-section .bg-img,
-.testimonial-section .testimonial-top-img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    object-position: center bottom !important;
-    transform: none !important;   /* clears the ≤991 translateY(-4%) nudge */
-}
-.testimonial-section .bg-img {
-    scale: 1 !important;
-}
-.testimonial-section .testimonial-top-img {
-    position: absolute !important;
-    inset: 0 !important;
-}
-/* ── CAN NEVER CLIPS (wide/short windows) ──────────────────────────────────
-   `object-fit: cover` on a window WIDER than the art (1.186) crops the art's
-   TOP — and once cropped, no transform can bring the can's lid back (a
-   translate just shifts the already-cropped image). So on wide aspect ratios
-   the CAN layer switches to `object-fit: contain`: the full can art is scaled
-   to FIT BY HEIGHT and centred, so the whole can (lid → base) is always in
-   frame. It's a transparent cutout, so the "letterbox" sides simply reveal the
-   flames of the bg-img (stage) behind — no bars, no seams. The stage keeps
-   `cover` (full-bleed flames). The can's base sits behind the centre review
-   card, so the slight scale difference vs the stage plinth is invisible. As
-   the window gets shorter the can naturally scales down WITH the height (the
-   user's ask) instead of being decapitated. */
-@media (min-aspect-ratio: 1400/1180) {
-    .testimonial-section .bg-img-wrapper .testimonial-top-img {
-        object-fit: contain !important;
-        object-position: center center !important;
-        translate: 0 !important;      /* nudge no longer needed / used */
-        --hb-can-scale: 1.28;         /* prominent, lid stays ~7% below the top edge */
-    }
-}
-
 /* ── LAYER ORDER: the display heading sits BEHIND the can ──────────────────
    Everything is placed in ONE stacking context on the section so the layers
-   can interleave:  stage(1) → big heading(2) → can(3) → slider cards(4).
-   The wrapper/container/grid must NOT create their own contexts or the can
-   would be trapped below the heading (main.css gives them z-index 10/20 at
-   ≤991px — reset to auto). */
+   interleave: flame-bg(0) → rock wrapper(1) → big heading(2) → can wrapper(3)
+   → slider cards(4). The z-index now lives on the WRAPPERS, not the inner
+   <img>s: both `.bg-img-wrapper` and `.can-wrapper` set `transform` (for
+   centring), which makes each one its OWN stacking context — an inner
+   z-index can no longer "leak out" and be compared against the heading's,
+   it would only ever rank against its own single sibling image. The
+   testimonial-container/grid-layout must still NOT create their own
+   contexts or the heading would be trapped below the can regardless (main.
+   css gives them z-index 10/20 at ≤991px — reset to auto). */
 .testimonial-section {
     isolation: isolate;
 }
-.testimonial-section .bg-img-wrapper,
 .testimonial-section .testimonial-container,
 .testimonial-section .testimonial-container > .grid-layout {
     z-index: auto !important;
 }
-.testimonial-section .bg-img {
-    position: relative;
+.testimonial-section .bg-img-wrapper:not(.can-wrapper) {
     z-index: 1 !important;
 }
 .testimonial-section .big-title-wrapper {
     position: relative;
+    top: -0.6em;
     z-index: 2 !important;
 }
-.testimonial-section .testimonial-top-img {
+.testimonial-section .can-wrapper {
     z-index: 3 !important;
 }
 .testimonial-section .testimonial-slider {
@@ -1045,45 +1068,24 @@ html.is-ready.lenis-stopped {
     z-index: 4 !important;
 }
 
-/* ── HERO CAN SIZE ─────────────────────────────────────────────────────────
-   The can is the product hero and was reading too small once the section
-   became viewport-height. Measured from the artwork's alpha channel, the can
-   occupies x 572–826 / y 330–981 of 1400×1180 — i.e. it is dead-centre
-   (49.9%) with its BASE at 83.1% of the art height.
-
-   Scaling from that exact contact point is what keeps this believable: the
-   can grows upward and outward from where it meets the lava plinth, so it
-   still stands ON the rock instead of floating above it. Both fit modes map
-   the art to the element's full HEIGHT (contain fits by height on wide boxes;
-   cover fits by height on tall ones), so this origin is correct in both.
-   Ceiling is 1.51× — beyond that the can's top would clip the section. */
+/* ── HERO CAN CONTACT POINT ──────────────────────────────────────────────
+   Measured from the artwork's alpha channel: the can is dead-centre (49.9%)
+   with its BASE at 83.1% of the art HEIGHT. Because `.bg-img-wrapper` above
+   is now always exactly the art's own aspect ratio, `object-fit:cover`
+   inside it never crops anything — box-fraction equals art-fraction on
+   both axes, always, with zero per-viewport correction needed. That makes
+   this a flat, permanent transform-origin: the can can grow from its exact
+   contact point and stay glued to the plinth at any screen size. */
 .testimonial-section .bg-img-wrapper .testimonial-top-img {
     transform-origin: 49.9% 83.1% !important;
     transform: none !important;
-    scale: var(--hb-can-scale, 1.28) !important;
-    /* KEEP THE LID IN FRAME. Cropping the stage from the top also crops the
-       can, and on 16:9-and-wider windows that sliced the can's lid off
-       (85px at 1920×1080, 169px at 1366×660) — a decapitated hero product.
-       The art covers the width at height 0.843·W, so the can's top sits at
-       0.236·W and the overflow removed from the top is (0.843·W − H); the
-       lid is therefore clipped by exactly (0.607·W − H) whenever positive.
-       Push the can down by that much (plus a small margin) to restore it.
-       This is invisible to the "standing on the rock" illusion because the
-       contact point is hidden behind the centre review card. */
-    translate: 0 max(0px, calc(60.7vw - 100svh + 1em)) !important;
+    scale: var(--hb-can-scale, 1.35) !important;
 }
-@supports not (translate: 0 max(0px, calc(60.7vw - 100vh + 1em))) {
-    /* older engines: no dynamic nudge, just keep the lid safe by not scaling */
-    .testimonial-section .bg-img-wrapper .testimonial-top-img {
-        --hb-can-scale: 1;
-    }
-}
-/* Phones magnify the can already (`cover` crops the width away), and the
-   plinth contact point stays VISIBLE below the card here — so a gentler
-   boost keeps the can hero-sized without swallowing the headline. */
+/* Phones/tablets: the composition box is narrower (portrait), so a slightly
+   smaller boost keeps the can hero-sized without swallowing the headline. */
 @media (max-width: 991px) {
     .testimonial-section .bg-img-wrapper .testimonial-top-img {
-        --hb-can-scale: 1.20;
+        --hb-can-scale: 1.25;
     }
 }
 
@@ -1120,7 +1122,7 @@ html.is-ready.lenis-stopped {
         max-width: 26em !important;
     }
     .testimonial-slider-wrapper {
-        padding-bottom: 2.2em !important;
+        padding-bottom: 0 !important;
     }
 }
 /* ≤767px: the phone layout swaps to the SMALL big-heading, so its natural
@@ -1228,7 +1230,7 @@ html.is-ready.lenis-stopped {
         padding-bottom: 1em !important;
     }
     .testimonial-slider-wrapper {
-        padding-bottom: 1.4em !important;
+        padding-bottom: 0 !important;
     }
 }
 
@@ -1837,6 +1839,17 @@ h1.hero-heading {
 }
 .warm-zone .footer .footer-content-wrapper {
     height: auto !important;
+}
+/* .footer-fact-wrapper (icon cards) never got webflow's left padding that
+   its sibling .footer-content-wrapper has (9.25em desktop / .75em ≤991px),
+   so its left edge sat further left than the text column below it. Match it. */
+.warm-zone .footer .footer-fact-wrapper {
+    padding-left: 9.25em !important;
+}
+@media screen and (max-width: 991px) {
+    .warm-zone .footer .footer-fact-wrapper {
+        padding-left: 0.75em !important;
+    }
 }
 
 /* Footer info cards (.footer-fact-wrapper): the two icons differ in width

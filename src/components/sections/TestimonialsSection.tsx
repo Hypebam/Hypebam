@@ -149,9 +149,34 @@ export const TestimonialsSection: React.FC = () => {
 
     return (
         <div id="reviews" className="testimonial-section">
+            {/* Full-bleed ambient backdrop — a mirrored strip of the same stage
+                photo (…mirror, mirror, ORIGINAL (centre), mirror, mirror…), each
+                copy rendered at the SAME height-locked scale (no per-panel
+                cropping) so the rock/flame pattern lines up exactly at every
+                seam instead of jumping between mismatched zoom levels. Enough
+                copies to cover ultra-wide monitors; extras simply sit outside
+                the viewport, clipped by the section's own overflow:hidden. The
+                sharp, uncropped can+plinth hero group (below) sits on top of
+                the true centre copy. */}
+            <div className="testimonial-flame-bg" aria-hidden="true">
+                {/* alternating mirror/normal outward from the centre so every
+                    seam is a true left-right reflection, kaleidoscope-style */}
+                <img src="/img/1/6.webp" alt="" loading="lazy" />
+                <img className="is-mirror" src="/img/1/6.webp" alt="" loading="lazy" />
+                <img className="is-center" src="/img/1/6.webp" alt="" loading="lazy" />
+                <img className="is-mirror" src="/img/1/6.webp" alt="" loading="lazy" />
+                <img src="/img/1/6.webp" alt="" loading="lazy" />
+            </div>
+            {/* Rock/plinth and can are now two SEPARATE, identically-sized-and-
+                positioned boxes (not one shared wrapper) purely so the heading
+                below can sit z-index-sandwiched between them: behind the can,
+                in front of the rock. Both use the same aspect-ratio box CSS so
+                they still overlay pixel-for-pixel. */}
             <div data-testimonial-parallax="" className="bg-img-wrapper">
-                <img className="testimonial-top-img" src="/img/1/4.webp" width="1400" alt="Hype Bam Original can" data-testimonial-parallax-item="" loading="lazy" />
                 <img className="bg-img" src="/img/1/6.webp" width="1400" alt="Hype Bam flame stage" data-testimonial-parallax-item="" loading="lazy" />
+            </div>
+            <div data-testimonial-parallax="" className="bg-img-wrapper can-wrapper">
+                <img className="testimonial-top-img" src="/img/1/4.webp" width="1400" alt="Hype Bam Original can" data-testimonial-parallax-item="" loading="lazy" />
             </div>
             <div className="testimonial-container">
                 <div className="grid-layout">
@@ -159,7 +184,6 @@ export const TestimonialsSection: React.FC = () => {
                         <h2 className="testimonial-big-heading">Sri Lankanized<br />Hydration</h2>
                     </div>
                     <div id="w-node-d56024cf-9b70-fc24-7ba0-e2b3ea8d1769-0ac01850" className="testimonial-slider">
-                        <h3 className="testimonial-heading">why they keep<br />coming back</h3>
                         <div
                             ref={wrapperRef}
                             data-testimonial-inview=""
