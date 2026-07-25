@@ -89,6 +89,25 @@ h1.hero-heading {
     }
 }
 
+/* ── Testimonial Slider position fix: move slider down to fill bottom empty space ── */
+.testimonial-section .testimonial-slider {
+    margin-top: auto !important;
+    justify-content: flex-end !important;
+    transform: translateY(7.5em) !important;
+}
+
+@media (max-width: 991px) {
+    .testimonial-section .testimonial-slider {
+        transform: translateY(5em) !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .testimonial-section .testimonial-slider {
+        transform: translateY(3.5em) !important;
+    }
+}
+
 /* ── 5-Video grid desktop ── */
 .testimonial-wrapper {
     grid-template-columns: repeat(5, 1fr) !important;
@@ -505,4 +524,37 @@ h1.hero-heading {
 
 @media (orientation: landscape) {
     .stage-container { min-height: 210vh; min-height: 210svh; }
+}
+
+/* ── Customer review name overlap & wrap fix ────────────── */
+.revwall-foot {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0.5em !important;
+}
+
+.revwall-name {
+    font-size: 1.05em !important;
+    line-height: 1.25 !important;
+    letter-spacing: 0.03em !important;
+    color: #E8460F !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+}
+
+.revwall-verified {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.4em !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+}
+
+.testimonial-client-name {
+    line-height: 1.25 !important;
+    white-space: nowrap !important;
 }

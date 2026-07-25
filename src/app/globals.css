@@ -1415,14 +1415,20 @@ html.is-ready.lenis-stopped {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75em;
+    gap: 0.5em;
     border-top: 1px solid rgba(61, 24, 0, 0.12);
     padding-top: 0.9em;
 }
 .revwall-name {
     font-size: 1.05em !important;
-    letter-spacing: 0.05em !important;
+    line-height: 1.25 !important;
+    letter-spacing: 0.03em !important;
     color: #E8460F;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
 }
 .revwall-verified {
     display: inline-flex;
@@ -1432,6 +1438,7 @@ html.is-ready.lenis-stopped {
     letter-spacing: 0.08em !important;
     color: rgba(61, 24, 0, 0.55);
     white-space: nowrap;
+    flex-shrink: 0;
 }
 .revwall-verified-icon {
     width: 1.2em;
@@ -1554,6 +1561,25 @@ html.is-ready.lenis-stopped {
     font-weight: 700 !important;
     text-transform: uppercase !important;
     letter-spacing: normal !important;
+}
+
+/* Move testimonial slider down to fill bottom empty space in testimonial-section */
+.testimonial-section .testimonial-slider {
+    margin-top: auto !important;
+    justify-content: flex-end !important;
+    transform: translateY(7.5em) !important;
+}
+
+@media (max-width: 991px) {
+    .testimonial-section .testimonial-slider {
+        transform: translateY(5em) !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .testimonial-section .testimonial-slider {
+        transform: translateY(3.5em) !important;
+    }
 }
 
 /* The big "Sri Lankanized Hydration" title is oversized on phones — scale down. */
