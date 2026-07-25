@@ -2210,7 +2210,7 @@ h1, h2, h3, h4, h5, h6,
        Do NOT re-show .sequence-cards here (original hides it & uses
        .sequence-cards-mobile). Only the final-title font is tweaked. */
     .sequence-final-mobile .sequence-title {
-        font-size: 1.8em !important;
+        font-size: clamp(40px, 7vw, 64px) !important;
     }
 
     /* ── Benefits ── */
@@ -2299,7 +2299,7 @@ h1, h2, h3, h4, h5, h6,
     }
 
     .sequence-final-mobile .sequence-title {
-        font-size: 1.4em !important;
+        font-size: clamp(32px, 8.5vw, 48px) !important;
     }
 
     .benefit-heading {
@@ -2372,7 +2372,7 @@ h1, h2, h3, h4, h5, h6,
     }
 
     .sequence-final-mobile .sequence-title {
-        font-size: 1.2em !important;
+        font-size: clamp(26px, 9vw, 40px) !important;
     }
 
     .benefit-heading {

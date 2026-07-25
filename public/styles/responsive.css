@@ -78,9 +78,11 @@ h1.hero-heading {
     .navbar .button {
         scale: 1.25 !important;
     }
+
     .stage-cta .button {
         scale: 1.25 !important;
     }
+
     /* Base desktop scale-up lives on the WRAPPER, not .testimonial-inner —
        the latter is the GSAP inertia target, and a CSS scale on it gets folded
        into GSAP's transform matrix and compounds on hover (card "grows"). */
@@ -128,26 +130,64 @@ h1.hero-heading {
     width: 100% !important;
 }
 
-.testimonial-inner-wrap.is-first  { top: 3em !important; rotate: -8deg !important; z-index: 2 !important; margin-left: -0.5em !important; }
-.testimonial-inner-wrap.is-second { top: 6em !important; rotate: 3deg !important; z-index: 3 !important; margin-left: -1.5em !important; }
-.testimonial-inner-wrap.is-third  { top: 0 !important; rotate: -4deg !important; z-index: 5 !important; transform: scale(1.08) !important; }
-.testimonial-inner-wrap.is-fourth { top: 5em !important; rotate: 5deg !important; z-index: 3 !important; margin-left: -1em !important; }
-.testimonial-inner-wrap.is-fifth  { top: 2em !important; rotate: -6deg !important; z-index: 2 !important; margin-right: -0.5em !important; }
+.testimonial-inner-wrap.is-first {
+    top: 3em !important;
+    rotate: -8deg !important;
+    z-index: 2 !important;
+    margin-left: -0.5em !important;
+}
+
+.testimonial-inner-wrap.is-second {
+    top: 6em !important;
+    rotate: 3deg !important;
+    z-index: 3 !important;
+    margin-left: -1.5em !important;
+}
+
+.testimonial-inner-wrap.is-third {
+    top: 0 !important;
+    rotate: -4deg !important;
+    z-index: 5 !important;
+    transform: scale(1.08) !important;
+}
+
+.testimonial-inner-wrap.is-fourth {
+    top: 5em !important;
+    rotate: 5deg !important;
+    z-index: 3 !important;
+    margin-left: -1em !important;
+}
+
+.testimonial-inner-wrap.is-fifth {
+    top: 2em !important;
+    rotate: -6deg !important;
+    z-index: 2 !important;
+    margin-right: -0.5em !important;
+}
 
 /* ── Letter spacing — use original webflow values (-.03em) ── */
 
 /* ── Marquee text ── */
-.marquee-text-svg { top: 20px !important; }
-.marquee-text-svg text, .marquee-text-svg textPath {
+.marquee-text-svg {
+    top: 20px !important;
+}
+
+.marquee-text-svg text,
+.marquee-text-svg textPath {
     font-weight: 700 !important;
 }
+
 /* font-size governed by the SVG user-unit attribute (fontSize=160) so it scales with the viewBox */
 
 /* ── Benefit table mobile-only title ── */
-.benefit-table-title.is-mobile-only { display: none !important; }
+.benefit-table-title.is-mobile-only {
+    display: none !important;
+}
 
 /* ── Footer logo ── */
-.footer-logo.desktop { display: none !important; }
+.footer-logo.desktop {
+    display: none !important;
+}
 
 
 /* ========================================
@@ -189,32 +229,87 @@ h1.hero-heading {
         text-align: center !important;
     }
 
-    .stage-right { text-align: center !important; }
-    .stage-text-wrap { align-items: center !important; }
-    .stage { margin-bottom: 2em !important; }
-    .marquee { transform: translateY(40px) !important; }
+    .stage-right {
+        text-align: center !important;
+    }
+
+    .stage-text-wrap {
+        align-items: center !important;
+    }
+
+    .stage {
+        margin-bottom: 2em !important;
+    }
+
+    .marquee {
+        transform: translateY(40px) !important;
+    }
 
     /* ── Stage facts ── */
-    .stage-fact-number { font-size: 1.8em !important; }
-    .stage-fact-unit { font-size: 0.9em !important; }
-    .stage-fact-text { font-size: 0.7em !important; }
+    .stage-fact-number {
+        font-size: 1.8em !important;
+    }
+
+    .stage-fact-unit {
+        font-size: 0.9em !important;
+    }
+
+    .stage-fact-text {
+        font-size: 0.7em !important;
+    }
 
     /* ── Stage logo ── */
-    .stage-logo { margin-top: 0 !important; }
-    .stage-logo-img { transform: scale(1) !important; }
+    .stage-logo {
+        margin-top: 0 !important;
+    }
+
+    .stage-logo-img {
+        transform: scale(1) !important;
+    }
 
     /* ── Stage layout ── */
-    .stage-deco { display: none !important; }
-    .stage-wrap { flex-direction: column !important; align-items: center !important; }
-    .stage-left, .stage-right { width: 100% !important; }
-    .stage-canvas { scale: 0.85 !important; }
+    .stage-deco {
+        display: none !important;
+    }
+
+    .stage-wrap {
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .stage-left,
+    .stage-right {
+        width: 100% !important;
+    }
+
+    .stage-canvas {
+        scale: 0.85 !important;
+    }
 
     /* ── Insider ── */
-    .insider-section { margin-top: 4em !important; }
-    .insider-heading { font-size: 1.8em !important; }
-    .insider-text-inner { margin-top: 2em !important; font-size: 1em !important; }
-    .insider-section .grid-layout { display: flex !important; flex-direction: column !important; }
-    .insider-section .insider-heading { order: -1 !important; margin-bottom: 1.5em !important; margin-top: 0 !important; }
+    .insider-section {
+        margin-top: 4em !important;
+    }
+
+    .insider-heading {
+        font-size: 1.8em !important;
+    }
+
+    .insider-text-inner {
+        margin-top: 2em !important;
+        font-size: 1em !important;
+    }
+
+    .insider-section .grid-layout {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .insider-section .insider-heading {
+        order: -1 !important;
+        margin-bottom: 1.5em !important;
+        margin-top: 0 !important;
+    }
 
     /* ── Insider videos — stacked pile ── */
     .testimonial-wrapper {
@@ -241,14 +336,40 @@ h1.hero-heading {
         transform: none !important;
     }
 
-    .testimonial-inner-wrap:first-child { margin-top: 0 !important; }
-    .testimonial-inner { width: 100% !important; height: auto !important; scale: 1 !important; }
+    .testimonial-inner-wrap:first-child {
+        margin-top: 0 !important;
+    }
 
-    .testimonial-inner-wrap.is-first  { align-self: flex-end !important; rotate: 5deg !important; }
-    .testimonial-inner-wrap.is-second { align-self: flex-start !important; rotate: -4deg !important; }
-    .testimonial-inner-wrap.is-third  { align-self: flex-end !important; rotate: 6deg !important; }
-    .testimonial-inner-wrap.is-fourth { align-self: flex-start !important; rotate: -5deg !important; }
-    .testimonial-inner-wrap.is-fifth  { align-self: flex-end !important; rotate: 4deg !important; }
+    .testimonial-inner {
+        width: 100% !important;
+        height: auto !important;
+        scale: 1 !important;
+    }
+
+    .testimonial-inner-wrap.is-first {
+        align-self: flex-end !important;
+        rotate: 5deg !important;
+    }
+
+    .testimonial-inner-wrap.is-second {
+        align-self: flex-start !important;
+        rotate: -4deg !important;
+    }
+
+    .testimonial-inner-wrap.is-third {
+        align-self: flex-end !important;
+        rotate: 6deg !important;
+    }
+
+    .testimonial-inner-wrap.is-fourth {
+        align-self: flex-start !important;
+        rotate: -5deg !important;
+    }
+
+    .testimonial-inner-wrap.is-fifth {
+        align-self: flex-end !important;
+        rotate: 4deg !important;
+    }
 
     /* ── Sequence ──
        DO NOT re-show .sequence-cards here. webflow.css hides the desktop
@@ -256,39 +377,88 @@ h1.hero-heading {
        Forcing display:flex made BOTH card sets render at grid-area:1/1,
        stacking on top of each other. .statement-card sizing is left to
        webflow.css originals too. */
-    .sequence-title { font-size: 1.8em !important; }
+    .sequence-title {
+        font-size: 1.8em !important;
+    }
 
     /* ── Benefits ── */
-    .benefit-heading { font-size: 2.8em !important; text-align: center !important; }
+    .benefit-heading {
+        font-size: 2.8em !important;
+        text-align: center !important;
+    }
 }
 
 /* ========================================
    MOBILE — max-width: 767px
    ======================================== */
 @media screen and (max-width: 767px) {
-    h1.hero-heading { font-size: 2em !important; }
-    .paragraph.is-stage-paragraph { font-size: 0.9em !important; }
-    .stage-container { padding-left: 1em !important; padding-right: 1em !important; }
-    .stage { margin-bottom: 1em !important; }
-    .marquee { transform: translateY(20px) !important; }
+    h1.hero-heading {
+        font-size: 2em !important;
+    }
+
+    .paragraph.is-stage-paragraph {
+        font-size: 0.9em !important;
+    }
+
+    .stage-container {
+        padding-left: 1em !important;
+        padding-right: 1em !important;
+    }
+
+    .stage {
+        margin-bottom: 1em !important;
+    }
+
+    .marquee {
+        transform: translateY(20px) !important;
+    }
+
     /* Centre the marquee text on the curved band — was sitting low (less space
        below the letters than above). Raised so top/bottom padding matches. */
-    .marquee-text-svg { top: 2px !important; }
+    .marquee-text-svg {
+        top: 2px !important;
+    }
 
-    .stage-fact-number { font-size: 1.4em !important; }
-    .stage-fact-unit { font-size: 0.7em !important; }
-    .stage-fact-text { font-size: 0.55em !important; }
-    .stage-fact { padding: 0.6em !important; }
+    .stage-fact-number {
+        font-size: 1.4em !important;
+    }
 
-    .stage-logo { margin-top: 0 !important; }
-    .stage-logo-img { transform: scale(0.85) !important; }
+    .stage-fact-unit {
+        font-size: 0.7em !important;
+    }
 
-    .insider-section { margin-top: 2.5em !important; }
+    .stage-fact-text {
+        font-size: 0.55em !important;
+    }
+
+    .stage-fact {
+        padding: 0.6em !important;
+    }
+
+    .stage-logo {
+        margin-top: 0 !important;
+    }
+
+    .stage-logo-img {
+        transform: scale(0.85) !important;
+    }
+
+    .insider-section {
+        margin-top: 2.5em !important;
+    }
+
     /* Fit the heading to its 4 authored (<br>) lines — 1.5em overflowed the
        two longest lines onto a 6th line on phones. Tighter size + normal
        tracking keeps "Sri-Lankanized just for you" on ONE line. */
-    .insider-heading { font-size: 1.3em !important; letter-spacing: 0 !important; }
-    .insider-text-inner { margin-top: 1.5em !important; font-size: 0.85em !important; }
+    .insider-heading {
+        font-size: 1.3em !important;
+        letter-spacing: 0 !important;
+    }
+
+    .insider-text-inner {
+        margin-top: 1.5em !important;
+        font-size: 0.85em !important;
+    }
 
     .testimonial-inner-wrap,
     .testimonial-inner-wrap.is-first,
@@ -300,12 +470,22 @@ h1.hero-heading {
         max-width: 330px !important;
         margin-top: -3em !important;
     }
-    .testimonial-inner-wrap:first-child { margin-top: 0 !important; }
 
-    .sequence-title { font-size: 1.4em !important; }
-    .benefit-heading { font-size: 2.2em !important; }
+    .testimonial-inner-wrap:first-child {
+        margin-top: 0 !important;
+    }
 
-    .footer-full-height-container { grid-template-columns: 1fr !important; }
+    .sequence-title {
+        font-size: 1.4em !important;
+    }
+
+    .benefit-heading {
+        font-size: 2.2em !important;
+    }
+
+    .footer-full-height-container {
+        grid-template-columns: 1fr !important;
+    }
 
     /* ── Benefits table ──
        The title-wrapper, each row, AND the nested checker-inner must share the
@@ -318,16 +498,63 @@ h1.hero-heading {
        stops matching the row grid. minmax(0,…) forces a pure fr split so the
        wrapper and rows resolve to IDENTICAL columns and the labels sit dead-centre
        over the check / X columns. */
-    .benefit-table-item { grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr) minmax(0, 1fr) !important; column-gap: 0.5em !important; align-items: center !important; }
-    .benefit-item-title { grid-column: 1 / 2 !important; font-size: 0.85em !important; }
-    .benefit-checker-inner { grid-column: 2 / 4 !important; display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 0.5em !important; }
-    .benefit-item-check, .benefit-item-x { width: 100% !important; justify-content: center !important; }
-    .benefit-table-title-wrapper { display: grid !important; grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr) minmax(0, 1fr) !important; column-gap: 0.5em !important; align-items: center !important; }
-    .benefit-table-title-wrapper>.benefit-table-title { white-space: normal !important; min-width: 0 !important; }
-    .benefit-table-title-wrapper>.benefit-table-title:first-child { grid-column: 1 !important; grid-row: 1 !important; }
-    .benefit-table-title-img.is-desktop { display: none !important; }
-    .benefit-table-title.is-mobile-only { display: block !important; grid-column: 2 !important; grid-row: 1 !important; text-align: center !important; }
-    .benefit-table-title-wrapper>.benefit-table-title:last-child { grid-column: 3 !important; grid-row: 1 !important; text-align: center !important; }
+    .benefit-table-item {
+        grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr) minmax(0, 1fr) !important;
+        column-gap: 0.5em !important;
+        align-items: center !important;
+    }
+
+    .benefit-item-title {
+        grid-column: 1 / 2 !important;
+        font-size: 0.85em !important;
+    }
+
+    .benefit-checker-inner {
+        grid-column: 2 / 4 !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.5em !important;
+    }
+
+    .benefit-item-check,
+    .benefit-item-x {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .benefit-table-title-wrapper {
+        display: grid !important;
+        grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr) minmax(0, 1fr) !important;
+        column-gap: 0.5em !important;
+        align-items: center !important;
+    }
+
+    .benefit-table-title-wrapper>.benefit-table-title {
+        white-space: normal !important;
+        min-width: 0 !important;
+    }
+
+    .benefit-table-title-wrapper>.benefit-table-title:first-child {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+    }
+
+    .benefit-table-title-img.is-desktop {
+        display: none !important;
+    }
+
+    .benefit-table-title.is-mobile-only {
+        display: block !important;
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        text-align: center !important;
+    }
+
+    .benefit-table-title-wrapper>.benefit-table-title:last-child {
+        grid-column: 3 !important;
+        grid-row: 1 !important;
+        text-align: center !important;
+    }
 }
 
 /* ========================================
@@ -341,36 +568,111 @@ h1.hero-heading {
    (Benefits | Hype Bam | Typical) at tablet size, matching the phone layout.
    ======================================== */
 @media screen and (min-width: 768px) and (max-width: 991px) {
-    .benefit-table-item { grid-template-columns: minmax(0, 2.6fr) minmax(0, 1fr) minmax(0, 1fr) !important; column-gap: 0.75em !important; align-items: center !important; }
-    .benefit-item-title { grid-column: 1 / 2 !important; font-size: 1.15em !important; }
-    .benefit-checker-inner { grid-column: 2 / 4 !important; display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 0.75em !important; }
-    .benefit-item-check, .benefit-item-x { width: 100% !important; justify-content: center !important; }
-    .benefit-item-check { height: 2.75em !important; }
-    .benefit-table-title-wrapper { display: grid !important; grid-template-columns: minmax(0, 2.6fr) minmax(0, 1fr) minmax(0, 1fr) !important; column-gap: 0.75em !important; align-items: center !important; }
-    .benefit-table-title-wrapper>.benefit-table-title { white-space: normal !important; min-width: 0 !important; font-size: 1.1em !important; line-height: 1.15 !important; }
-    .benefit-table-title-wrapper>.benefit-table-title:first-child { grid-column: 1 !important; grid-row: 1 !important; text-align: left !important; }
-    .benefit-table-title-img.is-desktop { display: none !important; }
-    .benefit-table-title.is-mobile-only { display: block !important; grid-column: 2 !important; grid-row: 1 !important; text-align: center !important; }
-    .benefit-table-title-wrapper>.benefit-table-title:last-child { grid-column: 3 !important; grid-row: 1 !important; text-align: center !important; }
+    .benefit-table-item {
+        grid-template-columns: minmax(0, 2.6fr) minmax(0, 1fr) minmax(0, 1fr) !important;
+        column-gap: 0.75em !important;
+        align-items: center !important;
+    }
+
+    .benefit-item-title {
+        grid-column: 1 / 2 !important;
+        font-size: 1.15em !important;
+    }
+
+    .benefit-checker-inner {
+        grid-column: 2 / 4 !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.75em !important;
+    }
+
+    .benefit-item-check,
+    .benefit-item-x {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .benefit-item-check {
+        height: 2.75em !important;
+    }
+
+    .benefit-table-title-wrapper {
+        display: grid !important;
+        grid-template-columns: minmax(0, 2.6fr) minmax(0, 1fr) minmax(0, 1fr) !important;
+        column-gap: 0.75em !important;
+        align-items: center !important;
+    }
+
+    .benefit-table-title-wrapper>.benefit-table-title {
+        white-space: normal !important;
+        min-width: 0 !important;
+        font-size: 1.1em !important;
+        line-height: 1.15 !important;
+    }
+
+    .benefit-table-title-wrapper>.benefit-table-title:first-child {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        text-align: left !important;
+    }
+
+    .benefit-table-title-img.is-desktop {
+        display: none !important;
+    }
+
+    .benefit-table-title.is-mobile-only {
+        display: block !important;
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        text-align: center !important;
+    }
+
+    .benefit-table-title-wrapper>.benefit-table-title:last-child {
+        grid-column: 3 !important;
+        grid-row: 1 !important;
+        text-align: center !important;
+    }
 }
 
 /* ========================================
    SMALL MOBILE — max-width: 479px
    ======================================== */
 @media screen and (max-width: 479px) {
-    h1.hero-heading { font-size: 1.6em !important; }
-    .paragraph.is-stage-paragraph { font-size: 0.8em !important; }
+    h1.hero-heading {
+        font-size: 1.6em !important;
+    }
 
-    .stage-fact-number { font-size: 1.2em !important; }
-    .stage-fact-unit { font-size: 0.6em !important; }
-    .stage-fact-text { font-size: 0.5em !important; }
-    .stage-fact { padding: 0.5em !important; }
+    .paragraph.is-stage-paragraph {
+        font-size: 0.8em !important;
+    }
 
-    .stage-logo-img { transform: scale(0.7) !important; }
+    .stage-fact-number {
+        font-size: 1.2em !important;
+    }
+
+    .stage-fact-unit {
+        font-size: 0.6em !important;
+    }
+
+    .stage-fact-text {
+        font-size: 0.5em !important;
+    }
+
+    .stage-fact {
+        padding: 0.5em !important;
+    }
+
+    .stage-logo-img {
+        transform: scale(0.7) !important;
+    }
+
     /* PHONE stage-canvas — matched to tablet scale so the hero can reads
        bolder on phones (user request: "lil bit close to tab mode"). Keeps
        the translate that drops it into the circle rig's centre. */
-    .stage-canvas { scale: 0.9 !important; translate: 0 8% -5% !important; }
+    .stage-canvas {
+        scale: 0.9 !important;
+        translate: 0 8% -5% !important;
+    }
 
     .testimonial-inner-wrap,
     .testimonial-inner-wrap.is-first,
@@ -383,11 +685,23 @@ h1.hero-heading {
         margin-top: -2.5em !important;
     }
 
-    .sequence-title { font-size: 1.2em !important; }
-    .benefit-heading { font-size: 1.8em !important; }
+    .sequence-title {
+        font-size: 1.2em !important;
+    }
 
-    .footer-inner { flex-direction: column !important; gap: 2em !important; }
-    .footer-col { width: 100% !important; text-align: center !important; }
+    .benefit-heading {
+        font-size: 1.8em !important;
+    }
+
+    .footer-inner {
+        flex-direction: column !important;
+        gap: 2em !important;
+    }
+
+    .footer-col {
+        width: 100% !important;
+        text-align: center !important;
+    }
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -406,24 +720,118 @@ h1.hero-heading {
    force-set a 7.2-viewport runway on phones — the mobile content only fills
    ~3.7 viewports, so users scrolled through ~3 empty screens of pinned can. */
 @media (min-width: 992px) {
-    .sequence-scroll-wrap { height: 720vh; height: 720lvh; }
+    .sequence-scroll-wrap {
+        height: 720vh;
+        height: 720lvh;
+    }
 }
+
 @media (max-width: 991px) {
-    .sequence-scroll-wrap { height: auto; }
+    .sequence-scroll-wrap {
+        height: auto;
+    }
 }
-.sequence-sticky { height: 100vh; height: 100lvh; }
-.sequence-cards { height: 100vh; height: 100lvh; }
-.stage-logo { height: max(12.5em, 34vh); height: max(12.5em, 34svh); }
+
+.sequence-sticky {
+    height: 100vh;
+    height: 100lvh;
+}
+
+.sequence-cards {
+    height: 100vh;
+    height: 100lvh;
+}
+
+.stage-logo {
+    height: max(12.5em, 34vh);
+    height: max(12.5em, 34svh);
+}
 
 @media screen and (max-width: 991px) {
-    .sequence-sticky { height: 100vh; height: 100lvh; }
-    .sequence-cards-mobile {
-        grid-column-gap: 65vh; grid-column-gap: 65lvh;
-        grid-row-gap: 65vh; grid-row-gap: 65lvh;
-        margin-top: -100vh; margin-top: -100lvh;
-        padding-top: 50vh; padding-top: 50lvh;
+    .sequence-sticky {
+        height: 100vh;
+        height: 100lvh;
     }
-    .sequence-final-mobile { min-height: 100vh; min-height: 100lvh; }
+
+    .sequence-cards-mobile {
+        grid-column-gap: 50vh;
+        grid-column-gap: 50lvh;
+        grid-row-gap: 50vh;
+        grid-row-gap: 50lvh;
+        margin-top: -100vh;
+        margin-top: -100lvh;
+        padding-top: 50vh;
+        padding-top: 50lvh;
+    }
+
+    .sequence-final-mobile {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+        width: 100% !important;
+        margin-top: 40vh !important;
+        margin-top: 40lvh !important;
+        transform: translateY(-30vh) !important;
+        min-height: auto !important;
+        padding: 1em 1.25em !important;
+        position: relative !important;
+        z-index: 10 !important;
+    }
+}
+
+/* ── Mobile & Tablet Sequence Final Title Styling ── */
+.sequence-final-mobile .sequence-title {
+    font-family: var(--font-primary), 'Impact', sans-serif !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    text-align: center !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.05 !important;
+    color: #DC5400 !important;
+    /* Dark Orange */
+    margin: 0 !important;
+    opacity: 1;
+    text-shadow: 0 2px 10px rgba(61, 24, 0, 0.12);
+}
+
+.sequence-final-mobile .sequence-title .light-green-span {
+    color: #FF9E1B !important;
+    /* Light Orange */
+    display: inline-block;
+    margin-top: 0.1em;
+    text-shadow: 0 2px 10px rgba(61, 24, 0, 0.12);
+}
+
+@media (min-width: 992px) {
+    .sequence-final-mobile {
+        display: none !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .sequence-final-mobile .sequence-title {
+        font-size: clamp(40px, 7vw, 64px) !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .sequence-final-mobile .sequence-title {
+        font-size: clamp(32px, 8.5vw, 48px) !important;
+        letter-spacing: 0.01em !important;
+    }
+}
+
+@media (max-width: 479px) {
+    .sequence-final-mobile .sequence-title {
+        font-size: clamp(26px, 9vw, 40px) !important;
+    }
+}
+
+.seq-final-word {
+    display: inline-block;
+    will-change: transform, opacity;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -437,21 +845,34 @@ h1.hero-heading {
    term so the slot hugs the logo. (`height:auto` is NOT usable — the logo is
    `width:100%` so an auto slot lets it balloon to the column width.) */
 @media screen and (max-width: 767px) {
-    .stage-logo { height: 13.5em !important; }
+    .stage-logo {
+        height: 13.5em !important;
+    }
+
     /* the `scale(0.85)` shrank the VISUAL logo below its layout box, so even a
        tight slot left a scale-sized gap. Drop the transform on mobile and let
        the slot height (via max-height:100% on the img) set the size — the logo
        then fills the slot exactly, zero dead space. */
-    .stage-logo-img { transform: none !important; }
+    .stage-logo-img {
+        transform: none !important;
+    }
 }
+
 @media screen and (max-width: 479px) {
-    .stage-logo { height: 12em !important; }
-    .stage-logo-img { transform: none !important; }
+    .stage-logo {
+        height: 12em !important;
+    }
+
+    .stage-logo-img {
+        transform: none !important;
+    }
 }
 
 /* MARQUEE TEXT — also raise it off the bottom of the band on tablet. */
 @media screen and (min-width: 768px) and (max-width: 991px) {
-    .marquee-text-svg { top: 6px !important; }
+    .marquee-text-svg {
+        top: 6px !important;
+    }
 }
 
 /* TESTIMONIAL SECTION must be FLEX on mobile so the container fills the full
@@ -476,6 +897,7 @@ h1.hero-heading {
         z-index: 5 !important;
     }
 }
+
 @media screen and (max-width: 767px) {
     .sequence-signature {
         top: 1em !important;
@@ -494,6 +916,7 @@ h1.hero-heading {
         top: -3.4em !important;
     }
 }
+
 @media screen and (max-width: 767px) {
     .second-icon {
         top: -3em !important;
@@ -523,7 +946,10 @@ h1.hero-heading {
 }
 
 @media (orientation: landscape) {
-    .stage-container { min-height: 210vh; min-height: 210svh; }
+    .stage-container {
+        min-height: 210vh;
+        min-height: 210svh;
+    }
 }
 
 /* ── Customer review name overlap & wrap fix ────────────── */

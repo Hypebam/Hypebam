@@ -88,63 +88,74 @@ const BOLTS = [
 export const SequenceSection: React.FC = () => {
     const mobileTitleRef = useRef<HTMLHeadingElement>(null);
 
-    // Mobile finale title reveal. The desktop finale (.sequence-final) gets a
-    // rich SplitText word-fly-in from app.js; the mobile block (.sequence-final-
-    // mobile) previously had only a faint opacity/slide rAF scrub that read as
-    // "no animation". This gives mobile the SAME calibre reveal as desktop.
-    //
-    // Robustness: the animation is a self-clocked GSAP timeline played ONCE when
-    // the title scrolls into view (IntersectionObserver). It does NOT depend on
-    // continuous scroll events (which iOS Safari drops during momentum) nor on
-    // ScrollTrigger's scroll sync — the IO only needs to fire a single time, and
-    // the timeline then runs on GSAP's own ticker. `.from()` means CSS keeps the
+    // Mobile finale title reveal. Uses GSAP ScrollTrigger + SplitText word reveal
+    // so the title animates with the exact same high-calibre word-fly-in on mobile
+    // and tablet when it enters the viewport. `.fromTo()` ensures CSS keeps the
     // title fully visible if JS never runs (never stuck blank).
     useEffect(() => {
         const el = mobileTitleRef.current;
         if (!el) return;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
         let cancelled = false;
-        let io: IntersectionObserver | null = null;
+        let st: any = null;
         let split: any = null;
         let tl: any = null;
 
         (async () => {
             const t0 = performance.now();
-            while (!(window as any).gsap || !(window as any).SplitText) {
+            while (!(window as any).gsap || !(window as any).ScrollTrigger || !(window as any).SplitText) {
                 if (cancelled || performance.now() - t0 > 8000) return;
                 await new Promise((r) => setTimeout(r, 50));
             }
             if (cancelled) return;
+
             const gsap = (window as any).gsap;
+            const ScrollTrigger = (window as any).ScrollTrigger;
             const SplitText = (window as any).SplitText;
 
-            io = new IntersectionObserver(
-                (entries) => {
-                    // fire once, only in the mobile layout (element laid out)
-                    if (!entries[0]?.isIntersecting || el.offsetParent === null || tl) return;
-                    io?.disconnect();
-                    split = SplitText.create(el, { type: 'words', wordsClass: 'seq-final-word' });
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            try {
+                split = SplitText.create(el, { type: 'words', wordsClass: 'seq-final-word' });
+            } catch {
+                return;
+            }
+
+            const words = split.words;
+            if (!words || !words.length) return;
+
+            st = ScrollTrigger.create({
+                trigger: el,
+                start: 'top 85%',
+                once: true,
+                onEnter: () => {
                     tl = gsap.timeline();
-                    tl.from(split.words, {
-                        yPercent: 120,
-                        opacity: 0,
-                        rotationX: -45,
-                        transformOrigin: '50% 100% -30',
-                        scale: 0.7,
-                        duration: 0.9,
-                        stagger: 0.06,
-                        ease: 'back.out(1.8)',
-                    });
+                    tl.fromTo(
+                        words,
+                        {
+                            yPercent: 100,
+                            opacity: 0,
+                            rotationX: -45,
+                            scale: 0.75,
+                            transformOrigin: '50% 100% -20',
+                        },
+                        {
+                            yPercent: 0,
+                            opacity: 1,
+                            rotationX: 0,
+                            scale: 1,
+                            duration: 0.85,
+                            stagger: 0.05,
+                            ease: 'back.out(1.7)',
+                        }
+                    );
                 },
-                { threshold: 0.25 }
-            );
-            io.observe(el);
+            });
         })();
 
         return () => {
             cancelled = true;
-            io?.disconnect();
+            st?.kill();
             tl?.kill();
             try { split?.revert(); } catch { /* ignore */ }
         };
@@ -272,7 +283,7 @@ export const SequenceSection: React.FC = () => {
                     <h2 ref={mobileTitleRef} className="sequence-title">
                         Fuel The Rebel<br /><span className="light-green-span">Let&apos;s Get Bam&apos;ed</span><br />
                     </h2>
-                    </div>
+                </div>
             </div>
         </div>
     );
