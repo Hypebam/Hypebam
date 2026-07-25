@@ -952,22 +952,23 @@ h1.hero-heading {
     }
 }
 
-/* ── Customer review name overlap & wrap fix ────────────── */
+/* ── Customer review name display fix ────────────── */
 .revwall-foot {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    gap: 0.5em !important;
+    gap: 0.4em !important;
 }
 
 .revwall-name {
-    font-size: 1.05em !important;
+    font-size: 0.95em !important;
     line-height: 1.25 !important;
-    letter-spacing: 0.03em !important;
+    letter-spacing: 0.02em !important;
     color: #E8460F !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    word-break: keep-all !important;
     flex: 1 !important;
     min-width: 0 !important;
 }
@@ -975,7 +976,10 @@ h1.hero-heading {
 .revwall-verified {
     display: inline-flex !important;
     align-items: center !important;
-    gap: 0.4em !important;
+    gap: 0.3em !important;
+    font-size: 0.72em !important;
+    letter-spacing: 0.04em !important;
+    color: rgba(61, 24, 0, 0.55) !important;
     white-space: nowrap !important;
     flex-shrink: 0 !important;
 }
