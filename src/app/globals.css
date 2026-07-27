@@ -1541,16 +1541,97 @@ html.is-ready.lenis-stopped {
     .reviews-swipe-hint { display: block; }
 }
 
-/* Phones: keep the headline dominant but let the quote breathe. */
-@media (max-width: 767px) {
+/* Tablet & Mobile: reduce review card height (sleeker, more compact) while
+   smartly matching font sizing, line-heights, and vertical padding. */
+@media (max-width: 991px) {
+    .testimonial-slider-item {
+        padding: 1.15em 1.25em !important;
+    }
+    .testimonial-star-wrap {
+        padding-bottom: 0.5em !important;
+    }
+    .testimonial-item-inner-text {
+        row-gap: 0.5em !important;
+        grid-row-gap: 0.5em !important;
+        padding-bottom: 0.8em !important;
+    }
+    .testimonial-item-bottom {
+        padding-top: 0.6em !important;
+    }
     [data-typography-target="testimonial-cards-text-field"] .testimonial-item-heading {
-        font-size: 1.8em !important;
+        font-size: 1.85em !important;
+        line-height: 0.95 !important;
     }
     [data-typography-target="testimonial-cards-text-field"] .testimonial-item-text {
-        font-size: 1em !important;
+        font-size: 0.98em !important;
+        line-height: 1.25 !important;
+    }
+    [data-typography-target="testimonial-cards-text-field"] .testimonial-client-name {
+        font-size: 1.1em !important;
     }
     .testimonial-slider-item::before {
-        font-size: 5.5em;
+        font-size: 4.8em !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .testimonial-slider-item {
+        padding: 0.95em 1.05em !important;
+    }
+    .testimonial-star-wrap {
+        padding-bottom: 0.4em !important;
+    }
+    .testimonial-item-inner-text {
+        row-gap: 0.4em !important;
+        grid-row-gap: 0.4em !important;
+        padding-bottom: 0.65em !important;
+    }
+    .testimonial-item-bottom {
+        padding-top: 0.5em !important;
+    }
+    [data-typography-target="testimonial-cards-text-field"] .testimonial-item-heading {
+        font-size: 1.6em !important;
+        line-height: 0.94 !important;
+    }
+    [data-typography-target="testimonial-cards-text-field"] .testimonial-item-text {
+        font-size: 0.92em !important;
+        line-height: 1.22 !important;
+    }
+    [data-typography-target="testimonial-cards-text-field"] .testimonial-client-name {
+        font-size: 1.05em !important;
+    }
+    .testimonial-slider-item::before {
+        font-size: 4em !important;
+    }
+}
+
+@media (max-width: 479px) {
+    .testimonial-slider-item {
+        padding: 0.8em 0.9em !important;
+    }
+    .testimonial-star-wrap {
+        padding-bottom: 0.35em !important;
+    }
+    .testimonial-item-inner-text {
+        row-gap: 0.35em !important;
+        grid-row-gap: 0.35em !important;
+        padding-bottom: 0.55em !important;
+    }
+    .testimonial-item-bottom {
+        padding-top: 0.45em !important;
+    }
+    [data-typography-target="testimonial-cards-text-field"] .testimonial-item-heading {
+        font-size: 1.45em !important;
+    }
+    [data-typography-target="testimonial-cards-text-field"] .testimonial-item-text {
+        font-size: 0.88em !important;
+        line-height: 1.2 !important;
+    }
+    [data-typography-target="testimonial-cards-text-field"] .testimonial-client-name {
+        font-size: 0.98em !important;
+    }
+    .testimonial-slider-item::before {
+        font-size: 3.5em !important;
     }
 }
 
@@ -1573,13 +1654,13 @@ html.is-ready.lenis-stopped {
 
 @media (max-width: 991px) {
     .testimonial-section .testimonial-slider {
-        transform: translateY(5em) !important;
+        transform: none !important;
     }
 }
 
 @media (max-width: 767px) {
     .testimonial-section .testimonial-slider {
-        transform: translateY(3.5em) !important;
+        transform: none !important;
     }
 }
 
