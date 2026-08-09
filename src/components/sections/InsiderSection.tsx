@@ -146,7 +146,7 @@ export const InsiderSection: React.FC = () => {
                         <h3 className="insider-subheading">Taste as Bold as Your Ambitions</h3>
                         <p className="paragraph">Hype Bam is more than just an energy drink; it&apos;s a symbol of Sri Lankan resilience. We&apos;ve faced countless challenges, yet we rise stronger every time. We defy the odds, push boundaries, and keep moving forward…and that&apos;s the spirit we&apos;ve infused into every can.</p>
                         <div className="insider-cta">
-                            <Button href="#">
+                            <Button href="#contact">
                                 Buy now
                             </Button>
                             <div className="rating-inner">

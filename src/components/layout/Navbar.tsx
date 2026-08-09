@@ -30,7 +30,7 @@ export const Navbar: React.FC = () => {
                         </a>
                     </div>
                     <Button
-                        href="#"
+                        href="#contact"
                         variant="white"
                         className="w-node-c4e2d712-b9aa-e56d-102b-73576293bdd9-4811c289"
                     >

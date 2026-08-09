@@ -110,7 +110,7 @@ export const HeroSection: React.FC = () => {
                             ></div>
                         </div>
                         <div data-load-stage-cta="" data-typography-target="hero-buy-button" className="stage-cta">
-                            <Button href="#">
+                            <Button href="#contact">
                                 Buy now
                             </Button>
                         </div>

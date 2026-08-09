@@ -40,6 +40,11 @@ const caveat = localFont({
 
 // Set NEXT_PUBLIC_SITE_URL in your deploy env to the real domain so social/OG
 // image + canonical URLs resolve absolutely. Falls back to the handle domain.
+/* Cache-bust token for the static /public stylesheets — bump on every edit to
+   webflow.css / main.css / responsive.css so browsers and the CDN fetch the
+   new file instead of a stale cached copy. */
+const ASSET_VERSION = "2026-07-25-1";
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://drinkhypebam.com";
 const OG_IMAGE = "/og-image.jpg"; // dedicated 1200×630 social card (JPG = max platform support)
 
@@ -122,11 +127,17 @@ export default function RootLayout({
              protection block third-party CDN requests, which broke styling
              cross-browser. Everything below is same-origin. ── */}
 
-        {/* ── Critical above-fold CSS ── */}
-        <link href="/styles/webflow.css" rel="stylesheet" type="text/css" />
-        <link href="/styles/main.css" rel="stylesheet" type="text/css" />
+        {/* ── Critical above-fold CSS ──
+             `?v=` CACHE BUST: these are STATIC files in /public, so unlike the
+             bundled globals.css they get no content hash and Vercel serves them
+             with a long-lived cache. Editing one therefore does NOT reach
+             visitors (or even our own browser) until the cache expires — a fix
+             can look "not applied" while the file on disk is already correct.
+             Bump ASSET_VERSION on every edit to webflow/main/responsive.css. ── */}
+        <link href={`/styles/webflow.css?v=${ASSET_VERSION}`} rel="stylesheet" type="text/css" />
+        <link href={`/styles/main.css?v=${ASSET_VERSION}`} rel="stylesheet" type="text/css" />
         {/* ── Responsive overrides — MUST be last to win cascade ── */}
-        <link href="/styles/responsive.css" rel="stylesheet" type="text/css" />
+        <link href={`/styles/responsive.css?v=${ASSET_VERSION}`} rel="stylesheet" type="text/css" />
 
         {/* ── Preload: Hero canvas + sequence first frames ──
              app.js consumes these via fetch()+createImageBitmap (NOT as <img>),

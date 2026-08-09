@@ -335,7 +335,7 @@ export const FlavourSection: React.FC = () => {
                     </button>
                 </div>
 
-                <Button href="#">Buy now</Button>
+                <Button href="#contact">Buy now</Button>
 
                 <div className="hbf-dots">
                     {FLAVOURS.map((f, i) => (
