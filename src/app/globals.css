@@ -2270,6 +2270,42 @@ textarea.hb-input { min-height: 7em; resize: vertical; }
     }
 }
 
+/* ── iOS/phone fix: hero content sliding under the navbar ──────────────────
+   The navbar is `position:absolute` over the hero, so it occupies no layout
+   space, and webflow gives `.stage-content` `justify-content:flex-start`.
+   Once the hero content is tall enough to fill the stage it therefore
+   top-aligns at y=0 and runs UNDER the nav — measured on a 375px iPhone 11
+   Pro, 46px of the Hype Bam logo sat behind the social icons / SHOP ALL pill.
+   (Removing the logo's own margin-top earlier — correct, it was dead space —
+   is what exposed this; the clearance belongs on the CONTAINER, not on the
+   logo, so it holds no matter how the logo is sized.)
+   Measured navbar height is a very consistent ~4.75em from 320–479px, so 5em
+   clears it with a small breathing gap. */
+@media (max-width: 767px) {
+    .stage .stage-content {
+        padding-top: 5em !important;
+    }
+}
+
+/* ── Phone fix: footer product panel overflowing its own square ────────────
+   webflow pins `.footer-product` to `aspect-ratio:1` with
+   `.footer-product-text-inner { height:100% }`. Moving the two shop cards
+   into that panel pushed its content past the square on phones (needs ~390px
+   inside a 344px box at 375px wide), and because overflow is visible the
+   "Buy now" pill spilled out below the artwork. Let the panel size to its
+   content on phones instead — `.absolute-background` is `inset:0`, so the
+   flame/can artwork simply stretches with it and still covers. */
+@media (max-width: 767px) {
+    .warm-zone .footer .footer-product {
+        aspect-ratio: auto !important;
+        height: auto !important;
+        max-height: none !important;
+    }
+    .warm-zone .footer .footer-product-text-inner {
+        height: auto !important;
+    }
+}
+
 /* Footer-product "Buy now": secondary (Goga) font, uppercase, bold. */
 .footer-product .button-text {
     font-family: var(--font-secondary), sans-serif !important;
