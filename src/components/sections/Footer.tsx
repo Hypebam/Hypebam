@@ -27,16 +27,10 @@ export const Footer: React.FC = () => {
                                 <div className="footer-info-text">samples <br />&amp; Singles</div>
                             </a>
                         </div>
-                        {/* Same shared Button every other section uses (hero, insider,
-                            flavour). `aria-hidden` on the button (not the whole
-                            card): .footer-product-link below is the actual, larger
-                            tap target and already drives this button's hover state
-                            via :has(), so the visible button stays decorative/inert
-                            to assistive tech and isn't announced twice. */}
-                        <Button href="#contact" variant="light" aria-hidden="true" tabIndex={-1}>
-                            Buy now
-                        </Button>
                     </div>
+                    {/* The whole panel stays clickable via this overlay link — the
+                        visible "Buy now" pill was removed on request (the two cards
+                        above already carry the call to action). */}
                     <a aria-label="Contact us to buy" href="#contact" className="footer-product-link w-inline-block"></a>
                 </div>
                 {/* Keep the w-node id — webflow assigns this column's grid
@@ -63,7 +57,13 @@ export const Footer: React.FC = () => {
                 </div>
                 <img src="/img/cdn/6899e6d17cc0ae7334395045_Vector_5.svg" loading="lazy" id="w-node-_9cf1d991-93c8-9876-0a84-cf07ed027319-0ac01850" alt="Hype Bam Logo" className="footer-logo mobile" />
                 <div id="w-node-_440e9322-e28d-ad9e-9ab8-9d51f2096f5d-0ac01850" className="footer-bottom">
-                    <div className="footer-bottom-text">© Hype Bam. All Rights Reserved.</div>
+                    <div className="footer-bottom-text">
+                        © Hype Bam. All Rights Reserved. <span className="footer-bottom-sep">|</span>{' '}
+                        Powered by{' '}
+                        <a href="https://searchagenda.com" target="_blank" rel="noopener noreferrer" className="footer-credit-link">
+                            Search Agenda
+                        </a>
+                    </div>
                     {/* Social moved out of the content column to the footer's
                         bottom-right corner (and scaled up) — it now reads as the
                         page's sign-off rather than an afterthought in the form. */}

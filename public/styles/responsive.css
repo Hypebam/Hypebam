@@ -554,15 +554,20 @@ h1.hero-heading {
         font-size: 0.85em !important;
     }
 
+    /* The five insider clips stacked to 3.04 VIEWPORTS on a phone — three
+       full screens of scrolling through one section, which is where people
+       lose patience. Tighter cards plus a much deeper overlap turns the
+       column into a fanned deck: every clip is still visible and still
+       playable, in roughly half the scroll distance. */
     .testimonial-inner-wrap,
     .testimonial-inner-wrap.is-first,
     .testimonial-inner-wrap.is-second,
     .testimonial-inner-wrap.is-third,
     .testimonial-inner-wrap.is-fourth,
     .testimonial-inner-wrap.is-fifth {
-        width: 78vw !important;
-        max-width: 330px !important;
-        margin-top: -3em !important;
+        width: 66vw !important;
+        max-width: 268px !important;
+        margin-top: -11em !important;
     }
 
     .testimonial-inner-wrap:first-child {
@@ -768,15 +773,20 @@ h1.hero-heading {
         translate: 0 8% -5% !important;
     }
 
+    /* ⚠ THIS is the block that governs ordinary phones (390/375/360 all match
+       ≤479 as well as ≤767, and this one is later so it wins) — the ≤767 rule
+       above never applies on a real handset. Same fanned-deck retune: the pile
+       measured 3.04 VIEWPORTS tall, which is three screens of scrolling in one
+       section. */
     .testimonial-inner-wrap,
     .testimonial-inner-wrap.is-first,
     .testimonial-inner-wrap.is-second,
     .testimonial-inner-wrap.is-third,
     .testimonial-inner-wrap.is-fourth,
     .testimonial-inner-wrap.is-fifth {
-        width: 84vw !important;
-        max-width: 320px !important;
-        margin-top: -2.5em !important;
+        width: 64vw !important;
+        max-width: 248px !important;
+        margin-top: -12em !important;
     }
 
     .sequence-title {
@@ -814,9 +824,13 @@ h1.hero-heading {
    force-set a 7.2-viewport runway on phones — the mobile content only fills
    ~3.7 viewports, so users scrolled through ~3 empty screens of pinned can. */
 @media (min-width: 992px) {
+    /* 720lvh meant 7.2 screens of scrolling, and measured a 1101px dead gap
+       between the "why people love it" signature and the first statement card
+       — over a full screen of empty stage before anything happened. 480lvh
+       keeps the pinned-scrub effect but gets the cards moving much sooner. */
     .sequence-scroll-wrap {
-        height: 720vh;
-        height: 720lvh;
+        height: 480vh;
+        height: 480lvh;
     }
 }
 
@@ -1081,4 +1095,41 @@ h1.hero-heading {
 .testimonial-client-name {
     line-height: 1.25 !important;
     white-space: nowrap !important;
+}
+/* ═══════════════════════════════════════════════════════════════════════════
+   HERO LOGO — size + vertical balance
+   Must live HERE, at the end of the last-loading stylesheet: webflow.css and
+   this file both ship an unscoped `.stage-logo{margin-top:4em!important}` and
+   `.stage-logo-img{transform:scale(1.3)!important}`, which beat anything in
+   globals.css at equal specificity (globals loads FIRST).
+
+   The 1.3 scale used `transform-origin:center bottom`, so the artwork's
+   VISUAL box grew upward past its layout box — measured at 1440×900 the logo
+   painted from y=36 while the navbar ended at y=82, i.e. it sat ~46px UNDER
+   the nav even though its layout box looked clear. That is the "logo is a
+   little too high" symptom. Dropping the scale makes what you see equal what
+   the layout reserves; the slot heights below restore the presence the scale
+   used to give, and margin-top then balances the gap to the navbar against
+   the gap down to the Buy-now pill.
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media screen and (min-width: 992px) {
+    .stage-logo {
+        height: max(13em, 34svh) !important;
+        /* 2.4em balances it: measured gap-to-navbar 31px vs gap-to-Buy-now
+           30px at 1440×900, and 39 vs 40 at 1900×650. */
+        margin-top: 2.4em !important;
+    }
+    .stage-logo-img { transform: none !important; }
+}
+/* Tablet ran the logo 348–408px tall and ~720–929px WIDE — nearly the full
+   viewport, crowding the navbar. Bring it back to a proportionate size. */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .stage-logo {
+        height: max(8em, 21svh) !important;
+        /* Negative because .stage-container's own top padding already pushes
+           the logo well clear of the nav here — without this the gap above ran
+           92px against 49px below, i.e. visibly bottom-heavy. */
+        margin-top: -1em !important;
+    }
+    .stage-logo-img { transform: none !important; }
 }

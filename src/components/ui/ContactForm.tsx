@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useState } from 'react';
-import { Button } from './Button';
 
 type Fields = { name: string; phone: string; email: string; message: string };
 type Errors = Partial<Record<keyof Fields, string>>;
@@ -101,13 +100,13 @@ export const ContactForm: React.FC = () => {
                 <p className="hb-form-done-text">
                     Thanks for reaching out — our team will get back to you shortly.
                 </p>
-                <Button
+                <button
                     type="button"
-                    variant="light"
+                    className="hb-form-submit"
                     onClick={() => { startedAt.current = Date.now(); setStatus('idle'); }}
                 >
                     Send another
-                </Button>
+                </button>
             </div>
         );
     }
@@ -161,11 +160,11 @@ export const ContactForm: React.FC = () => {
                 className="hb-hp"
             />
 
-            <div className="hb-form-actions">
-                <Button type="submit" variant="light" disabled={status === 'sending'}>
-                    {status === 'sending' ? 'Sending…' : 'Send message'}
-                </Button>
-            </div>
+            {/* Plain button on purpose — the site's animated pill CTA was tried
+                here and felt like too much for a form submit. */}
+            <button type="submit" className="hb-form-submit" disabled={status === 'sending'}>
+                {status === 'sending' ? 'Sending…' : 'Send message'}
+            </button>
 
             <p className="hb-form-note" role={status === 'error' ? 'alert' : undefined}>
                 {status === 'error'

@@ -2050,7 +2050,9 @@ h1.hero-heading {
 .warm-zone .footer .footer-contact-sub {
     font-family: var(--font-secondary), sans-serif;
     font-weight: 700;
-    text-transform: uppercase;
+    /* Sentence case, not the site-wide ALL CAPS — this is a full paragraph and
+       caps made it a wall of shouting text. */
+    text-transform: none !important;
     font-size: 1.15em;          /* 18.4px — sits with .footer-bottom-text (18px) */
     line-height: 1.45;
     letter-spacing: 0.02em;
@@ -2134,39 +2136,40 @@ textarea.hb-input { min-height: 7em; resize: vertical; }
     clip-path: inset(50%);
 }
 
-/* SUBMIT — this is the shared <Button> component rendered as a real
-   <button type="submit">, so it already carries the site's full pill
-   choreography (mascot swap + elastic slide) from main.css for free. Only two
-   things need saying here: strip the UA <button> chrome that the original <a>
-   never had, and match the other CTAs' text size. */
-.warm-zone .footer .hb-form-actions button.button {
-    background: none;
+/* SUBMIT — deliberately a plain pill, NOT the site's animated mascot-swap
+   CTA. That was tried here and read as too much motion for a form submit;
+   the quieter button keeps focus on the fields. */
+.warm-zone .footer .hb-form-submit {
+    font-family: var(--font-secondary), sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1em;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: #FFF8EF;
+    background: #3D1800;
     border: none;
-    padding: 0;
-    margin: 0;
-    font: inherit;
-    color: inherit;
+    border-radius: 10em;
+    padding: 1.05em 2em 0.95em;
     cursor: pointer;
-    -webkit-appearance: none;
-    appearance: none;
+    align-self: flex-start;
+    min-height: 3em;
+    box-shadow: 0 0.5em 1.2em rgba(61, 24, 0, 0.28);
+    transition: background-color 0.22s ease, box-shadow 0.22s ease;
 }
-.warm-zone .footer .hb-form-actions .button-text {
-    font-family: var(--font-secondary), sans-serif !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    /* Deliberately NOT the 26.4px hero/Buy-now size — the form's submit reads
-       better proportional to the fields above it (user call). */
-    font-size: 1em !important;
-    line-height: 1 !important;
+@media (hover: hover) and (pointer: fine) {
+    .warm-zone .footer .hb-form-submit:hover {
+        background: #E8460F;
+        box-shadow: 0 0.7em 1.5em rgba(61, 24, 0, 0.34);
+    }
 }
-.warm-zone .footer .hb-form-actions button.button:disabled {
+.warm-zone .footer .hb-form-submit:focus-visible {
+    outline: 3px solid #FFF8EF;
+    outline-offset: 3px;
+}
+.warm-zone .footer .hb-form-submit:disabled {
     opacity: 0.65;
     cursor: progress;
-}
-.warm-zone .footer .hb-form-actions button.button:focus-visible {
-    outline: 3px solid #FFF8EF;
-    outline-offset: 4px;
-    border-radius: 10em;
 }
 .warm-zone .footer .hb-form-note {
     font-family: var(--font-secondary), sans-serif;
@@ -2221,6 +2224,46 @@ textarea.hb-input { min-height: 7em; resize: vertical; }
     .hb-form-row { grid-template-columns: 1fr; }
 }
 
+/* Agency credit in the footer bar. */
+.warm-zone .footer .footer-bottom-sep {
+    opacity: 0.45;
+    margin: 0 0.15em;
+}
+.warm-zone .footer .footer-credit-link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+    .warm-zone .footer .footer-credit-link:hover { color: #FFF8EF; }
+}
+
+/* ── PC: match the two footer columns' heights ─────────────────────────────
+   The left product panel is a fixed 1:1 square while the right column is
+   content-sized, so on desktop one ran taller than the other and the row
+   looked lopsided. Stretch both to the taller of the two and let the form
+   column centre its content within that height. */
+@media (min-width: 992px) {
+    .warm-zone .footer .footer-full-height-container {
+        align-items: stretch !important;
+    }
+    .warm-zone .footer .footer-product,
+    .warm-zone .footer .footer-content {
+        height: 100% !important;
+    }
+    .warm-zone .footer .footer-product {
+        aspect-ratio: auto !important;
+        max-height: none !important;
+    }
+    .warm-zone .footer .footer-content {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+}
+
 /* ── Footer bottom bar: copyright left, social bottom-RIGHT ───────────── */
 .warm-zone .footer .footer-bottom {
     display: flex !important;
@@ -2268,6 +2311,14 @@ textarea.hb-input { min-height: 7em; resize: vertical; }
         width: 3em !important;
         height: 3em !important;
     }
+}
+
+/* The hero's "Energy Drink" span inherits the generic [data-white-text] dark
+   text-shadow, which reads as a muddy halo against the orange stage. The
+   brush lettering has enough weight to stand on its own here. */
+.hero-heading [data-white-text],
+.hero-heading [data-white-text] * {
+    text-shadow: none !important;
 }
 
 /* ── iOS/phone fix: hero content sliding under the navbar ──────────────────
@@ -2388,8 +2439,14 @@ textarea.hb-input { min-height: 7em; resize: vertical; }
     position: relative !important;
 }
 
+/* ⚠ Hero logo sizing/balance is NOT set here — it lives at the end of
+   public/styles/responsive.css. webflow.css AND responsive.css each ship an
+   UNSCOPED `.stage-logo{margin-top:4em!important}` +
+   `.stage-logo-img{transform:scale(1.3)!important}`, and responsive.css loads
+   last, so any rule here (media query or not) loses the tie at equal
+   specificity. Put stage-logo overrides in responsive.css and bump
+   ASSET_VERSION in layout.tsx. */
 .stage-logo-img {
-    transform: scale(1.3) !important;
     transform-origin: center bottom;
 }
 
