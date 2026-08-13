@@ -339,7 +339,13 @@ export const FlavourSection: React.FC = () => {
 
                 <div className="hbf-dots">
                     {FLAVOURS.map((f, i) => (
-                        <button key={i} className={`hbf-dot ${i === active ? 'on' : ''}`} style={i === active ? { background: f.color } : undefined} onClick={() => goToIndex(i)} aria-label={`Show ${f.name}`} />
+                        // backgroundColor, NOT the `background` shorthand: on touch
+                        // devices .hbf-dot is a 28px hit area painted down to a 9px
+                        // circle via `background-clip: content-box`, and the
+                        // shorthand resets background-clip to border-box — which
+                        // made the active dot paint its full 28px box and then
+                        // scale(1.6) to a ~45px blob.
+                        <button key={i} className={`hbf-dot ${i === active ? 'on' : ''}`} style={i === active ? { backgroundColor: f.color } : undefined} onClick={() => goToIndex(i)} aria-label={`Show ${f.name}`} />
                     ))}
                 </div>
             </div>
