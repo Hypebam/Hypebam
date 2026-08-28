@@ -1901,6 +1901,10 @@ h1.hero-heading {
 .warm-zone .footer .footer-bottom-text {
     color: #3D1800 !important;
 }
+.warm-zone .footer .footer-bottom-text {
+    font-weight: 700 !important;
+    line-height: 1.6 !important;
+}
 
 /* "Hype Bam" highlight line in the footer heading — white to pop on the orange.
    app.js's SplitText applies an INLINE `color: var(--light-green)` (orange) to
