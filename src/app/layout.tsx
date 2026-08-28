@@ -51,11 +51,11 @@ const OG_IMAGE = "/og-image.jpg"; // dedicated 1200×630 social card (JPG = max 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Hype Bam — Sri Lankanized Energy Drink",
-    template: "%s · Hype Bam",
+    default: "Hype Bam | Sri Lankanized Energy Drink",
+    template: "%s | Hype Bam",
   },
   description:
-    "Hype Bam: The Sri Lankanized energy drink. 80mg caffeine, 200mg electrolytes, 5g sugar. 5 bold natural flavours. Fuel the rebel in you.",
+    "Hype Bam is a Sri Lankanized energy drink with 80mg caffeine, electrolytes, only 5g sugar and five bold flavours. Find your flavour and fuel the rebel.",
   applicationName: "Hype Bam",
   keywords: [
     "Hype Bam", "energy drink", "Sri Lanka", "Sri Lankanized", "caffeine",
@@ -81,18 +81,18 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Hype Bam",
-    title: "Hype Bam — Sri Lankanized Energy Drink",
+    title: "Hype Bam | Sri Lankanized Energy Drink",
     description:
-      "80mg caffeine · 200mg electrolytes · 5g sugar · 5 bold natural flavours. Fuel the rebel in you.",
+      "Hype Bam is a Sri Lankanized energy drink with 80mg caffeine, electrolytes, only 5g sugar and five bold flavours. Find your flavour and fuel the rebel.",
     url: "/",
     locale: "en_US",
-    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Hype Bam energy drink flavours" }],
+    images: [{ url: OG_IMAGE, width: 1200, height: 1200, alt: "Hype Bam energy drink — Fuel The Rebel" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hype Bam — Sri Lankanized Energy Drink",
+    title: "Hype Bam | Sri Lankanized Energy Drink",
     description:
-      "80mg caffeine · 200mg electrolytes · 5g sugar · 5 bold natural flavours. Fuel the rebel in you.",
+      "Hype Bam is a Sri Lankanized energy drink with 80mg caffeine, electrolytes, only 5g sugar and five bold flavours. Find your flavour and fuel the rebel.",
     images: [OG_IMAGE],
   },
   robots: {
