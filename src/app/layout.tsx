@@ -148,10 +148,22 @@ export default function RootLayout({
              the cached response is reused. (Ancient iOS<14 without
              createImageBitmap falls back to <img>, forgoing the head-start —
              acceptable for <1% of traffic.) ── */}
+        {/* ── Preload: Hero canvas frames ──
+             app.js fetches all 23 hero frames (001–0023) via fetch()+createImageBitmap
+             before showing the hero animation. Preloading them in <head> lets the
+             browser start downloading in parallel with the CSS/JS parse, so the hero
+             appears faster. First 6 are static preloads (always needed); the rest
+             are adaptive (skipped on slow connections). ── */}
         <link rel="preload" href="/img/hypeBamVideo001.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
+        <link rel="preload" href="/img/hypeBamVideo002.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
+        <link rel="preload" href="/img/hypeBamVideo003.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
+        <link rel="preload" href="/img/hypeBamVideo004.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
+        <link rel="preload" href="/img/hypeBamVideo005.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
+        <link rel="preload" href="/img/hypeBamVideo006.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
         <link rel="preload" href="/img/seq_0_0.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
 
-        {/* ── Adaptive preload: extra hero frames 2-5 only on fast connections ── */}
+        {/* ── Adaptive preload: remaining hero frames 7-23 + extra sequence frame
+             only on fast connections ── */}
         <Script id="adaptive-frame-preload" strategy="beforeInteractive">
           {`
             (function () {
@@ -162,7 +174,9 @@ export default function RootLayout({
                                     conn.effectiveType === '2g' ||
                                     conn.effectiveType === '3g');
                 if (slow) return;
-                ['002','003','004','005'].forEach(function (n) {
+                var frames = ['007','008','009','0010','0011','0012','0013','0014',
+                              '0015','0016','0017','0018','0019','0020','0021','0022','0023'];
+                frames.forEach(function (n) {
                   var l = document.createElement('link');
                   l.rel = 'preload';
                   l.as = 'fetch';
@@ -207,12 +221,12 @@ export default function RootLayout({
             ScrollTrigger instead of hand-written polyfills. Order matters:
             gsap core first, then plugins (each UMD self-registers when it
             finds window.gsap; useAnimations also registers explicitly). */}
-        <Script src="/vendor/gsap/gsap.min.js" strategy="afterInteractive" />
-        <Script src="/vendor/gsap/ScrollTrigger.min.js" strategy="afterInteractive" />
-        <Script src="/vendor/gsap/CustomEase.min.js" strategy="afterInteractive" />
-        <Script src="/vendor/gsap/DrawSVGPlugin.min.js" strategy="afterInteractive" />
-        <Script src="/vendor/gsap/InertiaPlugin.min.js" strategy="afterInteractive" />
-        <Script src="/vendor/gsap/SplitText.min.js" strategy="afterInteractive" />
+        <Script src="/vendor/gsap/gsap.min.js" strategy="beforeInteractive" />
+        <Script src="/vendor/gsap/ScrollTrigger.min.js" strategy="beforeInteractive" />
+        <Script src="/vendor/gsap/CustomEase.min.js" strategy="beforeInteractive" />
+        <Script src="/vendor/gsap/DrawSVGPlugin.min.js" strategy="beforeInteractive" />
+        <Script src="/vendor/gsap/InertiaPlugin.min.js" strategy="beforeInteractive" />
+        <Script src="/vendor/gsap/SplitText.min.js" strategy="beforeInteractive" />
 
 
         <Script id="webflow-classes" strategy="afterInteractive">

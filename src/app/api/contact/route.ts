@@ -154,7 +154,7 @@ export async function POST(request: Request) {
     }
 
     const html = `
-        <h2 style="font-family:Arial,sans-serif">New enquiry from drinkhypebam.com</h2>
+        <h2 style="font-family:Arial,sans-serif">New enquiry from hypebam.lk</h2>
         <table style="font-family:Arial,sans-serif;font-size:15px;border-collapse:collapse">
           <tr><td style="padding:4px 12px 4px 0"><strong>Name</strong></td><td>${esc(name)}</td></tr>
           <tr><td style="padding:4px 12px 4px 0"><strong>Phone</strong></td><td>${esc(phone)}</td></tr>
@@ -179,7 +179,7 @@ export async function POST(request: Request) {
                 subject: `Hype Bam enquiry — ${name}`,
                 html,
                 text:
-                    `New enquiry from drinkhypebam.com\n\n` +
+                    `New enquiry from hypebam.lk\n\n` +
                     `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\n\nMessage:\n${message}\n`,
             }),
         });
