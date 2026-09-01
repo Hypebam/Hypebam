@@ -43,7 +43,7 @@ const caveat = localFont({
 /* Cache-bust token for the static /public stylesheets — bump on every edit to
    webflow.css / main.css / responsive.css so browsers and the CDN fetch the
    new file instead of a stale cached copy. */
-const ASSET_VERSION = "2026-08-28-1";
+const ASSET_VERSION = "2026-09-01-1";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://drinkhypebam.com";
 const OG_IMAGE = "/og-image.jpg"; // dedicated 1200×630 social card (JPG = max platform support)
