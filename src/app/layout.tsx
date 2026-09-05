@@ -43,7 +43,7 @@ const caveat = localFont({
 /* Cache-bust token for the static /public stylesheets — bump on every edit to
    webflow.css / main.css / responsive.css so browsers and the CDN fetch the
    new file instead of a stale cached copy. */
-const ASSET_VERSION = "2026-09-01-1";
+const ASSET_VERSION = "2026-09-05-1";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://drinkhypebam.com";
 const OG_IMAGE = "/og-image.jpg"; // dedicated 1200×630 social card (JPG = max platform support)
@@ -139,31 +139,18 @@ export default function RootLayout({
         {/* ── Responsive overrides — MUST be last to win cascade ── */}
         <link href={`/styles/responsive.css?v=${ASSET_VERSION}`} rel="stylesheet" type="text/css" />
 
-        {/* ── Preload: Hero canvas + sequence first frames ──
-             app.js consumes these via fetch()+createImageBitmap (NOT as <img>),
-             so they MUST preload as `fetch`, not `image`. An `as=image` preload
-             here is never matched by the fetch → the browser logs "preloaded but
-             not used" AND may download the bytes twice. `crossorigin` (anonymous)
-             makes the preload's request mode match app.js's same-origin fetch so
-             the cached response is reused. (Ancient iOS<14 without
-             createImageBitmap falls back to <img>, forgoing the head-start —
-             acceptable for <1% of traffic.) ── */}
-        {/* ── Preload: Hero canvas frames ──
-             app.js fetches all 23 hero frames (001–0023) via fetch()+createImageBitmap
-             before showing the hero animation. Preloading them in <head> lets the
-             browser start downloading in parallel with the CSS/JS parse, so the hero
-             appears faster. First 6 are static preloads (always needed); the rest
-             are adaptive (skipped on slow connections). ── */}
+        {/* ── Preload: Hero canvas first frames + sequence ──
+             app.js fetches all 23 hero frames via fetch()+createImageBitmap.
+             Only preload the first 3 (the intro tween's first visible frames)
+             to avoid flooding mobile bandwidth. The rest load naturally via
+             app.js's own fetch chain. `as=fetch` + crossOrigin matches app.js's
+             same-origin fetch so the cached response is reused. ── */}
         <link rel="preload" href="/img/hypeBamVideo001.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
         <link rel="preload" href="/img/hypeBamVideo002.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
         <link rel="preload" href="/img/hypeBamVideo003.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
-        <link rel="preload" href="/img/hypeBamVideo004.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
-        <link rel="preload" href="/img/hypeBamVideo005.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
-        <link rel="preload" href="/img/hypeBamVideo006.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
         <link rel="preload" href="/img/seq_0_0.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
 
-        {/* ── Adaptive preload: remaining hero frames 7-23 + extra sequence frame
-             only on fast connections ── */}
+        {/* ── Adaptive preload: extra hero frames 4-5 only on fast connections ── */}
         <Script id="adaptive-frame-preload" strategy="beforeInteractive">
           {`
             (function () {
@@ -174,9 +161,7 @@ export default function RootLayout({
                                     conn.effectiveType === '2g' ||
                                     conn.effectiveType === '3g');
                 if (slow) return;
-                var frames = ['007','008','009','0010','0011','0012','0013','0014',
-                              '0015','0016','0017','0018','0019','0020','0021','0022','0023'];
-                frames.forEach(function (n) {
+                ['004','005'].forEach(function (n) {
                   var l = document.createElement('link');
                   l.rel = 'preload';
                   l.as = 'fetch';
@@ -221,12 +206,19 @@ export default function RootLayout({
             ScrollTrigger instead of hand-written polyfills. Order matters:
             gsap core first, then plugins (each UMD self-registers when it
             finds window.gsap; useAnimations also registers explicitly). */}
-        <Script src="/vendor/gsap/gsap.min.js" strategy="beforeInteractive" />
-        <Script src="/vendor/gsap/ScrollTrigger.min.js" strategy="beforeInteractive" />
-        <Script src="/vendor/gsap/CustomEase.min.js" strategy="beforeInteractive" />
-        <Script src="/vendor/gsap/DrawSVGPlugin.min.js" strategy="beforeInteractive" />
-        <Script src="/vendor/gsap/InertiaPlugin.min.js" strategy="beforeInteractive" />
-        <Script src="/vendor/gsap/SplitText.min.js" strategy="beforeInteractive" />
+        {/* ── GSAP scripts: afterInteractive (NOT beforeInteractive) ──
+             beforeInteractive makes these render-blocking — nothing shows (not
+             even the loader) until all 6 download+execute. On slow mobile that
+             means a blank white screen. afterInteractive lets the loader show
+             immediately; the <link rel=preload> tags above already start the
+             downloads at highest priority, and useAnimations.ts's waitFor()
+             poll gates app.js until GSAP is actually ready. ── */}
+        <Script src="/vendor/gsap/gsap.min.js" strategy="afterInteractive" />
+        <Script src="/vendor/gsap/ScrollTrigger.min.js" strategy="afterInteractive" />
+        <Script src="/vendor/gsap/CustomEase.min.js" strategy="afterInteractive" />
+        <Script src="/vendor/gsap/DrawSVGPlugin.min.js" strategy="afterInteractive" />
+        <Script src="/vendor/gsap/InertiaPlugin.min.js" strategy="afterInteractive" />
+        <Script src="/vendor/gsap/SplitText.min.js" strategy="afterInteractive" />
 
 
         <Script id="webflow-classes" strategy="afterInteractive">

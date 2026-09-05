@@ -401,8 +401,15 @@ h1.hero-heading {
 
     .insider-section .insider-heading {
         order: -1 !important;
-        margin-bottom: 2.5em !important;
+        margin-bottom: 1em !important;
         margin-top: 0 !important;
+        position: relative !important;
+        z-index: 10 !important;
+    }
+
+    .insider-section .insider-wrapper {
+        position: relative !important;
+        z-index: 1 !important;
     }
 
     /* ── Insider videos — stacked pile ── */
