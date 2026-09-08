@@ -2339,20 +2339,26 @@
                 }
             })
         } (() => {
+            // Guard: ignore media-query changes during initial load settling
+            // (URL bar show/hide, viewport resize, orientation jitter) — these
+            // caused the page to reload a second time on mobile.
+            var _mqReady = false;
+            setTimeout(function () { _mqReady = true; }, 3000);
+            function _safeReload() { if (_mqReady) window.location.reload(); }
             let t = window.matchMedia("(prefers-reduced-motion)");
-            t.addEventListener("change", () => {
-                window.location.reload()
-            }), t.matches
+            t.addEventListener("change", _safeReload), t.matches
         })(), (() => {
+            var _mqReady = false;
+            setTimeout(function () { _mqReady = true; }, 3000);
+            function _safeReload() { if (_mqReady) window.location.reload(); }
             let t = window.matchMedia("(min-width: 992px)");
-            t.addEventListener("change", () => {
-                window.location.reload()
-            }), t.matches
+            t.addEventListener("change", _safeReload), t.matches
         })(), (() => {
+            var _mqReady = false;
+            setTimeout(function () { _mqReady = true; }, 3000);
+            function _safeReload() { if (_mqReady) window.location.reload(); }
             let t = window.matchMedia("(orientation: portrait)");
-            t.addEventListener("change", () => {
-                window.location.reload()
-            }), t.matches
+            t.addEventListener("change", _safeReload), t.matches
         })()
     }
 

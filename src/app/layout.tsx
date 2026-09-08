@@ -43,7 +43,7 @@ const caveat = localFont({
 /* Cache-bust token for the static /public stylesheets — bump on every edit to
    webflow.css / main.css / responsive.css so browsers and the CDN fetch the
    new file instead of a stale cached copy. */
-const ASSET_VERSION = "2026-09-05-1";
+const ASSET_VERSION = "2026-09-08-1";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://drinkhypebam.com";
 const OG_IMAGE = "/og-image.jpg"; // dedicated 1200×630 social card (JPG = max platform support)
@@ -145,10 +145,10 @@ export default function RootLayout({
              to avoid flooding mobile bandwidth. The rest load naturally via
              app.js's own fetch chain. `as=fetch` + crossOrigin matches app.js's
              same-origin fetch so the cached response is reused. ── */}
-        <link rel="preload" href="/img/hypeBamVideo001.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
-        <link rel="preload" href="/img/hypeBamVideo002.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
-        <link rel="preload" href="/img/hypeBamVideo003.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
-        <link rel="preload" href="/img/seq_0_0.webp" as="fetch" type="image/webp" crossOrigin="anonymous" />
+        <link rel="preload" href="/img/hypeBamVideo001.webp" as="fetch" type="image/webp" />
+        <link rel="preload" href="/img/hypeBamVideo002.webp" as="fetch" type="image/webp" />
+        <link rel="preload" href="/img/hypeBamVideo003.webp" as="fetch" type="image/webp" />
+        <link rel="preload" href="/img/seq_0_0.webp" as="fetch" type="image/webp" />
 
         {/* ── Adaptive preload: extra hero frames 4-5 only on fast connections ── */}
         <Script id="adaptive-frame-preload" strategy="beforeInteractive">
@@ -166,7 +166,7 @@ export default function RootLayout({
                   l.rel = 'preload';
                   l.as = 'fetch';
                   l.type = 'image/webp';
-                  l.crossOrigin = 'anonymous';
+                  // no crossOrigin — same-origin fetch must match app.js's plain fetch()
                   l.href = '/img/hypeBamVideo' + n + '.webp';
                   document.head.appendChild(l);
                 });
