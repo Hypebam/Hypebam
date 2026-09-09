@@ -1656,7 +1656,7 @@
             E = [],
             x = !1;
 
-        function P(t) {
+        function Praw(t) {
             return Ot(this, null, function* () {
                 let e = yield (yield fetch(t)).blob();
                 if (window.createImageBitmap) return yield createImageBitmap(e, {
@@ -1666,6 +1666,19 @@
                     return t.src = URL.createObjectURL(e), t.decode && (yield t.decode()), t
                 }
             })
+        }
+
+        function P(t) {
+            // The hero frames are fetched AND decoded by the early prefetcher in
+            // layout.tsx <head>, which starts them ~1-2s before app.js even
+            // exists. Reuse those in-flight promises instead of kicking off a
+            // second round of 23 fetch+decode jobs at the end of the chain.
+            // A prefetch that failed must NOT be sticky — fall back to a fresh
+            // fetch, otherwise one dropped request would leave the loader up
+            // forever (Promise.all below rejects and is-ready never lands).
+            let c = window.__hypeHeroFrames;
+            if (c && c[t]) return c[t].catch(function () { return Praw(t); });
+            return Praw(t);
         }
 
         let _lastHero = -1;
@@ -2373,16 +2386,31 @@
         ScrollTrigger.clearScrollMemory("manual");
         history.scrollRestoration && (history.scrollRestoration = "manual");
         wo();
-        document.fonts.ready.then(function () {
+        // The hero intro (ko → yo) split-texts the title, so it PREFERS fonts to
+        // be settled — but it must not be held hostage by them. All faces use
+        // display:swap, and useAnimations re-runs ScrollTrigger.refresh() on
+        // fonts.ready anyway, so cap the wait at 1.2s and start the hero.
+        var fontsSettled = Promise.race([
+            document.fonts.ready,
+            new Promise(function (resolve) { setTimeout(resolve, 1200); })
+        ]);
+        fontsSettled.then(function () {
             document.documentElement.classList.add(ho);
             ko();
         });
     }
 
-    if (document.readyState === "complete") {
-        initializeApp();
+    // ⚠ DO NOT gate this on window 'load'. That event waits for EVERY image,
+    // poster and iframe on the page to finish — on a media-heavy phone load
+    // that is 5-10s during which the loader just spins and nothing animates.
+    // app.js is injected by useAnimations AFTER React has hydrated, so the DOM
+    // is always parsed by the time we get here; 'interactive' is sufficient.
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        setTimeout(initializeApp, 0);
     } else {
-        window.addEventListener("load", initializeApp);
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(initializeApp, 0);
+        }, { once: true });
     }
 })();
 /*! Bundled license information:

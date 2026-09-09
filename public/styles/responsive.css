@@ -437,7 +437,8 @@ h1.hero-heading {
         transform: none !important;
     }
 
-    .testimonial-inner-wrap:first-child {
+    .testimonial-wrapper .testimonial-inner-wrap:first-child,
+    .testimonial-wrapper .testimonial-inner-wrap.is-first {
         margin-top: 0 !important;
     }
 
@@ -577,7 +578,11 @@ h1.hero-heading {
         margin-top: -11em !important;
     }
 
-    .testimonial-inner-wrap:first-child {
+    /* (0,3,0) so it outranks the `.testimonial-inner-wrap.is-first` selector
+       in the deck rule above regardless of source order — see the note in the
+       ≤479 block. */
+    .testimonial-wrapper .testimonial-inner-wrap:first-child,
+    .testimonial-wrapper .testimonial-inner-wrap.is-first {
         margin-top: 0 !important;
     }
 
@@ -794,6 +799,25 @@ h1.hero-heading {
         width: 64vw !important;
         max-width: 248px !important;
         margin-top: -12em !important;
+    }
+
+    /* ⚠ CASCADE TRAP — the reason the pile kept eating the heading.
+       The rule above lists `.testimonial-inner-wrap.is-first` (0,2,0), and the
+       first-child reset in the ≤767 block is `.testimonial-inner-wrap:first-child`
+       — ALSO (0,2,0). Equal specificity + equal importance means SOURCE ORDER
+       decides, and this block is later, so the FIRST card was inheriting the
+       -12em fanned-deck margin and hauling all five cards up into the heading.
+       The extra ancestor class below makes the reset (0,3,0) so it wins outright
+       no matter where the deck margin is re-tuned later. */
+    .testimonial-wrapper .testimonial-inner-wrap:first-child,
+    .testimonial-wrapper .testimonial-inner-wrap.is-first {
+        margin-top: 0 !important;
+    }
+
+    /* Clearance so the 4deg/5deg card rotation (which pushes the top corner
+       ~12px above the card's own box) can never touch the heading either. */
+    .insider-section .insider-heading {
+        margin-bottom: 1.6em !important;
     }
 
     .sequence-title {

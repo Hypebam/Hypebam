@@ -43,7 +43,7 @@ const caveat = localFont({
 /* Cache-bust token for the static /public stylesheets — bump on every edit to
    webflow.css / main.css / responsive.css so browsers and the CDN fetch the
    new file instead of a stale cached copy. */
-const ASSET_VERSION = "2026-09-08-1";
+const ASSET_VERSION = "2026-09-09-1";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://drinkhypebam.com";
 const OG_IMAGE = "/og-image.jpg"; // dedicated 1200×630 social card (JPG = max platform support)
@@ -139,38 +139,71 @@ export default function RootLayout({
         {/* ── Responsive overrides — MUST be last to win cascade ── */}
         <link href={`/styles/responsive.css?v=${ASSET_VERSION}`} rel="stylesheet" type="text/css" />
 
-        {/* ── Preload: Hero canvas first frames + sequence ──
-             app.js fetches all 23 hero frames via fetch()+createImageBitmap.
-             Only preload the first 3 (the intro tween's first visible frames)
-             to avoid flooding mobile bandwidth. The rest load naturally via
-             app.js's own fetch chain. `as=fetch` + crossOrigin matches app.js's
-             same-origin fetch so the cached response is reused. ── */}
-        <link rel="preload" href="/img/hypeBamVideo001.webp" as="fetch" type="image/webp" />
-        <link rel="preload" href="/img/hypeBamVideo002.webp" as="fetch" type="image/webp" />
-        <link rel="preload" href="/img/hypeBamVideo003.webp" as="fetch" type="image/webp" />
-        <link rel="preload" href="/img/seq_0_0.webp" as="fetch" type="image/webp" />
+        {/* ── Hero frame prefetch + DECODE, started before anything else ──
+             THE critical-path fix. app.js's yo() cannot lift the loader until all
+             23 hero frames are fetched AND decoded to bitmaps — but it only
+             STARTS that work at the very end of the chain (hydrate → 6 GSAP files
+             → app.js → fonts). That left ~2s of dead air where the network was
+             idle and the loader just span.
 
-        {/* ── Adaptive preload: extra hero frames 4-5 only on fast connections ── */}
-        <Script id="adaptive-frame-preload" strategy="beforeInteractive">
+             This inline script runs the instant the parser reaches it, so the
+             frames download and decode IN PARALLEL with React hydration and the
+             GSAP downloads. app.js's P() reads these promises straight out of
+             window.__hypeHeroFrames, so by the time yo() runs the bitmaps are
+             usually already resolved and the hero paints immediately.
+
+             This is NOT extra bandwidth — app.js already fetched all 23 in
+             parallel via Promise.all. We only move that work EARLIER.
+
+             Concurrency is capped at 4 so the first frames (the ones the intro
+             tween actually shows first) win the bandwidth race against CSS/JS
+             rather than all 23 fighting each other on a slow phone. ── */}
+        <link rel="preload" href="/img/seq_0_0.webp" as="fetch" type="image/webp" />
+        <Script id="hero-frame-prefetch" strategy="beforeInteractive">
           {`
             (function () {
               try {
-                var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-                var slow = conn && (conn.saveData === true ||
-                                    conn.effectiveType === 'slow-2g' ||
-                                    conn.effectiveType === '2g' ||
-                                    conn.effectiveType === '3g');
-                if (slow) return;
-                ['004','005'].forEach(function (n) {
-                  var l = document.createElement('link');
-                  l.rel = 'preload';
-                  l.as = 'fetch';
-                  l.type = 'image/webp';
-                  // no crossOrigin — same-origin fetch must match app.js's plain fetch()
-                  l.href = '/img/hypeBamVideo' + n + '.webp';
-                  document.head.appendChild(l);
+                if (!window.fetch) return;
+                var BASE = '/img/', TOTAL = 23, cache = {}, urls = [];
+                for (var i = 1; i <= TOTAL; i++) urls.push(BASE + 'hypeBamVideo00' + i + '.webp');
+
+                var decode = function (blob) {
+                  if (window.createImageBitmap) {
+                    return createImageBitmap(blob, { imageOrientation: 'from-image' });
+                  }
+                  return new Promise(function (res, rej) {
+                    var im = new Image();
+                    im.onload = function () { res(im); };
+                    im.onerror = rej;
+                    im.src = URL.createObjectURL(blob);
+                  });
+                };
+
+                // Each URL gets its promise NOW so app.js can await it, but the
+                // actual fetch is gated behind a 4-wide queue.
+                var resolvers = {};
+                urls.forEach(function (u) {
+                  cache[u] = new Promise(function (res, rej) { resolvers[u] = { res: res, rej: rej }; });
                 });
-              } catch (e) { /* opt-out gracefully */ }
+
+                var next = 0, active = 0, MAX = 4;
+                function pump() {
+                  while (active < MAX && next < urls.length) {
+                    (function (u) {
+                      active++;
+                      fetch(u)
+                        .then(function (r) { return r.blob(); })
+                        .then(decode)
+                        .then(function (bmp) { resolvers[u].res(bmp); })
+                        .catch(function (e) { resolvers[u].rej(e); })
+                        .then(function () { active--; pump(); });
+                    })(urls[next++]);
+                  }
+                }
+                pump();
+
+                window.__hypeHeroFrames = cache;
+              } catch (e) { /* app.js falls back to its own fetch */ }
             })();
           `}
         </Script>
