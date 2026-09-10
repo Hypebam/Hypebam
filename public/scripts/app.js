@@ -1201,7 +1201,36 @@
                 rootMargin: "2500px 0px"
             });
             _io.observe(t)
-        } else _startLoad();
+        } else {
+            // Non-metered: this ~35 MB sweep used to start the instant app.js
+            // ran — BEFORE the hero had revealed — and, fetch() being High
+            // priority, it out-competed the hero frames the loader was still
+            // waiting on (measured: only 12 of 23 hero frames even requested
+            // in 14 s on a 4G profile, window 'load' never fired). The sequence
+            // is a full viewport below the fold; it starts once html.is-ready
+            // lands, after a short beat so the intro's remaining frames win.
+            // ...and after the hero's own 23 frames have all landed (capped at
+            // 5 s), so the sweep can never starve the can-spin the intro is
+            // about to play.
+            // ...and after every <img> inside the hero has arrived (capped at
+            // 5 s) — the fact badges land ~2.3 s into the intro and were
+            // measured arriving at 11 s because this sweep had taken the pipe.
+            let _kick = () => {
+                let c = window.__hypeHeroFrames,
+                    pending = c ? Object.keys(c).map(k => c[k].catch(() => { })) : [],
+                    imgs = Array.from(document.querySelectorAll("[data-load-stage] img")).map(i =>
+                        i.complete ? Promise.resolve() : new Promise(r => { i.addEventListener("load", r, { once: !0 }); i.addEventListener("error", r, { once: !0 }) }));
+                Promise.race([Promise.all(pending.concat(imgs)), new Promise(r => setTimeout(r, 5000))])
+                    .then(() => setTimeout(_startLoad, 600))
+            };
+            if (document.documentElement.classList.contains(Ps)) _kick();
+            else {
+                let _mo = new MutationObserver(() => {
+                    document.documentElement.classList.contains(Ps) && (_mo.disconnect(), _kick())
+                });
+                _mo.observe(document.documentElement, { attributes: !0, attributeFilter: ["class"] })
+            }
+        }
         let l = !1,
             h = t.querySelectorAll("[data-sequence-card]"),
             p = t.querySelector("[data-sequence-title]"),
@@ -1683,6 +1712,24 @@
 
         let _lastHero = -1;
 
+        // ── Reveal policy ──────────────────────────────────────────────────
+        // The loader used to stay up until ALL 23 decoded frames (1 MB) were
+        // in — on a 3G phone that outran the layout.tsx safety fallback, which
+        // then revealed the raw hero; a moment later this code gsap.set() every
+        // hero element to hidden and replayed the intro. That reveal → wipe →
+        // replay is what "the site loads twice" was.
+        // Now the hero is drawable as soon as frame 0 exists. The rest fill
+        // E[] individually as they land (T() simply skips a frame that is not
+        // here yet, and never marks it as drawn), with at most 1s of grace so
+        // a decent connection still gets the fully smooth can spin.
+        function loadFrames(a) {
+            E = [a], x = !0;
+            let rest = w.slice(1).map((u, k) => P(u).then(bmp => { E[k + 1] = bmp }).catch(() => { }));
+            // 1 s: the can tween that actually needs the later frames starts
+            // ~2.3 s AFTER the reveal, so on 4G they have all landed by then.
+            return Promise.race([Promise.all(rest), new Promise(res => setTimeout(res, 1000))]);
+        }
+
         function T(t) {
             if (!x) return;
             // the yoyo tween only changes the ACTUAL frame ~16×/s but its
@@ -1710,7 +1757,13 @@
             let e = gsap.timeline();
             Ot(this, null, function* () {
                 let a = yield P(w[0]);
-                p.width = a.width * b, p.height = a.height * b, v.setTransform(b, 0, 0, b, 0, 0), E = [a, ...yield Promise.all(w.slice(1).map(P))], x = !0, document.documentElement.classList.add("has-seq-ready"), setTimeout(() => {
+                p.width = a.width * b, p.height = a.height * b, v.setTransform(b, 0, 0, b, 0, 0);
+                yield loadFrames(a);
+                // If a safety fallback already lifted the loader, the hero is
+                // ALREADY on screen: build the intro but jump it to its end
+                // state (see the `_skip && e.progress` below) — never wipe it.
+                let _skip = document.documentElement.classList.contains(Ps);
+                document.documentElement.classList.add("has-seq-ready"), setTimeout(() => {
                     requestAnimationFrame(() => {
                         document.documentElement.classList.add(Ps)
                     })
@@ -1884,14 +1937,24 @@
                     duration: .45
                 }, "<+=.15"), e.call(() => {
                     kt.start()
-                }, null, "-=1")
+                }, null, "-=1"),
+                // progress(1, false): jump to the end state AND fire the callbacks
+                // on the way (the canvas onComplete that wires the idle-loop
+                // ScrollTrigger, and the kt.start() call) — synchronously, in the
+                // same tick as the gsap.set() hides above, so nothing ever paints
+                // hidden.
+                _skip && e.progress(1, !1)
             })
         }), ri(() => {
             kt.stop();
             let e = gsap.timeline();
             Ot(this, null, function* () {
                 let a = yield P(w[0]);
-                p.width = a.width * b, p.height = a.height * b, v.setTransform(b, 0, 0, b, 0, 0), E = [a, ...yield Promise.all(w.slice(1).map(P))], x = !0, document.documentElement.classList.add("has-seq-ready"), setTimeout(() => {
+                p.width = a.width * b, p.height = a.height * b, v.setTransform(b, 0, 0, b, 0, 0);
+                yield loadFrames(a);
+                // Same as the desktop path: never wipe an already-revealed hero.
+                let _skip = document.documentElement.classList.contains(Ps);
+                document.documentElement.classList.add("has-seq-ready"), setTimeout(() => {
                     requestAnimationFrame(() => {
                         document.documentElement.classList.add(Ps)
                     })
@@ -2009,7 +2072,8 @@
                     onUpdate: () => T(Math.round(n.frame))
                 }, "<-=.005"), e.call(() => {
                     kt.start()
-                }, null, "-=1.25")
+                }, null, "-=1.25"),
+                _skip && e.progress(1, !1)
             })
         })
     }
@@ -2383,6 +2447,11 @@
     };
 
     function initializeApp() {
+        // CSS, Next chunks and GSAP are all in by the time this runs — release
+        // hero frames 2-22 now (see HERO_PREFETCH in layout.tsx). Starting them
+        // any earlier was measured to slow the reveal by competing with the
+        // very assets it waits on.
+        try { window.__hypeHeroKick && window.__hypeHeroKick() } catch (e) { }
         ScrollTrigger.clearScrollMemory("manual");
         history.scrollRestoration && (history.scrollRestoration = "manual");
         wo();
@@ -2390,9 +2459,25 @@
         // be settled — but it must not be held hostage by them. All faces use
         // display:swap, and useAnimations re-runs ScrollTrigger.refresh() on
         // fonts.ready anyway, so cap the wait at 1.2s and start the hero.
+        // Only the faces the hero actually renders (Bad Brush display + Goga
+        // body). document.fonts.ready ALSO waited on the 384 KB Caveat that is
+        // only used far below the fold, which pushed this wait to its cap on
+        // every load (measured). Fall back to fonts.ready if the FontFaceSet
+        // API is missing.
+        // Only faces the layout has ALREADY requested (status loading/loaded).
+        // Calling load() on an "unloaded" face forces a download of weights
+        // nothing on screen uses — measured +600 ms on 4G for three Goga
+        // weights the hero never renders.
+        var heroFaces = [];
+        try {
+            document.fonts.forEach(function (f) {
+                /badbrush|goga/i.test(f.family) && f.status !== "unloaded" &&
+                    heroFaces.push(f.loaded.catch(function () { }));
+            });
+        } catch (e) { }
         var fontsSettled = Promise.race([
-            document.fonts.ready,
-            new Promise(function (resolve) { setTimeout(resolve, 1200); })
+            heroFaces.length ? Promise.all(heroFaces) : document.fonts.ready,
+            new Promise(function (resolve) { setTimeout(resolve, 1500); })
         ]);
         fontsSettled.then(function () {
             document.documentElement.classList.add(ho);

@@ -129,7 +129,9 @@ export const HeroSection: React.FC = () => {
                                         <div key={f.cls} data-inertia-item="" className="stage-fact-outer">
                                             <div data-load-stage-fact="" data-inertia-item-child="" className={`hero-fact ${f.cls}`}>
                                                 <span className="hero-fact-icon-wrap">
-                                                    <img className="hero-fact-icon" src={f.img} alt="" loading="eager" draggable={false} />
+                                                    {/* eager but Low: React SSR emits a preload for every non-lazy <img>,
+                                                        and the priority here is what that hint carries. */}
+                                                    <img className="hero-fact-icon" src={f.img} alt="" loading="eager" fetchPriority="low" draggable={false} />
                                                 </span>
                                                 <span className="hero-fact-copy">
                                                     <span className="hero-fact-value">{f.value}</span>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from 'react';
+import { ASSET_VERSION } from '@/lib/assetVersion';
 
 declare global {
     interface Window {
@@ -419,8 +420,11 @@ export const useAnimations = () => {
             }
 
             // 4. Load the Webflow animation bundle now that plugins are live.
+            //    `?v=` MUST match layout.tsx's <link rel=preload> exactly — app.js
+            //    is immutable-cached for a year, so without the version a phone
+            //    that has visited before never receives an updated bundle.
             try {
-                await loadScript('/scripts/app.js');
+                await loadScript(`/scripts/app.js?v=${ASSET_VERSION}`);
             } catch (err) {
                 console.error('Failed to load app.js — enabling fallback', err);
                 document.documentElement.classList.add('fonts-loaded', 'is-ready', 'has-seq-ready');

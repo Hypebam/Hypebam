@@ -1514,6 +1514,16 @@ html.is-ready.lenis-stopped {
     will-change: transform;
 }
 
+/* Caveat is a 384 KB TTF used ONLY by these two below-the-fold elements, but
+   the browser fetches a font the moment any text needs it — so it was pulled
+   during the hero's critical window and measured taking ~75% of a 4G pipe
+   while the page was still hydrating. Hold it on the system fallback until
+   the loader has lifted; it lands long before anyone scrolls down. */
+html:not(.is-ready) .reviews-swipe-hint,
+html:not(.is-ready) .hbf-tagline {
+    font-family: sans-serif;
+}
+
 /* Handwritten swipe cue under the slider — touch layouts only.
    GSAP fades it out on the first swipe / slide change. */
 .reviews-swipe-hint {
